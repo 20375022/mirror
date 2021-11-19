@@ -9,26 +9,28 @@ public class PlayerControl : NetworkBehaviour
         // ローカルプレイヤーの時
         if (isLocalPlayer)
         {
-            var z = Input.GetAxis("Vertical");
-            Vector3 velocity = new Vector3(0, 0, z);
-            velocity = transform.TransformDirection(velocity);
-
-            var x = Input.GetAxis("Horizontal");
-            velocity = new Vector3(x, 0, 0);
-            velocity = transform.TransformDirection(velocity);
-
-            //// 操作
-            //float x = Input.GetAxis("Horizontal");
-            //float z = Input.GetAxis("Vertical");
-            CmdMoveSphere(x, z);
+            CmdMoveSphere();
         }
     }
 
     // 球の移動
-    [Command]
-    void CmdMoveSphere(float x, float z)
+    void CmdMoveSphere()
     {
-        Vector3 v = new Vector3(x, 0, z) * 15f;
-        GetComponent<Rigidbody>().AddForce(v);
+        if (Input.GetKey(KeyCode.UpArrow))
+        {
+            transform.Translate(0f, 0f, 0.1f);
+        }
+        if (Input.GetKey(KeyCode.DownArrow))
+        {
+            transform.Translate(0f, 0f, -0.1f);
+        }
+        if (Input.GetKey(KeyCode.LeftArrow))
+        {
+            transform.Translate(-0.1f, 0f, 0f);
+        }
+        if (Input.GetKey(KeyCode.RightArrow))
+        {
+            transform.Translate(0.1f, 0f, 0f);
+        }
     }
 }
