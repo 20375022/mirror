@@ -6,23 +6,28 @@ using Mirror;
 public class NetworkManagerUI : MonoBehaviour
 {
     public Canvas canvas;
+    public GameObject MainCamera;
 
     // ホストボタン押下時に呼ばれる
     public void OnHostButton()
     {
         GetComponent<NetworkManager>().StartHost();
+        MainCamera.gameObject.SetActive(false);
     }
 
     // クライアントボタン押下時に呼ばれる
     public void OnClientButton()
     {
-        GetComponent<NetworkManager>().networkAddress = "172.19.8.146"; // IP指定
+        GetComponent<NetworkManager>().networkAddress = "172.19.2.210"; // IP指定
         GetComponent<NetworkManager>().StartClient();
+        MainCamera.gameObject.SetActive(false);
     }
 
     // セーバーボタン押下時に呼ばれる
     public void OnServerButton()
     {
         GetComponent<NetworkManager>().StartServer();
+        MainCamera.gameObject.SetActive(false);
     }
 }
+

@@ -3,9 +3,24 @@ using Mirror;
 
 public class PlayerControl : NetworkBehaviour
 {
+    public Camera mycam;
+
+    void start()
+    {
+    }
+
     // 定期更新時に呼ばれる
     void FixedUpdate()
     {
+        if (!isLocalPlayer)
+        {
+            mycam.enabled = false;
+        }
+        else
+        {
+            mycam.enabled = true;
+        }
+
         float x = 0.0f;
         float z = 0.0f;
 
