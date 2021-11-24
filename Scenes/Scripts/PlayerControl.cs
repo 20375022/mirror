@@ -6,31 +6,37 @@ public class PlayerControl : NetworkBehaviour
     // 定期更新時に呼ばれる
     void FixedUpdate()
     {
+        float x = 0.0f;
+        float z = 0.0f;
+
         // ローカルプレイヤーの時
-        if (isLocalPlayer)
-        {
-            CmdMoveSphere();
+        if (isLocalPlayer) {
+            // 操作
+            if (Input.GetKey(KeyCode.W))
+            {
+                z = 0.1f;
+            }
+            if (Input.GetKey(KeyCode.S))
+            {
+                z = -0.1f;
+            }
+            if (Input.GetKey(KeyCode.A))
+            {
+                x = -0.1f;
+            }
+            if (Input.GetKey(KeyCode.D))
+            {
+                x = 0.1f;
+            }
+            CmdMoveSphere(x, z);
         }
     }
 
     // 球の移動
-    void CmdMoveSphere()
+    [Command]
+    void CmdMoveSphere(float x, float z) 
     {
-        if (Input.GetKey(KeyCode.W))
-        {
-            transform.Translate(0f, 0f, 0.1f);
-        }
-        if (Input.GetKey(KeyCode.S))
-        {
-            transform.Translate(0f, 0f, -0.1f);
-        }
-        if (Input.GetKey(KeyCode.A))
-        {
-            transform.Translate(-0.1f, 0f, 0f);
-        }
-        if (Input.GetKey(KeyCode.D))
-        {
-            transform.Translate(0.1f, 0f, 0f);
-        }
+        transform.Translate(x, 0f, z);
     }
+
 }

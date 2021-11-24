@@ -71,7 +71,6 @@ public class CustomNetworkManager : NetworkManager
     {
         base.OnClientDisconnect(conn);
         print("OnClientDisconnect : " + conn.connectionId);
-        canvas.gameObject.SetActive(true);
     }
 
     // クライアントのエラー時に呼ばれる
@@ -79,7 +78,6 @@ public class CustomNetworkManager : NetworkManager
     {
         base.OnClientError(exception);
         print("OnClientError : " + exception);
-        canvas.gameObject.SetActive(true);
     }
 
     // クライアントの未準備時に呼ばれる
@@ -112,7 +110,6 @@ public class CustomNetworkManager : NetworkManager
     {
         base.OnServerDisconnect(conn);
         print("OnServerDisconnect : " + conn.connectionId);
-        canvas.gameObject.SetActive(true);
     }
 
     // サーバーの準備完了時に呼ばれる
