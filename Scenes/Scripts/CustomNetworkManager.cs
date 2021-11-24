@@ -16,6 +16,7 @@ public class CustomNetworkManager : NetworkManager
     {
         base.OnStartHost();
         print("OnStartHost");
+        canvas.gameObject.SetActive(false);
     }
 
     // クライアントの開始時に呼ばれる
@@ -61,6 +62,7 @@ public class CustomNetworkManager : NetworkManager
     {
         base.OnClientConnect(conn);
         print("OnClientConnect : " + conn.connectionId);
+        canvas.gameObject.SetActive(false);
     }
 
     // クライアントの切断時に呼ばれる
@@ -101,6 +103,7 @@ public class CustomNetworkManager : NetworkManager
     {
         base.OnServerConnect(conn);
         print("OnServerConnect : " + conn.connectionId);
+        canvas.gameObject.SetActive(false);
     }
 
     // サーバーの切断時に呼ばれる

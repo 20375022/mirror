@@ -11,7 +11,6 @@ public class NetworkManagerUI : MonoBehaviour
     public void OnHostButton()
     {
         GetComponent<NetworkManager>().StartHost();
-        canvas.gameObject.SetActive(false);
     }
 
     // クライアントボタン押下時に呼ばれる
@@ -19,13 +18,11 @@ public class NetworkManagerUI : MonoBehaviour
     {
         GetComponent<NetworkManager>().networkAddress = "172.19.8.146"; // IP指定
         GetComponent<NetworkManager>().StartClient();
-        canvas.gameObject.SetActive(false);
     }
 
     // セーバーボタン押下時に呼ばれる
     public void OnServerButton()
     {
         GetComponent<NetworkManager>().StartServer();
-        canvas.gameObject.SetActive(false);
     }
 }
