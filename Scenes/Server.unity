@@ -959,9 +959,9 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 1456474604}
+  - component: {fileID: 1456474601}
   - component: {fileID: 1456474603}
   - component: {fileID: 1456474602}
-  - component: {fileID: 1456474601}
   m_Layer: 0
   m_Name: Network
   m_TagString: Untagged
@@ -1016,7 +1016,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 1456474600}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 8aab4c8111b7c411b9b92cf3dbc5bd4e, type: 3}
+  m_Script: {fileID: 11500000, guid: 8980e0968c6b65545aec0a1c9e28fd73, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   dontDestroyOnLoad: 1
@@ -1035,6 +1035,7 @@ MonoBehaviour:
   autoCreatePlayer: 1
   playerSpawnMethod: 0
   spawnPrefabs: []
+  canvas: {fileID: 17816014}
 --- !u!4 &1456474604
 Transform:
   m_ObjectHideFlags: 0
