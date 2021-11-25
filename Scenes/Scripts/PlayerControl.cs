@@ -45,18 +45,6 @@ public class PlayerControl : NetworkBehaviour
                 x = 0.1f;
             }
             CmdMoveSphere(x, z);
-
-            // カメラ操作 -- キーボード入力による回転処理(横)
-            var view_sensitivity = 1.5f;
-            if (Input.GetKey("left"))
-            {
-                view_sensitivity *= -1;
-                transform.Rotate(0, view_sensitivity * 1f, 0);
-            }
-            if (Input.GetKey("right"))
-            {
-                transform.Rotate(0, view_sensitivity * 1f, 0);
-            }
         }
     }
 
