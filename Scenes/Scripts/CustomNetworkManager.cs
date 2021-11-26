@@ -102,7 +102,6 @@ public class CustomNetworkManager : NetworkManager
     {
         base.OnServerConnect(conn);
         print("OnServerConnect : " + conn.connectionId);
-        canvas.gameObject.SetActive(false);
     }
 
     // サーバーの切断時に呼ばれる
