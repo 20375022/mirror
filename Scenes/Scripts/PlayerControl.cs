@@ -43,7 +43,8 @@ public class PlayerControl : NetworkBehaviour
             Vector3 moveForward = cameraForward * inputVertical + cam.transform.right * inputHorizontal;
 
             // 移動方向にスピードを掛ける。ジャンプや落下がある場合は、別途Y軸方向の速度ベクトルを足す。
-            rb.velocity = moveForward * moveSpeed + new Vector3(0, rb.velocity.y, 0);
+            var changed = moveForward * moveSpeed + new Vector3(0, rb.velocity.y, 0);
+            CmdMoveSphere(changed);
 
             // キャラクターの向きを進行方向に
             if (moveForward != Vector3.zero)
@@ -71,11 +72,16 @@ public class PlayerControl : NetworkBehaviour
         }
     }
 
-    //// 球の移動
+    // 球の移動
     //[Command]
     //void CmdMoveSphere(float x, float z)
     //{
     //    transform.Translate(x, 0f, z);
     //}
+    [Command]
+    void CmdMoveSphere(Vector3 move)
+    {
+        GetComponent<Rigidbody>().velocity = move;
+    }
 
 }
