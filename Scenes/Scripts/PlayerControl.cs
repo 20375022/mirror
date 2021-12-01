@@ -49,7 +49,8 @@ public class PlayerControl : NetworkBehaviour
             // キャラクターの向きを進行方向に
             if (moveForward != Vector3.zero)
             {
-                transform.rotation = Quaternion.LookRotation(moveForward);
+                var rot = Quaternion.LookRotation(moveForward);
+                CmdRotatePlayer(rot);
             }
             //// 移動
             //if (Input.GetKey(KeyCode.W))
@@ -73,11 +74,12 @@ public class PlayerControl : NetworkBehaviour
     }
 
     // 球の移動
-    //[Command]
-    //void CmdMoveSphere(float x, float z)
-    //{
-    //    transform.Translate(x, 0f, z);
-    //}
+    [Command]
+    void CmdRotatePlayer(Quaternion rotate)
+    {
+        transform.rotation = rotate ;
+    }
+
     [Command]
     void CmdMoveSphere(Vector3 move)
     {
