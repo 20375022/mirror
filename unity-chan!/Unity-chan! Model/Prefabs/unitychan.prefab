@@ -2086,6 +2086,7 @@ GameObject:
   - component: {fileID: 704351302198173718}
   - component: {fileID: 1251601991877898965}
   - component: {fileID: 7109114850035877231}
+  - component: {fileID: -3958691277703867578}
   m_Layer: 0
   m_Name: unitychan
   m_TagString: Untagged
@@ -2288,6 +2289,22 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 86f54915fc80cc241ad12ecf46409d72, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+--- !u!114 &-3958691277703867578
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 100096}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 7f6f3bf89aa97405989c802ba270f815, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  syncMode: 0
+  syncInterval: 0.1
+  clientAuthority: 0
+  animator: {fileID: 9500000}
 --- !u!1 &100098
 GameObject:
   m_ObjectHideFlags: 0
