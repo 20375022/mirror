@@ -82,10 +82,17 @@ public class SimpleSonarShader_Object : MonoBehaviour
         }
     }
 
-    void OnCollisionEnter(Collision collision)
+    void OnCollisionEnter(Collision collision) {
+        // Start sonar ring from the contact point
+        StartSonarRing(collision.contacts[0].point, collision.impulse.magnitude + 0);    // <-リングの大きさ(初期値は / 10)
+    }
+
+    void OnCollisionStay(Collision collision)
     {
         // Start sonar ring from the contact point
-        StartSonarRing(collision.contacts[0].point, collision.impulse.magnitude * 5.0f);    // <-リングの大きさ
+        if (Input.GetKey(KeyCode.Z)){
+            StartSonarRing(collision.contacts[0].point, collision.impulse.magnitude * 10);    // <-リングの大きさ(初期値は / 10)
+        }
     }
 
     private void OnDestroy()

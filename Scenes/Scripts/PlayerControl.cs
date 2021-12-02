@@ -17,8 +17,6 @@ public class PlayerControl : NetworkBehaviour
     void FixedUpdate()
     {
         rb = this.transform.GetComponent<Rigidbody>();
-        float x = 0.0f;
-        float z = 0.0f;
         // カメラの有効化(自分の以外は無効に)
         if (!isLocalPlayer)
         {
