@@ -1,6 +1,7 @@
 ﻿using UnityEngine;
+using Mirror;
 
-public class SampleAnimation : MonoBehaviour
+public class SampleAnimation : NetworkBehaviour
 {
 
     // Animator コンポーネント
@@ -18,20 +19,22 @@ public class SampleAnimation : MonoBehaviour
     }
 
     // 1フレームに1回コールされる
-    void Update()
+    void FixedUpdate()
     {
-
-        // 矢印下ボタンを押下している
-        if ( (Input.GetKey(KeyCode.W) ) || (Input.GetKey(KeyCode.S)) ||
-             (Input.GetKey(KeyCode.A) ) || (Input.GetKey(KeyCode.D)) )
+        if (isLocalPlayer)
         {
-            // WaitからRunに遷移する
-            this.animator.SetBool(key_isRun, true);
-        }
-        else
-        {
-            // RunからWaitに遷移する
-            this.animator.SetBool(key_isRun, false);
+            // 矢印下ボタンを押下している
+            if ((Input.GetKey(KeyCode.W)) || (Input.GetKey(KeyCode.S)) ||
+                 (Input.GetKey(KeyCode.A)) || (Input.GetKey(KeyCode.D)))
+            {
+                // WaitからRunに遷移する
+                this.animator.SetBool(key_isRun, true);
+            }
+            else
+            {
+                // RunからWaitに遷移する
+                this.animator.SetBool(key_isRun, false);
+            }
         }
 
     }
