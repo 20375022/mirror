@@ -3,9 +3,8 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using Mirror;
 
-public class SimpleSonarShader_Object : NetworkBehaviour
+public class SimpleSonarShader_Object : MonoBehaviour
 {
 
     // All the renderers that will have the sonar data sent to their shaders.
