@@ -4,10 +4,16 @@ public class PlayerControl : NetworkBehaviour
 {
     public Camera mycam;
     public GameObject cam;
+    public GameObject Plane;
     float inputHorizontal;
     float inputVertical;
     Rigidbody rb;
     float moveSpeed = 3f;
+
+    void Start() {
+        Plane = GameObject.Find("Plane");
+    }
+
     void Update()
     {
         inputHorizontal = Input.GetAxisRaw("Horizontal");
@@ -50,6 +56,16 @@ public class PlayerControl : NetworkBehaviour
         if (isLocalPlayer)
         {
             GetComponent<AudioSource>().Play();
+        }
+    }
+
+    void OnCollisionStay(Collision collision) {
+        if (isLocalPlayer)
+        {
+            if (Input.GetKey(KeyCode.Z))
+            {
+                Plane.GetComponent<SimpleSonarShader_Object>().StartSonarRing(collision.contacts[0].point, collision.impulse.magnitude * 10);
+            }
         }
     }
 

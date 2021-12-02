@@ -88,16 +88,11 @@ public class SimpleSonarShader_Object : NetworkBehaviour
         StartSonarRing(collision.contacts[0].point, collision.impulse.magnitude / 2);    // <-リングの大きさ(初期値は / 10)
     }
 
-    void OnCollisionStay(Collision collision)
+/*    void OnCollisionStay(Collision collision)
     {
         // Start sonar ring from the contact point
-        if (isLocalPlayer){
-            if (Input.GetKey(KeyCode.Z))
-            {
-                StartSonarRing(collision.contacts[0].point, collision.impulse.magnitude * 10);    // <-リングの大きさ(初期値は / 10)
-            }
-        }
-    }
+        StartSonarRing(collision.contacts[0].point, collision.impulse.magnitude * 10);    // <-リングの大きさ(初期値は / 10)
+    }*/
 
     private void OnDestroy()
     {
