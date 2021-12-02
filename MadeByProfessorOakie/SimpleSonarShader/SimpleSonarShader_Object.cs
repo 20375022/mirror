@@ -3,8 +3,9 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using Mirror;
 
-public class SimpleSonarShader_Object : MonoBehaviour
+public class SimpleSonarShader_Object : NetworkBehaviour
 {
 
     // All the renderers that will have the sonar data sent to their shaders.
@@ -90,8 +91,11 @@ public class SimpleSonarShader_Object : MonoBehaviour
     void OnCollisionStay(Collision collision)
     {
         // Start sonar ring from the contact point
-        if (Input.GetKey(KeyCode.Z)){
-            StartSonarRing(collision.contacts[0].point, collision.impulse.magnitude * 10);    // <-リングの大きさ(初期値は / 10)
+        if (isLocalPlayer){
+            if (Input.GetKey(KeyCode.Z))
+            {
+                StartSonarRing(collision.contacts[0].point, collision.impulse.magnitude * 10);    // <-リングの大きさ(初期値は / 10)
+            }
         }
     }
 

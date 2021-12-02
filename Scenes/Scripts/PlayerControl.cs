@@ -47,7 +47,10 @@ public class PlayerControl : NetworkBehaviour
     }
 
     void OnCollisionEnter(){
-        GetComponent<AudioSource>().Play();
+        if (isLocalPlayer)
+        {
+            GetComponent<AudioSource>().Play();
+        }
     }
 
     // プレイヤーの回転
