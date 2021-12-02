@@ -45,6 +45,11 @@ public class PlayerControl : NetworkBehaviour
             }
         }
     }
+
+    void OnCollisionEnter(){
+        GetComponent<AudioSource>().Play();
+    }
+
     // プレイヤーの回転
     [Command]
     void CmdRotatePlayer(Quaternion rotate)
