@@ -11,6 +11,11 @@ public class PlayerControl : NetworkBehaviour
 
     float moveSpeed = 3f;
 
+    void Start()
+    {
+        Cursor.visible = false;
+    }
+
     void Update()
     {
         inputHorizontal = Input.GetAxisRaw("Horizontal");
@@ -35,23 +40,31 @@ public class PlayerControl : NetworkBehaviour
         // ローカルプレイヤーの時
         if (isLocalPlayer)
         {
-            // カメラの方向から、X-Z平面の単位ベクトルを取得
-            Vector3 cameraForward = Vector3.Scale(cam.transform.forward, new Vector3(1, 0, 1)).normalized;
-
-            // 方向キーの入力値とカメラの向きから、移動方向を決定
-            Vector3 moveForward = cameraForward * inputVertical + cam.transform.right * inputHorizontal;
-
-            // 移動方向にスピードを掛ける。ジャンプや落下がある場合は、別途Y軸方向の速度ベクトルを足す。
-            var changed = moveForward * moveSpeed + new Vector3(0, rb.velocity.y, 0);
-         
-            // 移動はサーバーにやらせる
-            CmdMovePlayer(changed);
-
-            // キャラクターの向きを進行方向に
-            if (moveForward != Vector3.zero)
+            if (Cursor.visible == false)
             {
-                var rot = Quaternion.LookRotation(moveForward);
-                CmdRotatePlayer(rot);       // 回転はサーバーにやらせる
+                // カメラの方向から、X-Z平面の単位ベクトルを取得
+                Vector3 cameraForward = Vector3.Scale(cam.transform.forward, new Vector3(1, 0, 1)).normalized;
+
+                // 方向キーの入力値とカメラの向きから、移動方向を決定
+                Vector3 moveForward = cameraForward * inputVertical + cam.transform.right * inputHorizontal;
+
+                // 移動方向にスピードを掛ける。ジャンプや落下がある場合は、別途Y軸方向の速度ベクトルを足す。
+                var changed = moveForward * moveSpeed + new Vector3(0, rb.velocity.y, 0);
+
+                // 移動はサーバーにやらせる
+                CmdMovePlayer(changed);
+
+                // キャラクターの向きを進行方向に
+                if (moveForward != Vector3.zero)
+                {
+                    var rot = Quaternion.LookRotation(moveForward);
+                    CmdRotatePlayer(rot);       // 回転はサーバーにやらせる
+                }
+            }
+        
+            if (Input.GetKey(KeyCode.Escape))
+            {
+                Cursor.visible = true;
             }
         }
     }

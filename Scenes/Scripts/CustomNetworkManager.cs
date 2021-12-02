@@ -47,6 +47,7 @@ public class CustomNetworkManager : NetworkManager
     {
         base.OnStopClient();
         print("OnStopClient");
+        canvas.gameObject.SetActive(true);
     }
 
     // サーバーの停止時に呼ばれる
