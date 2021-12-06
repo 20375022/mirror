@@ -177,6 +177,7 @@ MonoBehaviour:
   syncInterval: 0.1
   mycam: {fileID: 656028141562082839}
   cam: {fileID: 656028141562082833}
+  Plane: {fileID: 0}
 --- !u!82 &1542162358162441767
 AudioSource:
   m_ObjectHideFlags: 0
@@ -338,6 +339,11 @@ PrefabInstance:
     - target: {fileID: 2808932863242272498, guid: 10421a2028937474bb0983f41bf3063a,
         type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2808932863242272500, guid: 10421a2028937474bb0983f41bf3063a,
+        type: 3}
+      propertyPath: m_Enabled
       value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 2808932863242272501, guid: 10421a2028937474bb0983f41bf3063a,

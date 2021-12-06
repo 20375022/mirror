@@ -22,6 +22,7 @@ public class PlayerControl : NetworkBehaviour
     // 定期更新時に呼ばれる
     void FixedUpdate()
     {
+        cam.GetComponent<AudioListener>().enabled = true;
         rb = this.transform.GetComponent<Rigidbody>();
         // カメラの有効化(自分の以外は無効に)
         if (!isLocalPlayer)
@@ -50,6 +51,7 @@ public class PlayerControl : NetworkBehaviour
                 CmdRotatePlayer(rot);       // 回転はサーバーにやらせる
             }
         }
+        cam.GetComponent<AudioListener>().enabled = false;
     }
 
     void OnCollisionEnter(){
