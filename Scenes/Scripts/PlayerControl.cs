@@ -1,5 +1,6 @@
 ﻿using UnityEngine;
 using Mirror;
+
 public class PlayerControl : NetworkBehaviour
 {
     public Camera mycam;
@@ -10,8 +11,10 @@ public class PlayerControl : NetworkBehaviour
     Rigidbody rb;
     float moveSpeed = 3f;
 
+
     void Start() {
         Plane = GameObject.Find("Plane");
+        cam.GetComponent<AudioListener>().enabled = true;
     }
 
     void Update()
@@ -22,17 +25,17 @@ public class PlayerControl : NetworkBehaviour
     // 定期更新時に呼ばれる
     void FixedUpdate()
     {
-        cam.GetComponent<AudioListener>().enabled = true;
-        rb = this.transform.GetComponent<Rigidbody>();
+         rb = this.transform.GetComponent<Rigidbody>();
         // カメラの有効化(自分の以外は無効に)
         if (!isLocalPlayer)
         {
-            mycam.enabled = false;
+            cam.SetActive(false);
         }
         else
         {
-            mycam.enabled = true;
+            cam.SetActive(true);
         }
+
         // ローカルプレイヤーの時
         if (isLocalPlayer)
         {
@@ -51,15 +54,37 @@ public class PlayerControl : NetworkBehaviour
                 CmdRotatePlayer(rot);       // 回転はサーバーにやらせる
             }
         }
-        cam.GetComponent<AudioListener>().enabled = false;
     }
 
-    void OnCollisionEnter(){
+    void OnCollisionEnter()
+    {
         if (isLocalPlayer)
         {
-            GetComponent<AudioSource>().Play();
+            this.GetComponent<AudioSource>().Play();
+            if (isServer)
+            {
+                RpcPlaySounds();    // クライアントに送信
+            }
+            else if (isClient)
+            {
+                CmdPlaySounds();    // サーバーに送信
+            }
         }
     }
+
+
+    [Command]
+    void CmdPlaySounds()
+    {
+        this.GetComponent<AudioSource>().Play();
+    }
+
+    [ClientRpc]
+    void RpcPlaySounds()
+    {
+        this.GetComponent<AudioSource>().Play();
+    }
+
 
     void OnCollisionStay(Collision collision) {
         if (isLocalPlayer)
@@ -67,6 +92,7 @@ public class PlayerControl : NetworkBehaviour
             if (Input.GetKey(KeyCode.Z))
             {
                 Plane.GetComponent<SimpleSonarShader_Object>().StartSonarRing(collision.contacts[0].point, collision.impulse.magnitude * 10);
+                CmdPlaySounds();
             }
         }
     }

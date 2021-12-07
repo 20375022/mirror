@@ -18,8 +18,8 @@ public class NetworkManagerUI : MonoBehaviour
     // クライアントボタン押下時に呼ばれる
     public void OnClientButton()
     {
-//        GetComponent<NetworkManager>().networkAddress = "172.19.2.210"; // IP指定
-        GetComponent<NetworkManager>().networkAddress = "172.19.4.64"; // IP指定
+        GetComponent<NetworkManager>().networkAddress = "172.19.2.210"; // IP指定
+//        GetComponent<NetworkManager>().networkAddress = "172.19.4.64"; // IP指定
 //        GetComponent<NetworkManager>().networkAddress = "192.168.0.6"; // IP指定
         GetComponent<NetworkManager>().StartClient();
         MainCamera.gameObject.SetActive(false);
