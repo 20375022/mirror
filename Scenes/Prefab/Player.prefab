@@ -30,6 +30,7 @@ GameObject:
   - component: {fileID: 4555531878411782409}
   - component: {fileID: 2218102443052700259}
   - component: {fileID: 1542162358162441767}
+  - component: {fileID: 1182849151550799522}
   m_Layer: 8
   m_Name: Player
   m_TagString: Untagged
@@ -106,7 +107,7 @@ BoxCollider:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1555054639584768389}
-  m_Material: {fileID: 0}
+  m_Material: {fileID: 13400000, guid: 2debad4ac21a6644faf4fc93bd5b5869, type: 2}
   m_IsTrigger: 0
   m_Enabled: 1
   serializedVersion: 2
@@ -190,7 +191,7 @@ MonoBehaviour:
   syncInterval: 0.1
   mycam: {fileID: 656028141562082839}
   cam: {fileID: 656028141562082833}
-  Plane: {fileID: 0}
+  Plane: {fileID: 1555054639584768389}
 --- !u!82 &1542162358162441767
 AudioSource:
   m_ObjectHideFlags: 0
@@ -287,6 +288,18 @@ AudioSource:
     m_PreInfinity: 2
     m_PostInfinity: 2
     m_RotationOrder: 4
+--- !u!114 &1182849151550799522
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1555054639584768389}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d69754a57dd27f0468e06f91b44ab9f6, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1001 &3450315389514172644
 PrefabInstance:
   m_ObjectHideFlags: 0

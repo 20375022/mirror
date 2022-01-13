@@ -13,7 +13,7 @@ public class PlayerControl : NetworkBehaviour
 
 
     void Start() {
-        Plane = GameObject.Find("Plane");
+        Plane = GameObject.Find("Player");
         cam.GetComponent<AudioListener>().enabled = true;
     }
 
