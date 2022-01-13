@@ -39,6 +39,15 @@ public class PlayerControl : NetworkBehaviour
         // ローカルプレイヤーの時
         if (isLocalPlayer)
         {
+            if (Input.GetKey(KeyCode.LeftShift))
+            {
+                moveSpeed = 5.0f;
+            }
+            else
+            {
+                moveSpeed = 3.0f;
+            }
+
             // カメラの方向から、X-Z平面の単位ベクトルを取得
             Vector3 cameraForward = Vector3.Scale(cam.transform.forward, new Vector3(1, 0, 1)).normalized;
             // 方向キーの入力値とカメラの向きから、移動方向を決定

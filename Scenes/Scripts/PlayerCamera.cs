@@ -36,5 +36,6 @@ public class PlayerCamera : MonoBehaviour
                 transform.RotateAround(targetpos, Vector3.up, 50.0f * Time.deltaTime);
             }
         }
+
     }
 }
