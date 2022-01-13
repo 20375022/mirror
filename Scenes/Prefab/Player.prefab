@@ -191,7 +191,7 @@ MonoBehaviour:
   syncInterval: 0.1
   mycam: {fileID: 656028141562082839}
   cam: {fileID: 656028141562082833}
-  Plane: {fileID: 1555054639584768389}
+  Plane: {fileID: 4600796947787204375, guid: b70f3d4562f89884fa6c07b691775116, type: 3}
 --- !u!82 &1542162358162441767
 AudioSource:
   m_ObjectHideFlags: 0
