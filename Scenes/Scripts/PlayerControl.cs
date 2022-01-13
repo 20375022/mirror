@@ -13,7 +13,7 @@ public class PlayerControl : NetworkBehaviour
 
 
     void Start() {
-        Plane = GameObject.Find("Player");
+        Plane = GameObject.Find("四方の見えない壁");
         cam.GetComponent<AudioListener>().enabled = true;
     }
 
