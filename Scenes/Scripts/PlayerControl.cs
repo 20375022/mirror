@@ -1,5 +1,4 @@
 ﻿using UnityEngine;
-using UnityEngine.UI;
 using Mirror;
 
 public class PlayerControl : NetworkBehaviour
@@ -23,7 +22,6 @@ public class PlayerControl : NetworkBehaviour
         inputHorizontal = Input.GetAxisRaw("Horizontal");
         inputVertical = Input.GetAxisRaw("Vertical");
     }
-
     // 定期更新時に呼ばれる
     void FixedUpdate()
     {
@@ -43,11 +41,11 @@ public class PlayerControl : NetworkBehaviour
         {
             if (Input.GetKey(KeyCode.LeftShift))
             {
-                moveSpeed = 5.0f;       // 走る速さ
+                moveSpeed = 5.0f;
             }
             else
             {
-                moveSpeed = 3.0f;       // 歩く速さ
+                moveSpeed = 3.0f;
             }
 
             // カメラの方向から、X-Z平面の単位ベクトルを取得
@@ -82,59 +80,7 @@ public class PlayerControl : NetworkBehaviour
             }
         }
     }
-    void OnCollisionStay(Collision collision)
-    {
-        if (isLocalPlayer)
-        {
-            if (Input.GetKey(KeyCode.Z))
-            {
-                Plane.GetComponent<SimpleSonarShader_Object>().StartSonarRing(collision.contacts[0].point, collision.impulse.magnitude * 10);
-                CmdPlaySounds();
-            }
-        }
-    }
 
-    // ゲームオブジェクト同士が接触したタイミングで実行
-    void OnTriggerEnter(Collider other)
-    {
-        // もし衝突した相手オブジェクトが柵ならば
-        if (other.tag == "saku")
-        {            
-            Debug.Log("柵に当たった");
-            if (Input.GetKey(KeyCode.Space))
-            {
-                CmdJumpPlayer();
-            }
-        }
-    }
-
-    // ゲームオブジェクト同士が接触している間実行
-    void OnTriggerStay(Collider other)
-    {
-        // もし衝突した相手オブジェクトが柵ならば
-        if (other.tag == "saku")
-        {
-            Debug.Log("柵に当たっている");
-            if (Input.GetKey(KeyCode.Space))
-            {
-                CmdJumpPlayer();
-            }
-        }
-    }
-
-    // ゲームオブジェクト同士が離れたタイミングで実行
-    void OnTriggerExit(Collider other)
-    {
-        // もし衝突した相手オブジェクトが柵ならば
-        if (other.tag == "saku")
-        {
-            Debug.Log("柵から離れた");
-            if (Input.GetKey(KeyCode.Space))
-            {
-                CmdJumpPlayer();
-            }
-        }
-    }
 
     [Command]
     void CmdPlaySounds()
@@ -146,6 +92,18 @@ public class PlayerControl : NetworkBehaviour
     void RpcPlaySounds()
     {
         this.GetComponent<AudioSource>().Play();
+    }
+
+
+    void OnCollisionStay(Collision collision) {
+        if (isLocalPlayer)
+        {
+            if (Input.GetKey(KeyCode.Z))
+            {
+                Plane.GetComponent<SimpleSonarShader_Object>().StartSonarRing(collision.contacts[0].point, collision.impulse.magnitude * 10);
+                CmdPlaySounds();
+            }
+        }
     }
 
     // プレイヤーの回転
@@ -160,13 +118,4 @@ public class PlayerControl : NetworkBehaviour
     {
         GetComponent<Rigidbody>().velocity = move;
     }
-
-    // プレイヤーの乗り越え
-    [Command]
-    void CmdJumpPlayer()
-    {
-        var jump = new Vector3(0.0f, 1.0f, 0.0f);
-        GetComponent<Rigidbody>().velocity += jump;
-    }
-
 }
