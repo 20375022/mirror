@@ -7,7 +7,7 @@ public class Title : MonoBehaviour
 {
     public void OnClickStart()
     {
-        SceneManager.LoadScene("game");
+        SceneManager.LoadScene("select");
     }
 
 
