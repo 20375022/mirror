@@ -23,7 +23,7 @@
 using UnityEngine;
 
 [RequireComponent(typeof(Camera))]
-public class SonarFx : MonoBehaviour
+public class SonarFx2 : MonoBehaviour
 {
     private GameObject Player;
 
