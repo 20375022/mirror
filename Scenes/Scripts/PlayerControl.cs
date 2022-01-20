@@ -81,6 +81,18 @@ public class PlayerControl : NetworkBehaviour
         }
     }
 
+    void OnCollisionStay(Collision collision)
+    {
+        if (isLocalPlayer)
+        {
+            if (Input.GetKey(KeyCode.Z))
+            {
+                Plane.GetComponent<SimpleSonarShader_Object>().StartSonarRing(collision.contacts[0].point, collision.impulse.magnitude * 10);
+                CmdPlaySounds();
+            }
+        }
+    }
+
 
     [Command]
     void CmdPlaySounds()
@@ -94,17 +106,19 @@ public class PlayerControl : NetworkBehaviour
         this.GetComponent<AudioSource>().Play();
     }
 
-
-    void OnCollisionStay(Collision collision) {
+    void OnTriggerStay(Collider other)
+    {
         if (isLocalPlayer)
         {
-            if (Input.GetKey(KeyCode.Z))
+            if (other.tag == "saku")
             {
-                Plane.GetComponent<SimpleSonarShader_Object>().StartSonarRing(collision.contacts[0].point, collision.impulse.magnitude * 10);
-                CmdPlaySounds();
+                Debug.Log("柵に当たってる");
             }
         }
     }
+
+
+
 
     // プレイヤーの回転
     [Command]

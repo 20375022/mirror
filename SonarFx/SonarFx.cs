@@ -105,7 +105,7 @@ public class SonarFx : MonoBehaviour
     {
         Vector3 Plus = new Vector3(500.0f, 500.0f, 500.0f);
 
-//        _origin = new Vector3(Player.transform.position.x, Player.transform.position.y, Player.transform.position.z);
+        _origin = new Vector3(Player.transform.position.x, Player.transform.position.y, Player.transform.position.z);
 
         Shader.SetGlobalColor(baseColorID, _baseColor);
         Shader.SetGlobalColor(waveColorID, _waveColor);

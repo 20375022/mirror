@@ -305,8 +305,8 @@ BoxCollider:
   m_IsTrigger: 1
   m_Enabled: 1
   serializedVersion: 2
-  m_Size: {x: 0.0068510785, y: 0.043267757, z: 0.02107137}
-  m_Center: {x: 0.34902522, y: 0.2848026, z: 0.010535142}
+  m_Size: {x: 0.0041923225, y: 0.043267757, z: 0.02107137}
+  m_Center: {x: 0.34299195, y: 0.28480262, z: 0.010535142}
 --- !u!64 &40919616
 MeshCollider:
   m_ObjectHideFlags: 0
@@ -1106,7 +1106,7 @@ MonoBehaviour:
   networkAddress: 192.168.0.6
   maxConnections: 100
   authenticator: {fileID: 0}
-  playerPrefab: {fileID: 1555054639584768389, guid: ccf96f9a6f4049b4a868321cbdcd6475,
+  playerPrefab: {fileID: 1555054639584768389, guid: a1431631fbbd1fc46922fdd799cb028c,
     type: 3}
   autoCreatePlayer: 1
   playerSpawnMethod: 0
