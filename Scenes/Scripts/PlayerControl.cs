@@ -3,29 +3,37 @@ using Mirror;
 
 public class PlayerControl : NetworkBehaviour
 {
-    public Camera mycam;
-    public GameObject cam;
-    public GameObject Plane;
-    float inputHorizontal;
-    float inputVertical;
-    Rigidbody rb;
-    float moveSpeed = 3f;
-
+    public Camera mycam;    // カメラコンポーネント
+    public GameObject cam;  // カメラオブジェクト
+    GameObject Plane;       // simple sonar用の床
+    float inputHorizontal;  // 横のキー入力
+    float inputVertical;    // 縦のキー入力
+    Rigidbody rb;           // Rigid Body
+    float moveSpeed;        // キャラの移動速度
+    
+    [SyncVar]
+    GameObject CurrentModel;// 今のプレイヤーモデル
+    public int PlyObj = 1;
 
     void Start() {
         Plane = GameObject.Find("四方の見えない壁");
+        CurrentModel = this.transform.gameObject;
+        this.transform.GetChild(1).gameObject.SetActive(true);
         cam.GetComponent<AudioListener>().enabled = true;
     }
 
     void Update()
     {
+        // キー入力
         inputHorizontal = Input.GetAxisRaw("Horizontal");
         inputVertical = Input.GetAxisRaw("Vertical");
     }
     // 定期更新時に呼ばれる
     void FixedUpdate()
     {
-         rb = this.transform.GetComponent<Rigidbody>();
+        // 自分のrigidbodyを毎回取得
+        rb = this.transform.GetComponent<Rigidbody>();
+ //       rb = this.transform.GetChild(1).GetComponent<Rigidbody>();
         // カメラの有効化(自分の以外は無効に)
         if (!isLocalPlayer)
         {
@@ -39,29 +47,8 @@ public class PlayerControl : NetworkBehaviour
         // ローカルプレイヤーの時
         if (isLocalPlayer)
         {
-            if (Input.GetKey(KeyCode.LeftShift))
-            {
-                moveSpeed = 5.0f;
-            }
-            else
-            {
-                moveSpeed = 3.0f;
-            }
-
-            // カメラの方向から、X-Z平面の単位ベクトルを取得
-            Vector3 cameraForward = Vector3.Scale(cam.transform.forward, new Vector3(1, 0, 1)).normalized;
-            // 方向キーの入力値とカメラの向きから、移動方向を決定
-            Vector3 moveForward = cameraForward * inputVertical + cam.transform.right * inputHorizontal;
-            // 移動方向にスピードを掛ける。ジャンプや落下がある場合は、別途Y軸方向の速度ベクトルを足す。
-            var changed = moveForward * moveSpeed + new Vector3(0, rb.velocity.y, 0);
-            // 移動はサーバーにやらせる
-            CmdMovePlayer(changed);
-            // キャラクターの向きを進行方向に
-            if (moveForward != Vector3.zero)
-            {
-                var rot = Quaternion.LookRotation(moveForward);
-                CmdRotatePlayer(rot);       // 回転はサーバーにやらせる
-            }
+            Debug.Log(netId);
+            PlayerMovement();       // プレイヤーの移動を管理する関数
         }
     }
 
@@ -69,7 +56,7 @@ public class PlayerControl : NetworkBehaviour
     {
         if (isLocalPlayer)
         {
-            this.GetComponent<AudioSource>().Play();
+            this.transform.GetChild(1).GetComponent<AudioSource>().Play();
             if (isServer)
             {
                 RpcPlaySounds();    // クライアントに送信
@@ -97,39 +84,89 @@ public class PlayerControl : NetworkBehaviour
     [Command]
     void CmdPlaySounds()
     {
-        this.GetComponent<AudioSource>().Play();
+        this.transform.GetChild(1).GetComponent<AudioSource>().Play();
     }
 
     [ClientRpc]
     void RpcPlaySounds()
     {
-        this.GetComponent<AudioSource>().Play();
+        this.transform.GetChild(1).GetComponent<AudioSource>().Play();
     }
 
+
+    // 当たり判定に当たったとき
     void OnTriggerStay(Collider other)
     {
         if (isLocalPlayer)
         {
+            // 柵だった場合
             if (other.tag == "saku")
             {
-                Debug.Log("柵に当たってる");
+                Debug.Log("柵にヒット");
+                if (Input.GetKey(KeyCode.Space))
+                {
+                    Debug.Log("乗り越えようとする");
+                }
             }
+
+            // プレイヤーだった場合
+            if (other.tag == "Player")
+            {
+                Debug.Log("プレイヤーにヒット");
+                if (Input.GetKey(KeyCode.C))
+                {
+                    Debug.Log("プレイヤーにタッチ");
+                    //Systemobj.GetComponent<GameSystem>().CmdTouchPlayer(other.gameObject);
+                    //CmdTouchPlayer(other.gameObject);
+                }
+            }
+        }
+
+    }
+
+
+    // ---------------------------------------------- //
+    //              プレイヤーの移動                  //
+    // ---------------------------------------------- //
+    void PlayerMovement()
+    {
+        // ダッシュ
+        if (Input.GetKey(KeyCode.LeftShift))
+        {
+            moveSpeed = 5.0f;
+        }
+        else
+        {
+            moveSpeed = 3.0f;
+        }
+
+        // カメラの方向から、X-Z平面の単位ベクトルを取得
+        Vector3 cameraForward = Vector3.Scale(cam.transform.forward, new Vector3(1, 0, 1)).normalized;
+        // 方向キーの入力値とカメラの向きから、移動方向を決定
+        Vector3 moveForward = cameraForward * inputVertical + cam.transform.right * inputHorizontal;
+        // 移動方向にスピードを掛ける。ジャンプや落下がある場合は、別途Y軸方向の速度ベクトルを足す。
+        var changed = moveForward * moveSpeed + new Vector3(0, rb.velocity.y, 0);
+        // 移動はサーバーにやらせる
+        CmdMovePlayer(changed);
+        // キャラクターの向きを進行方向に
+        if (moveForward != Vector3.zero)
+        {
+            var rot = Quaternion.LookRotation(moveForward);
+            CmdRotatePlayer(rot);       // 回転はサーバーにやらせる
         }
     }
 
-
-
-
-    // プレイヤーの回転
-    [Command]
-    void CmdRotatePlayer(Quaternion rotate)
-    {
-        transform.rotation = rotate;
-    }
     // プレイヤーの移動
     [Command]
     void CmdMovePlayer(Vector3 move)
     {
         GetComponent<Rigidbody>().velocity = move;
     }
+    // プレイヤーの回転
+    [Command]
+    void CmdRotatePlayer(Quaternion rotate)
+    {
+        transform.rotation = rotate;
+    }
+
 }

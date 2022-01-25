@@ -1039,7 +1039,7 @@ GameObject:
   - component: {fileID: 1456474602}
   m_Layer: 0
   m_Name: Network
-  m_TagString: Untagged
+  m_TagString: System
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -1098,7 +1098,7 @@ MonoBehaviour:
   dontDestroyOnLoad: 1
   PersistNetworkManagerToOfflineScene: 0
   runInBackground: 1
-  autoStartServerBuild: 1
+  autoStartServerBuild: 0
   serverTickRate: 30
   offlineScene: 
   onlineScene: 
@@ -1106,12 +1106,12 @@ MonoBehaviour:
   networkAddress: 192.168.0.6
   maxConnections: 100
   authenticator: {fileID: 0}
-  playerPrefab: {fileID: 1555054639584768389, guid: a1431631fbbd1fc46922fdd799cb028c,
+  playerPrefab: {fileID: 8269854961021232652, guid: d9b319caec5b0f54988c56935e12642c,
     type: 3}
   autoCreatePlayer: 1
   playerSpawnMethod: 0
   spawnPrefabs:
-  - {fileID: 5227866251644406560, guid: 6094acf5178a1f14d87ba657ba6770f9, type: 3}
+  - {fileID: 608582073923357530, guid: ba08596e6001b3245971963c80561dcf, type: 3}
   canvas: {fileID: 17816014}
 --- !u!4 &1456474604
 Transform:
