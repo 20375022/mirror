@@ -105,50 +105,27 @@ BoxCollider:
   serializedVersion: 2
   m_Size: {x: 1, y: 1, z: 1}
   m_Center: {x: 0, y: 0, z: 0}
---- !u!114 &860031968224372192
+--- !u!114 &561294635502525558
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 656028141562082833}
-  m_Enabled: 1
+  m_Enabled: 0
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 4c725fe963b534280bc779c2e7f23fb5, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   _mode: 1
   _direction: {x: 0, y: 0, z: 1}
-  _origin: {x: -100, y: -100, z: 0}
+  _origin: {x: 0, y: 0, z: 0}
   _baseColor: {r: 0.2, g: 0.2, b: 0.2, a: 0}
   _waveColor: {r: 1, g: 0.2, b: 0.2, a: 0}
   _waveAmplitude: 2
-  _waveExponent: 10
-  _waveInterval: 100
-  _waveSpeed: 50
-  _addColor: {r: 0, g: 0, b: 0, a: 1}
-  shader: {fileID: 4800000, guid: 6d12e7ab487bf49d18b89038af741a18, type: 3}
---- !u!114 &4944366855835111750
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 656028141562082833}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: bde8f01c8e1053a419ff76189da9c53b, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  _mode: 1
-  _direction: {x: 100, y: 100, z: 1}
-  _origin: {x: 100, y: 100, z: 0}
-  _baseColor: {r: 0.2, g: 0.2, b: 0.2, a: 0}
-  _waveColor: {r: 1, g: 0.2, b: 0.2, a: 0}
-  _waveAmplitude: 2
-  _waveExponent: 10
-  _waveInterval: 100
-  _waveSpeed: 50
+  _waveExponent: 20
+  _waveInterval: 50
+  _waveSpeed: 20
   _addColor: {r: 0, g: 0, b: 0, a: 1}
   shader: {fileID: 4800000, guid: 6d12e7ab487bf49d18b89038af741a18, type: 3}
 --- !u!1 &1555054639584768389
@@ -329,7 +306,7 @@ MonoBehaviour:
   syncInterval: 0.1
   mycam: {fileID: 656028141562082839}
   cam: {fileID: 656028141562082833}
-  Plane: {fileID: 4600796947787204375, guid: b70f3d4562f89884fa6c07b691775116, type: 3}
+  Plane: {fileID: 919132149155446097, guid: ea1b1c6cb97201f4b953eabcf2919b3f, type: 3}
 --- !u!82 &1542162358162441767
 AudioSource:
   m_ObjectHideFlags: 0

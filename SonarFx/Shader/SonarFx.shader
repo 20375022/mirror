@@ -54,27 +54,35 @@ Shader "Hidden/SonarFX"
         {
 #ifdef SONAR_DIRECTIONAL
             float w = dot(IN.worldPos, _SonarWaveVector);
+            float wa = dot(IN.worldPos, _SonarWaveVector);
 #else
             float w = length(IN.worldPos - _SonarWaveVector);
-#endif
+            float wa = length((IN.worldPos + 100) - _SonarWaveVector);
+#endif      
 
             // Moving wave.
             w -= _Time.y * _SonarWaveParams.w;
+            wa -= _Time.y * _SonarWaveParams.w;
 
             // Get modulo (w % params.z / params.z)
             w /= _SonarWaveParams.z;
             w = w - floor(w);
+            wa /= _SonarWaveParams.z;
+            wa = wa - floor(wa);
 
             // Make the gradient steeper.
             float p = _SonarWaveParams.y;
             w = (pow(w, p) + pow(1 - w, p * 4)) * 0.5;
+            wa = (pow(wa, p) + pow(1 - wa, p * 4)) * 0.5;
 
             // Amplify.
             w *= _SonarWaveParams.x;
+            wa *= _SonarWaveParams.x;
 
             // Apply to the surface.
             o.Albedo = _SonarBaseColor;
             o.Emission = _SonarWaveColor * w + _SonarAddColor;
+            o.Emission = _SonarWaveColor * wa + _SonarAddColor;
         }
 
         ENDCG

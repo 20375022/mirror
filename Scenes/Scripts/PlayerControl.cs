@@ -10,15 +10,33 @@ public class PlayerControl : NetworkBehaviour
     float inputVertical;
     Rigidbody rb;
     float moveSpeed = 3f;
-
+    bool trigger = false;
 
     void Start() {
-        Plane = GameObject.Find("四方の見えない壁");
+        Plane = GameObject.Find("地面");
         cam.GetComponent<AudioListener>().enabled = true;
     }
 
     void Update()
     {
+        if (Input.GetKey(KeyCode.X))
+        {
+            if (trigger == false)
+            {
+                if (cam.GetComponent<SonarFx>().enabled == true)
+                {
+                    cam.GetComponent<SonarFx>().enabled = false;
+                }
+                else
+                {
+                    cam.GetComponent<SonarFx>().enabled = true;
+                }
+            }
+            trigger = true;
+        }
+        else {
+            trigger = false;
+        }
         inputHorizontal = Input.GetAxisRaw("Horizontal");
         inputVertical = Input.GetAxisRaw("Vertical");
     }
