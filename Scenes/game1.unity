@@ -44,7 +44,7 @@ RenderSettings:
 LightmapSettings:
   m_ObjectHideFlags: 0
   serializedVersion: 11
-  m_GIWorkflowMode: 1
+  m_GIWorkflowMode: 0
   m_GISettings:
     serializedVersion: 2
     m_BounceScale: 1
@@ -1106,7 +1106,7 @@ MonoBehaviour:
   networkAddress: 192.168.0.6
   maxConnections: 100
   authenticator: {fileID: 0}
-  playerPrefab: {fileID: 8269854961021232652, guid: d9b319caec5b0f54988c56935e12642c,
+  playerPrefab: {fileID: 1097770640250672476, guid: 7a5eacf972248b04a9364830a798c572,
     type: 3}
   autoCreatePlayer: 1
   playerSpawnMethod: 0
