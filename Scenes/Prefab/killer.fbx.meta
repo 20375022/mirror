@@ -7,6 +7,12 @@ ModelImporter:
       74: -3419257869308726280
     second: walk
   - first:
+      74: 5522812681064789136
+    second: Run
+  - first:
+      74: 4400453606987535483
+    second: "\u30A2\u30FC\u30DE\u30C1\u30E5\u30A2|Run"
+  - first:
       74: 5004041584230489543
     second: "\u30A2\u30FC\u30DE\u30C1\u30E5\u30A2|walk"
   externalObjects: {}
