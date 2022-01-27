@@ -8,6 +8,7 @@ public class CustomNetworkManager : NetworkManager
 {
     public Canvas canvas;
 
+
     //====================
     // ホスト・クライアント・サーバーの開始・停止
     //====================
@@ -138,4 +139,7 @@ public class CustomNetworkManager : NetworkManager
         base.OnServerChangeScene(sceneName);
         print("OnServerChangeScene : " + sceneName);
     }
+
+
+
 }
