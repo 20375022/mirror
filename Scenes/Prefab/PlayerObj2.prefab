@@ -1360,8 +1360,8 @@ GameObject:
   - component: {fileID: 1105843490615251056}
   - component: {fileID: 3380523142777325313}
   - component: {fileID: 2657253876990362499}
-  - component: {fileID: 175120841833596964}
   - component: {fileID: 7953044316917094600}
+  - component: {fileID: 175120841833596964}
   m_Layer: 0
   m_Name: killer
   m_TagString: Untagged
@@ -1518,22 +1518,6 @@ MonoBehaviour:
   visible: 0
   m_AssetId: d9b319caec5b0f54988c56935e12642c
   hasSpawned: 0
---- !u!114 &175120841833596964
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 2442570207081041466}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 7f6f3bf89aa97405989c802ba270f815, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  syncMode: 0
-  syncInterval: 0.1
-  clientAuthority: 0
-  animator: {fileID: 3380523142777325313}
 --- !u!114 &7953044316917094600
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1563,6 +1547,22 @@ MonoBehaviour:
   showGizmos: 0
   showOverlay: 0
   overlayColor: {r: 0, g: 0, b: 0, a: 0.5}
+--- !u!114 &175120841833596964
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2442570207081041466}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 7f6f3bf89aa97405989c802ba270f815, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  syncMode: 0
+  syncInterval: 0.1
+  clientAuthority: 1
+  animator: {fileID: 3380523142777325313}
 --- !u!1 &2478131209445194733
 GameObject:
   m_ObjectHideFlags: 0
@@ -2965,7 +2965,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   syncMode: 0
   syncInterval: 0.1
-  clientAuthority: 0
+  clientAuthority: 1
   animator: {fileID: 7377334230523825751}
 --- !u!1 &4443712298253411839
 GameObject:
