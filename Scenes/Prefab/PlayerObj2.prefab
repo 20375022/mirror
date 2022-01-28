@@ -1358,11 +1358,8 @@ GameObject:
   m_Component:
   - component: {fileID: 3075413213072118912}
   - component: {fileID: 1105843490615251056}
-  - component: {fileID: 3380523142777325313}
   - component: {fileID: 2657253876990362499}
   - component: {fileID: 7953044316917094600}
-  - component: {fileID: 6815798649621322334}
-  - component: {fileID: 3821233968533606367}
   m_Layer: 0
   m_Name: killer
   m_TagString: Untagged
@@ -1485,25 +1482,6 @@ AudioSource:
     m_PreInfinity: 2
     m_PostInfinity: 2
     m_RotationOrder: 4
---- !u!95 &3380523142777325313
-Animator:
-  serializedVersion: 3
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 2442570207081041466}
-  m_Enabled: 1
-  m_Avatar: {fileID: 0}
-  m_Controller: {fileID: 9100000, guid: dbe270a744c6bef42bb9129b0de033a7, type: 2}
-  m_CullingMode: 1
-  m_UpdateMode: 0
-  m_ApplyRootMotion: 0
-  m_LinearVelocityBlending: 0
-  m_WarningMessage: 
-  m_HasTransformHierarchy: 1
-  m_AllowConstantClipSamplingOptimization: 1
-  m_KeepAnimatorControllerStateOnDisable: 0
 --- !u!114 &2657253876990362499
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1550,37 +1528,6 @@ MonoBehaviour:
   showGizmos: 0
   showOverlay: 0
   overlayColor: {r: 0, g: 0, b: 0, a: 0.5}
---- !u!114 &6815798649621322334
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 2442570207081041466}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 7f6f3bf89aa97405989c802ba270f815, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  syncMode: 0
-  syncInterval: 0.1
-  clientAuthority: 0
-  animator: {fileID: 3380523142777325313}
---- !u!114 &3821233968533606367
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 2442570207081041466}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 65e874c7d68d40543b6a937d286d5933, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  syncMode: 0
-  syncInterval: 0.1
-  playerControl: {fileID: 4211692741696712424}
 --- !u!1 &2478131209445194733
 GameObject:
   m_ObjectHideFlags: 0
@@ -5102,6 +5049,9 @@ GameObject:
   - component: {fileID: 7795082714313430310}
   - component: {fileID: -4001451404702662244}
   - component: {fileID: 4211692741696712424}
+  - component: {fileID: 4843779971384171862}
+  - component: {fileID: 2696398149971853596}
+  - component: {fileID: 1967703235000347621}
   m_Layer: 0
   m_Name: PlayerObj2
   m_TagString: Untagged
@@ -5221,6 +5171,56 @@ MonoBehaviour:
   mycam: {fileID: 5474630839735891737}
   cam: {fileID: 5474630839735891743}
   PlyObj: 0
+--- !u!95 &4843779971384171862
+Animator:
+  serializedVersion: 3
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8269854961021232652}
+  m_Enabled: 1
+  m_Avatar: {fileID: 0}
+  m_Controller: {fileID: 9100000, guid: dbe270a744c6bef42bb9129b0de033a7, type: 2}
+  m_CullingMode: 1
+  m_UpdateMode: 0
+  m_ApplyRootMotion: 0
+  m_LinearVelocityBlending: 0
+  m_WarningMessage: 
+  m_HasTransformHierarchy: 1
+  m_AllowConstantClipSamplingOptimization: 1
+  m_KeepAnimatorControllerStateOnDisable: 0
+--- !u!114 &2696398149971853596
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8269854961021232652}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 7f6f3bf89aa97405989c802ba270f815, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  syncMode: 0
+  syncInterval: 0.1
+  clientAuthority: 0
+  animator: {fileID: 4843779971384171862}
+--- !u!114 &1967703235000347621
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8269854961021232652}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 65e874c7d68d40543b6a937d286d5933, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  syncMode: 0
+  syncInterval: 0.1
+  playerControl: {fileID: 4211692741696712424}
 --- !u!1 &8319281148637661706
 GameObject:
   m_ObjectHideFlags: 0
