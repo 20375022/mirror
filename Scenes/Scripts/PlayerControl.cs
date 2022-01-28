@@ -12,7 +12,6 @@ public class PlayerControl : NetworkBehaviour
     float moveSpeed;        // キャラの移動速度
     
     GameObject CurrentModel;// 今のプレイヤーモデル
-    [SyncVar]
     public int PlyObj = 1;
 
     void Start() {

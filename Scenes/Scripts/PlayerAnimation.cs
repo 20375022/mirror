@@ -6,8 +6,8 @@ public class PlayerAnimation : NetworkBehaviour
 
     // Animator コンポーネント
     private Animator animator;
-    [SyncVar]
-    public int PlyObj;
+    public PlayerControl playerControl;
+    int PlyObj;
 
     // 設定したフラグの名前
     private const string key_isRun = "isRun";
@@ -16,6 +16,7 @@ public class PlayerAnimation : NetworkBehaviour
     // 初期化メソッド
     void Start()
     {
+        PlyObj = playerControl.PlyObj;
         // 自分に設定されているAnimatorコンポーネントを取得する
         animator = this.transform.GetChild(PlyObj).GetComponent<Animator>();
     }
