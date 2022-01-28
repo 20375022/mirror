@@ -11,7 +11,7 @@ public class PlayerControl : NetworkBehaviour
     Rigidbody rb;           // Rigid Body
     float moveSpeed;        // キャラの移動速度
     
-    public int PlyObj = 0;
+    public int PlyObj = 0;  // 今どのモデルをONにしているか
 
     void Start() {
         Plane = GameObject.Find("y床");
@@ -131,12 +131,12 @@ public class PlayerControl : NetworkBehaviour
         if (Input.GetKey(KeyCode.LeftShift))
         {
             moveSpeed = 5.0f;
-            GetComponent<PlayerAnimation>().PlyRunAnim();
+            this.transform.GetChild(PlyObj).GetComponent<PlayerAnimation>().PlyRunAnim();
         }
         else
         {
             moveSpeed = 3.0f;
-            GetComponent<PlayerAnimation>().PlyWalkAnim();
+            this.transform.GetChild(PlyObj).GetComponent<PlayerAnimation>().PlyWalkAnim();
         }
 
         // カメラの方向から、X-Z平面の単位ベクトルを取得
