@@ -14,7 +14,7 @@ public class PlayerControl : NetworkBehaviour
     public int PlyObj = 0;
 
     void Start() {
-        Plane = GameObject.Find("四方の見えない壁");
+        Plane = GameObject.Find("y床");
         this.transform.GetChild(PlyObj).gameObject.SetActive(true);
         cam.GetComponent<AudioListener>().enabled = true;
     }

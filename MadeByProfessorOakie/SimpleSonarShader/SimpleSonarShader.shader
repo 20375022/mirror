@@ -32,6 +32,7 @@ Shader "MadeByProfessorOakie/SimpleSonarShader" {
 	struct Input {
 		float2 uv_MainTex;
 		float3 worldPos;
+		float3 uv_Illum;
 	};
 
 	// The size of these arrays is the number of rings that can be rendered at once.
@@ -44,6 +45,7 @@ Shader "MadeByProfessorOakie/SimpleSonarShader" {
 	half _Metallic;
 	fixed4 _Color;
 	fixed4 _RingColor;
+	fixed4 _EmissionLM;
 	half _RingColorIntensity;
 	half _RingSpeed;
 	half _RingWidth;
@@ -77,11 +79,17 @@ Shader "MadeByProfessorOakie/SimpleSonarShader" {
 				if (tempDiffFromRingCol < DiffFromRingCol)
 				{
 					// Update values using our predicted ones.
+
 					DiffFromRingCol = tempDiffFromRingCol;
 					o.Albedo.r = tmp.r;
 					o.Albedo.g = tmp.g;
 					o.Albedo.b = tmp.b;
 					o.Albedo.rgb *= _RingColorIntensity;
+
+					o.Emission.r = tmp.r;
+					o.Emission.g = tmp.g;
+					o.Emission.b = tmp.b;
+					o.Emission.rgb = tmp;
 				}
 			}
 		}
