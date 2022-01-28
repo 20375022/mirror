@@ -13,7 +13,7 @@ public class PlayerControl : NetworkBehaviour
     bool trigger = false;
 
     void Start() {
-        Plane = GameObject.Find("地面");
+        Plane = GameObject.Find("y床");
         cam.GetComponent<AudioListener>().enabled = true;
     }
 
