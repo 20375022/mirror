@@ -11,13 +11,11 @@ public class PlayerControl : NetworkBehaviour
     Rigidbody rb;           // Rigid Body
     float moveSpeed;        // キャラの移動速度
     
-    GameObject CurrentModel;// 今のプレイヤーモデル
-    public int PlyObj = 1;
+    public int PlyObj = 0;
 
     void Start() {
         Plane = GameObject.Find("四方の見えない壁");
-        CurrentModel = this.transform.gameObject;
-        this.transform.GetChild(1).gameObject.SetActive(true);
+        this.transform.GetChild(PlyObj).gameObject.SetActive(true);
         cam.GetComponent<AudioListener>().enabled = true;
     }
 
@@ -83,13 +81,13 @@ public class PlayerControl : NetworkBehaviour
     [Command]
     void CmdPlaySounds()
     {
-        this.transform.GetChild(1).GetComponent<AudioSource>().Play();
+        this.transform.GetChild(PlyObj).GetComponent<AudioSource>().Play();
     }
 
     [ClientRpc]
     void RpcPlaySounds()
     {
-        this.transform.GetChild(1).GetComponent<AudioSource>().Play();
+        this.transform.GetChild(PlyObj).GetComponent<AudioSource>().Play();
     }
 
 
@@ -133,10 +131,12 @@ public class PlayerControl : NetworkBehaviour
         if (Input.GetKey(KeyCode.LeftShift))
         {
             moveSpeed = 5.0f;
+            this.transform.GetChild(PlyObj).GetComponent<PlayerAnimation>().PlyRunAnim();
         }
         else
         {
             moveSpeed = 3.0f;
+            this.transform.GetChild(PlyObj).GetComponent<PlayerAnimation>().PlyWalkAnim();
         }
 
         // カメラの方向から、X-Z平面の単位ベクトルを取得

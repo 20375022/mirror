@@ -18,7 +18,18 @@ public class PlayerAnimation : NetworkBehaviour
     {
         PlyObj = playerControl.PlyObj;
         // 自分に設定されているAnimatorコンポーネントを取得する
-        animator = this.transform.GetChild(PlyObj).GetComponent<Animator>();
+        //        this.animator = this.transform.GetChild(PlyObj).GetComponent<Animator>();
+        this.animator = GetComponent<Animator>();
+    }
+
+    public void PlyRunAnim()
+    {
+        this.animator.SetBool(key_isRun, true);
+    }
+
+    public void PlyWalkAnim()
+    {
+        this.animator.SetBool(key_isRun, false);
     }
 
     // 1フレームに1回コールされる
@@ -32,12 +43,12 @@ public class PlayerAnimation : NetworkBehaviour
             if (Input.GetKey(KeyCode.LeftShift))
             {
                 // WalkからRunに遷移する
-                animator.SetBool(key_isRun, true);
+                //this.animator.SetBool(key_isRun, true);
             }
             else
             {
                 // RunからWalkに遷移する
-                this.animator.SetBool(key_isRun, false);
+                //this.animator.SetBool(key_isRun, false);
             }
         }
 
