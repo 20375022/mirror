@@ -7,6 +7,7 @@ public class PlayerCamera : MonoBehaviour
 {
     public GameObject target;
     public Vector3 targetpos;
+    public float Cam_sensi;
 
     // Start is called before the first frame update
     void Start()
@@ -21,19 +22,17 @@ public class PlayerCamera : MonoBehaviour
         targetpos = target.transform.position;
 
         // カメラ操作 -- キーボード入力による回転処理(横)
-        var view_sensitivity = 1.5f;
         if (Input.GetKey("left"))
         {
             targetpos = target.transform.position;
-            transform.RotateAround(targetpos, Vector3.up, -50.0f * Time.deltaTime);
+            transform.RotateAround(targetpos, Vector3.up, (Cam_sensi * -1) * Time.deltaTime);
         }
         else
         {
             if (Input.GetKey("right"))
             {
-                view_sensitivity *= -1;
                 targetpos = target.transform.position;
-                transform.RotateAround(targetpos, Vector3.up, 50.0f * Time.deltaTime);
+                transform.RotateAround(targetpos, Vector3.up, Cam_sensi * Time.deltaTime);
             }
         }
 

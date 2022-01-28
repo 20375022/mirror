@@ -5596,6 +5596,11 @@ PrefabInstance:
       propertyPath: target
       value: 
       objectReference: {fileID: 8269854961021232652}
+    - target: {fileID: 2164632160659682450, guid: 10421a2028937474bb0983f41bf3063a,
+        type: 3}
+      propertyPath: Cam_sensi
+      value: 100
+      objectReference: {fileID: 0}
     - target: {fileID: 2808932863242272498, guid: 10421a2028937474bb0983f41bf3063a,
         type: 3}
       propertyPath: m_RootOrder
