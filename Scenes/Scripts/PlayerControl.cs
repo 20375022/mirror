@@ -11,8 +11,8 @@ public class PlayerControl : NetworkBehaviour
     Rigidbody rb;           // Rigid Body
     float moveSpeed;        // キャラの移動速度
     
-    [SyncVar]
     GameObject CurrentModel;// 今のプレイヤーモデル
+    [SyncVar]
     public int PlyObj = 1;
 
     void Start() {
