@@ -1361,7 +1361,7 @@ GameObject:
   - component: {fileID: 3380523142777325313}
   - component: {fileID: 2657253876990362499}
   - component: {fileID: 7953044316917094600}
-  - component: {fileID: 175120841833596964}
+  - component: {fileID: 6815798649621322334}
   m_Layer: 0
   m_Name: killer
   m_TagString: Untagged
@@ -1549,7 +1549,7 @@ MonoBehaviour:
   showGizmos: 0
   showOverlay: 0
   overlayColor: {r: 0, g: 0, b: 0, a: 0.5}
---- !u!114 &175120841833596964
+--- !u!114 &6815798649621322334
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
