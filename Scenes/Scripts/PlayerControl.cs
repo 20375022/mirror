@@ -174,8 +174,10 @@ public class PlayerControl : NetworkBehaviour
         transform.rotation = rotate;
     }
 
+
+
     // ---------------------------------------------- //
-    //              プレイヤーの移動                  //
+    //              プレイヤーのソナー                //
     // ---------------------------------------------- //
     [Command]
     void CmdSonarPlayer(Vector4 point, float impulse)

@@ -139,7 +139,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!114 &17816012
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1564,7 +1564,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!114 &1456474601
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1726,6 +1726,115 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1822935012}
   m_CullTransparentMesh: 0
+--- !u!1 &1948552046
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1948552050}
+  - component: {fileID: 1948552049}
+  - component: {fileID: 1948552048}
+  - component: {fileID: 1948552047}
+  m_Layer: 0
+  m_Name: NetworkLobby
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!114 &1948552047
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1948552046}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 6442dc8070ceb41f094e44de0bf87274, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  offsetX: 0
+  offsetY: 0
+--- !u!114 &1948552048
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1948552046}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 6b0fecffa3f624585964b0d0eb21b18e, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  Port: 7777
+  DualMode: 1
+  NoDelay: 1
+  Interval: 10
+  Timeout: 10000
+  FastResend: 2
+  CongestionWindow: 0
+  SendWindowSize: 4096
+  ReceiveWindowSize: 4096
+  NonAlloc: 1
+  debugLog: 0
+  statisticsGUI: 0
+  statisticsLog: 0
+--- !u!114 &1948552049
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1948552046}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a4c96e6dd99826849ab1431f94547141, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  dontDestroyOnLoad: 1
+  PersistNetworkManagerToOfflineScene: 0
+  runInBackground: 1
+  autoStartServerBuild: 1
+  serverTickRate: 30
+  offlineScene: 
+  onlineScene: 
+  transport: {fileID: 1948552048}
+  networkAddress: localhost
+  maxConnections: 100
+  authenticator: {fileID: 0}
+  playerPrefab: {fileID: 8269854961021232652, guid: 0bbb80871f6b6d346ade7466cef9215c,
+    type: 3}
+  autoCreatePlayer: 1
+  playerSpawnMethod: 0
+  spawnPrefabs: []
+  showRoomGUI: 1
+  minPlayers: 1
+  roomPlayerPrefab: {fileID: 1324788117597170254, guid: b331f831caf6b2e45a48eb92e2d6492f,
+    type: 3}
+  RoomScene: 
+  GameplayScene: 
+  _allPlayersReady: 0
+  roomSlots: []
+  clientIndex: 0
+--- !u!4 &1948552050
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1948552046}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 7.1275473, y: 12.127115, z: -8.023684}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_RootOrder: 7
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &2077567292
 GameObject:
   m_ObjectHideFlags: 0
@@ -6323,8 +6432,8 @@ MonoBehaviour:
     serializedVersion: 2
     m_Curve:
     - serializedVersion: 3
-      time: -0.4314764
-      value: 0.5891893
+      time: -0.9457617
+      value: -0.27269894
       inSlope: 0
       outSlope: 0
       tangentMode: 0
@@ -6332,8 +6441,8 @@ MonoBehaviour:
       inWeight: 0
       outWeight: 0
     - serializedVersion: 3
-      time: -0.3656957
-      value: 0.60170424
+      time: -0.8484428
+      value: -0.260184
       inSlope: 0.2024772
       outSlope: 0.2024772
       tangentMode: 0
@@ -6341,8 +6450,8 @@ MonoBehaviour:
       inWeight: 0.980543
       outWeight: 0
     - serializedVersion: 3
-      time: -0.18355773
-      value: 0.6872957
+      time: -0.57898
+      value: -0.17459255
       inSlope: 0
       outSlope: 0
       tangentMode: 0
@@ -6350,8 +6459,8 @@ MonoBehaviour:
       inWeight: 0
       outWeight: 0
     - serializedVersion: 3
-      time: -0.1437105
-      value: 0.6841502
+      time: -0.5200283
+      value: -0.17773801
       inSlope: 0
       outSlope: 0
       tangentMode: 0
@@ -6359,8 +6468,8 @@ MonoBehaviour:
       inWeight: 0
       outWeight: 0
     - serializedVersion: 3
-      time: -0.09111211
-      value: 0.6872956
+      time: -0.44221196
+      value: -0.17459261
       inSlope: 0
       outSlope: 0
       tangentMode: 0
@@ -6368,8 +6477,8 @@ MonoBehaviour:
       inWeight: 0
       outWeight: 0
     - serializedVersion: 3
-      time: -0.064015955
-      value: 0.7030227
+      time: -0.40212473
+      value: -0.15886551
       inSlope: 0
       outSlope: 0
       tangentMode: 0
@@ -6377,8 +6486,8 @@ MonoBehaviour:
       inWeight: 0
       outWeight: 0
     - serializedVersion: 3
-      time: -0.006635934
-      value: 0.6652777
+      time: -0.31723422
+      value: -0.19661051
       inSlope: 0
       outSlope: 0
       tangentMode: 0
@@ -6386,8 +6495,8 @@ MonoBehaviour:
       inWeight: 0
       outWeight: 0
     - serializedVersion: 3
-      time: 0.045962512
-      value: 0.71245897
+      time: -0.23941779
+      value: -0.14942926
       inSlope: -0.33947074
       outSlope: -0.33947074
       tangentMode: 0
@@ -6395,8 +6504,8 @@ MonoBehaviour:
       inWeight: 1
       outWeight: 0
     - serializedVersion: 3
-      time: 0.08531918
-      value: 0.9363219
+      time: -0.18119183
+      value: 0.074433684
       inSlope: 0
       outSlope: 0
       tangentMode: 0
@@ -6404,8 +6513,8 @@ MonoBehaviour:
       inWeight: 0
       outWeight: 0
     - serializedVersion: 3
-      time: 0.15535113
-      value: 0.5718295
+      time: -0.07758352
+      value: -0.29005873
       inSlope: -1.7116185
       outSlope: -1.7116185
       tangentMode: 0
@@ -6413,8 +6522,8 @@ MonoBehaviour:
       inWeight: 0.29825312
       outWeight: 0
     - serializedVersion: 3
-      time: 0.15593553
-      value: 0.8131057
+      time: -0.07671894
+      value: -0.048782527
       inSlope: -1.5179278
       outSlope: -1.5179278
       tangentMode: 0
@@ -6422,8 +6531,8 @@ MonoBehaviour:
       inWeight: 0.6855304
       outWeight: 0
     - serializedVersion: 3
-      time: 0.25968382
-      value: -0.24353391
+      time: 0.26966366
+      value: -0.20780802
       inSlope: -0.848962
       outSlope: -0.848962
       tangentMode: 0
@@ -6431,8 +6540,8 @@ MonoBehaviour:
       inWeight: 0.9458598
       outWeight: 0
     - serializedVersion: 3
-      time: 0.3719531
-      value: -0.12938493
+      time: 0.43575975
+      value: -0.09365904
       inSlope: 0
       outSlope: 0
       tangentMode: 0
@@ -6440,8 +6549,8 @@ MonoBehaviour:
       inWeight: 0
       outWeight: 0
     - serializedVersion: 3
-      time: 0.4503808
-      value: -0.129385
+      time: 0.55178905
+      value: -0.0936591
       inSlope: 0
       outSlope: 0
       tangentMode: 0
@@ -6449,8 +6558,8 @@ MonoBehaviour:
       inWeight: 0
       outWeight: 0
     - serializedVersion: 3
-      time: 0.5341819
-      value: -0.24667934
+      time: 0.66456395
+      value: 0.6509348
       inSlope: 0.21965772
       outSlope: 0.21965772
       tangentMode: 0
@@ -6458,8 +6567,8 @@ MonoBehaviour:
       inWeight: 0.82758236
       outWeight: 0
     - serializedVersion: 3
-      time: 0.58762944
-      value: -0.12938493
+      time: 0.7180115
+      value: 0.7682292
       inSlope: 0
       outSlope: 0
       tangentMode: 0
@@ -6467,8 +6576,8 @@ MonoBehaviour:
       inWeight: 0
       outWeight: 0
     - serializedVersion: 3
-      time: 0.5930029
-      value: -0.06424546
+      time: 0.723385
+      value: 0.83336866
       inSlope: 0
       outSlope: 0
       tangentMode: 0
@@ -6476,8 +6585,8 @@ MonoBehaviour:
       inWeight: 0
       outWeight: 0
     - serializedVersion: 3
-      time: 0.64398086
-      value: -0.061100006
+      time: 0.7743629
+      value: 0.8365141
       inSlope: 0
       outSlope: 0
       tangentMode: 0
@@ -6485,8 +6594,8 @@ MonoBehaviour:
       inWeight: 0
       outWeight: 0
     - serializedVersion: 3
-      time: 0.6675093
-      value: -0.23095226
+      time: 0.7978914
+      value: 0.66666186
       inSlope: 0
       outSlope: 0
       tangentMode: 0
@@ -6494,8 +6603,8 @@ MonoBehaviour:
       inWeight: 0
       outWeight: 0
     - serializedVersion: 3
-      time: 0.6699786
-      value: -0.13882113
+      time: 0.8003607
+      value: 0.758793
       inSlope: 0
       outSlope: 0
       tangentMode: 0
@@ -6503,8 +6612,8 @@ MonoBehaviour:
       inWeight: 0
       outWeight: 0
     - serializedVersion: 3
-      time: 0.71848726
-      value: -0.24038851
+      time: 0.8488693
+      value: 0.6572256
       inSlope: 0
       outSlope: 0
       tangentMode: 0
@@ -6512,8 +6621,8 @@ MonoBehaviour:
       inWeight: 0
       outWeight: 0
     - serializedVersion: 3
-      time: 0.73025125
-      value: -0.04851836
+      time: 0.8606333
+      value: 0.84909576
       inSlope: 0
       outSlope: 0
       tangentMode: 0
@@ -6521,8 +6630,8 @@ MonoBehaviour:
       inWeight: 0
       outWeight: 0
     - serializedVersion: 3
-      time: 0.78515095
-      value: -0.042227507
+      time: 0.915533
+      value: 0.8553866
       inSlope: 0
       outSlope: 0
       tangentMode: 0
@@ -6530,8 +6639,8 @@ MonoBehaviour:
       inWeight: 0
       outWeight: 0
     - serializedVersion: 3
-      time: 0.82044333
-      value: -0.25611556
+      time: 0.9508254
+      value: 0.64149857
       inSlope: 0
       outSlope: 0
       tangentMode: 0
@@ -6539,8 +6648,8 @@ MonoBehaviour:
       inWeight: 0
       outWeight: 0
     - serializedVersion: 3
-      time: 0.9184781
-      value: -0.26555178
+      time: 1.0488601
+      value: 0.6320623
       inSlope: 0
       outSlope: 0
       tangentMode: 0
@@ -6548,8 +6657,8 @@ MonoBehaviour:
       inWeight: 0
       outWeight: 0
     - serializedVersion: 3
-      time: 0.9679733
-      value: 0.03102827
+      time: 1.0983553
+      value: 0.9286424
       inSlope: 0
       outSlope: 0
       tangentMode: 0
@@ -6557,8 +6666,8 @@ MonoBehaviour:
       inWeight: 0
       outWeight: 0
     - serializedVersion: 3
-      time: 1.1498398
-      value: -0.0831179
+      time: 1.2802218
+      value: 0.8144962
       inSlope: 1.2804662
       outSlope: 1.2804662
       tangentMode: 0
@@ -6566,8 +6675,8 @@ MonoBehaviour:
       inWeight: 0
       outWeight: 1
     - serializedVersion: 3
-      time: 1.2478747
-      value: -0.089408755
+      time: 1.3782568
+      value: 0.80820537
       inSlope: 0
       outSlope: 0
       tangentMode: 0
@@ -6575,8 +6684,8 @@ MonoBehaviour:
       inWeight: 0
       outWeight: 0
     - serializedVersion: 3
-      time: 1.4008088
-      value: -0.19635275
+      time: 1.5311909
+      value: 0.7012614
       inSlope: 0
       outSlope: 0
       tangentMode: 0
@@ -6584,8 +6693,8 @@ MonoBehaviour:
       inWeight: 0
       outWeight: 0
     - serializedVersion: 3
-      time: 1.4910014
-      value: -0.23095226
+      time: 1.6213834
+      value: 0.66666186
       inSlope: 0.4792528
       outSlope: 0.4792528
       tangentMode: 0
