@@ -131,12 +131,10 @@ public class PlayerControl : NetworkBehaviour
         if (Input.GetKey(KeyCode.LeftShift))
         {
             moveSpeed = 5.0f;
-            this.transform.GetChild(PlyObj).GetComponent<PlayerAnimation>().PlyRunAnim();
         }
         else
         {
             moveSpeed = 3.0f;
-            this.transform.GetChild(PlyObj).GetComponent<PlayerAnimation>().PlyWalkAnim();
         }
 
         // カメラの方向から、X-Z平面の単位ベクトルを取得

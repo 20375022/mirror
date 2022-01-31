@@ -18,7 +18,7 @@ public class PlayerAnimation : NetworkBehaviour
     {
         PlyObj = playerControl.PlyObj;
         // 自分に設定されているAnimatorコンポーネントを取得する
-        //        this.animator = this.transform.GetChild(PlyObj).GetComponent<Animator>();
+        //this.animator = this.transform.GetChild(PlyObj).GetComponent<Animator>();
         this.animator = GetComponent<Animator>();
     }
 
@@ -43,12 +43,12 @@ public class PlayerAnimation : NetworkBehaviour
             if (Input.GetKey(KeyCode.LeftShift))
             {
                 // WalkからRunに遷移する
-                //this.animator.SetBool(key_isRun, true);
+                this.animator.SetBool(key_isRun, true);
             }
             else
             {
                 // RunからWalkに遷移する
-                //this.animator.SetBool(key_isRun, false);
+                this.animator.SetBool(key_isRun, false);
             }
         }
 
