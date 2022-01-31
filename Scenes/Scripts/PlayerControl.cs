@@ -71,8 +71,16 @@ public class PlayerControl : NetworkBehaviour
         {
             if (Input.GetKey(KeyCode.Z))
             {
-                Plane.GetComponent<SimpleSonarShader_Object>().StartSonarRing(collision.contacts[0].point, collision.impulse.magnitude * 10);
-                CmdPlaySounds();
+                if (isServer)
+                {
+                    RqcSonarPlayer(collision.contacts[0].point, collision.impulse.magnitude);
+                }
+                else if (isClient)
+                {
+                    Plane.GetComponent<SimpleSonarShader_Object>().StartSonarRing(collision.contacts[0].point, collision.impulse.magnitude * 10);
+                    CmdSonarPlayer(collision.contacts[0].point, collision.impulse.magnitude);
+                }
+                //CmdPlaySounds();
             }
         }
     }
@@ -166,4 +174,26 @@ public class PlayerControl : NetworkBehaviour
         transform.rotation = rotate;
     }
 
+    // ---------------------------------------------- //
+    //              プレイヤーの移動                  //
+    // ---------------------------------------------- //
+    [Command]
+    void CmdSonarPlayer(Vector4 point, float impulse)
+    {
+        Plane.GetComponent<SimpleSonarShader_Object>().StartSonarRing(point, impulse * 10);
+    }
+
+    [ClientRpc]
+    void RqcSonarPlayer(Vector4 point, float impulse)
+    {
+        Plane.GetComponent<SimpleSonarShader_Object>().StartSonarRing(point, impulse * 10);
+    }
+
 }
+
+
+
+
+
+
+
