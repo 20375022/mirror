@@ -21,8 +21,8 @@ public class SampleAnimation : NetworkBehaviour
     // 1フレームに1回コールされる
     void FixedUpdate()
     {
-        if (isLocalPlayer)
-        {
+//        if (isLocalPlayer)
+//        {
             // 矢印下ボタンを押下している
             if ((Input.GetKey(KeyCode.W)) || (Input.GetKey(KeyCode.S)) ||
                  (Input.GetKey(KeyCode.A)) || (Input.GetKey(KeyCode.D)))
@@ -35,7 +35,7 @@ public class SampleAnimation : NetworkBehaviour
                 // RunからWaitに遷移する
                 this.animator.SetBool(key_isRun, false);
             }
-        }
+//        }
 
     }
 }
