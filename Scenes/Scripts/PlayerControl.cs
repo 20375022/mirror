@@ -14,7 +14,7 @@ public class PlayerControl : NetworkBehaviour
     bool ZKey = false;
 
     void Start() {
-        Plane = GameObject.Find("地面");
+        Plane = GameObject.Find("y床");
         cam.GetComponent<AudioListener>().enabled = true;
     }
 
