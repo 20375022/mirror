@@ -10,8 +10,8 @@ public class PlayerAnimation : NetworkBehaviour
     int PlyObj;
 
     // 設定したフラグの名前
+    private const string key_isWalk = "isWalk";
     private const string key_isRun = "isRun";
-    private const string key_isJump = "isJump";
 
     // 初期化メソッド
     void Start()
@@ -22,34 +22,37 @@ public class PlayerAnimation : NetworkBehaviour
         this.animator = GetComponent<Animator>();
     }
 
-    public void PlyRunAnim()
-    {
-        this.animator.SetBool(key_isRun, true);
-    }
-
-    public void PlyWalkAnim()
-    {
-        this.animator.SetBool(key_isRun, false);
-    }
-
     // 1フレームに1回コールされる
     void FixedUpdate()
     {
         if (isLocalPlayer)
         {
             // 移動ボタンを押下している
-            //           if ((Input.GetKey(KeyCode.W)) || (Input.GetKey(KeyCode.S)) ||
-            //               (Input.GetKey(KeyCode.A)) || (Input.GetKey(KeyCode.D)))
-            if (Input.GetKey(KeyCode.LeftShift))
+            if ((Input.GetKey(KeyCode.W)) || (Input.GetKey(KeyCode.S)) ||
+                (Input.GetKey(KeyCode.A)) || (Input.GetKey(KeyCode.D)))
             {
-                // WalkからRunに遷移する
-                this.animator.SetBool(key_isRun, true);
+                // WaitからWalkに遷移する
+                this.animator.SetBool(key_isWalk, true);
+
+                // 歩いている間は走りに移行できる
+                if (Input.GetKey(KeyCode.LeftShift))
+                {
+                    // WalkからRunに遷移する
+                    this.animator.SetBool(key_isRun, true);
+                }
+                else
+                {
+                    // RunからWalkに遷移する
+                    this.animator.SetBool(key_isRun, false);
+                }
             }
             else
             {
-                // RunからWalkに遷移する
+                // WalkからWaitに遷移する
+                this.animator.SetBool(key_isWalk, false);
                 this.animator.SetBool(key_isRun, false);
             }
+
         }
 
     }

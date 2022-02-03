@@ -10,7 +10,8 @@ public class PlayerControl : NetworkBehaviour
     float inputVertical;    // 縦のキー入力
     Rigidbody rb;           // Rigid Body
     float moveSpeed;        // キャラの移動速度
-    
+
+
     public int PlyObj = 0;  // 今どのモデルをONにしているか
 
     void Start() {
@@ -25,6 +26,7 @@ public class PlayerControl : NetworkBehaviour
         inputHorizontal = Input.GetAxisRaw("Horizontal");
         inputVertical = Input.GetAxisRaw("Vertical");
     }
+
     // 定期更新時に呼ばれる
     void FixedUpdate()
     {
@@ -136,7 +138,7 @@ public class PlayerControl : NetworkBehaviour
     void PlayerMovement()
     {
         // ダッシュ
-        if (Input.GetKey(KeyCode.LeftShift))
+            if (Input.GetKey(KeyCode.LeftShift))
         {
             moveSpeed = 5.0f;
         }
@@ -161,7 +163,7 @@ public class PlayerControl : NetworkBehaviour
         }
     }
 
-    // プレイヤーの移動
+
     [Command]
     void CmdMovePlayer(Vector3 move)
     {
