@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 using Mirror;
 
 public class PlayerCamera : MonoBehaviour
@@ -9,10 +10,15 @@ public class PlayerCamera : MonoBehaviour
     public Vector3 targetpos;
     public float Cam_sensi;
 
+    public GameObject GameUI;
+    public GameObject OptionUI;
+
     // Start is called before the first frame update
     void Start()
     {
         this.transform.parent = null;
+        GameUI.SetActive(true);
+        OptionUI.SetActive(false);
     }
 
     // Update is called once per frame
@@ -36,5 +42,17 @@ public class PlayerCamera : MonoBehaviour
             }
         }
 
+        if (Input.GetKey(KeyCode.Escape))
+        {
+            GameUI.SetActive(false);
+            OptionUI.SetActive(true);
+        }
+
+    }
+
+    public void OnclickOptionClose()
+    {
+        GameUI.SetActive(true);
+        OptionUI.SetActive(false);
     }
 }

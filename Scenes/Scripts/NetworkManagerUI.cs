@@ -5,7 +5,6 @@ using Mirror;
 
 public class NetworkManagerUI : MonoBehaviour
 {
-    public Canvas canvas;
     public GameObject MainCamera;
 
     // ホストボタン押下時に呼ばれる

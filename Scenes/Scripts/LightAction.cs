@@ -1,16 +1,19 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using Mirror;
 using Const;
 
-public class LightAction : MonoBehaviour
+public class LightAction : NetworkBehaviour
 {
     [SerializeField] AnimationCurve curve;
     [SerializeField] float speed;
     [SerializeField] float intensity;
 
     Light light;
+    [SyncVar]
     float t = 0f;
+    float tim;
 
     // Start is called before the first frame update
     void Start()
@@ -21,8 +24,22 @@ public class LightAction : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+        timeInc();
+        timeSync();
+        light.intensity = intensity * curve.Evaluate(tim * speed);
+    }
+
+    [ServerCallback]
+    void timeInc()
+    {
         t += Time.deltaTime;
-        light.intensity = intensity * curve.Evaluate(t * speed);
+        tim = t;
+    }
+
+    [ClientCallback]
+    void timeSync()
+    {
+        tim = GetComponent<LightAction>().t;
     }
 
 }

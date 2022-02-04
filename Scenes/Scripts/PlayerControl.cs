@@ -1,4 +1,6 @@
 ﻿using UnityEngine;
+using UnityEngine.UI;
+using Const;
 using Mirror;
 
 public class PlayerControl : NetworkBehaviour
@@ -11,8 +13,9 @@ public class PlayerControl : NetworkBehaviour
     Rigidbody rb;           // Rigid Body
     float moveSpeed;        // キャラの移動速度
 
+    public GameObject select;
 
-    public int PlyObj = 0;  // 今どのモデルをONにしているか
+    public int PlyObj;  // 今どのモデルをONにしているか
 
     void Start() {
         Plane = GameObject.Find("y床");
@@ -80,6 +83,7 @@ public class PlayerControl : NetworkBehaviour
                 else if (isClient)
                 {
                     Plane.GetComponent<SimpleSonarShader_Object>().StartSonarRing(collision.contacts[0].point, collision.impulse.magnitude * 10);
+                    RqcSonarPlayer(collision.contacts[0].point, collision.impulse.magnitude);
                     CmdSonarPlayer(collision.contacts[0].point, collision.impulse.magnitude);
                 }
                 //CmdPlaySounds();

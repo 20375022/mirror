@@ -12,7 +12,10 @@ namespace Const
 
     public static class CO
     {
-        public const int LIGHTMAX = 7;      // lightの最大数
+        public enum Player { 
+            JASON,  // 0
+            RUNNER  // 1
+        }
     }
 
 }

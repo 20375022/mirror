@@ -6,7 +6,7 @@ using Mirror;
 
 public class CustomNetworkManager : NetworkManager
 {
-    public Canvas canvas;
+    public GameObject network;
 
 
     //====================
@@ -17,7 +17,7 @@ public class CustomNetworkManager : NetworkManager
     {
         base.OnStartHost();
         print("OnStartHost");
-        canvas.gameObject.SetActive(false);
+        network.gameObject.SetActive(false);
     }
 
     // クライアントの開始時に呼ばれる
@@ -25,7 +25,7 @@ public class CustomNetworkManager : NetworkManager
     {
         base.OnStartClient();
         print("OnStartClient");
-        canvas.gameObject.SetActive(false);
+        network.gameObject.SetActive(false);
     }
 
     // サーバーの開始時に呼ばれる
@@ -33,7 +33,7 @@ public class CustomNetworkManager : NetworkManager
     {
         base.OnStartServer();
         print("OnStartServer");
-        canvas.gameObject.SetActive(false);
+        network.gameObject.SetActive(false);
     }
 
     // ホストの停止時に呼ばれる
