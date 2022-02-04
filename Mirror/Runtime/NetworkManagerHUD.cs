@@ -1,6 +1,10 @@
 // vis2k: GUILayout instead of spacey += ...; removed Update hotkeys to avoid
 // confusion if someone accidentally presses one.
+using System;
+using System.Collections.Generic;
+using System.Net.NetworkInformation;
 using UnityEngine;
+using UnityEngine.UI;
 
 namespace Mirror
 {
@@ -15,6 +19,9 @@ namespace Mirror
 
         public int offsetX;
         public int offsetY;
+        public GameObject IPado;
+        public string myAddr;
+
 
         void Awake()
         {
@@ -26,6 +33,7 @@ namespace Mirror
             GUILayout.BeginArea(new Rect(10 + offsetX, 40 + offsetY, 215, 9999));
             if (!NetworkClient.isConnected && !NetworkServer.active)
             {
+                Debug.Log("ê⁄ë±ëO");
                 StartButtons();
             }
             else
@@ -51,6 +59,41 @@ namespace Mirror
             GUILayout.EndArea();
         }
 
+        public void OnClickServer()
+        {
+            if (!NetworkClient.active)
+            {
+                manager.StartHost();
+            }
+            else
+            {
+                // Connecting
+                GUILayout.Label($"Connecting to {manager.networkAddress}..");
+                if (GUILayout.Button("Cancel Connection Attempt"))
+                {
+                    manager.StopClient();
+                }
+            }
+        }
+
+        public void OnClickClient()
+        {
+            if (!NetworkClient.active)
+            {
+                manager.StartClient();
+                manager.networkAddress = IPado.transform.Find("Text").gameObject.GetComponent<Text>().text;
+            }
+            else
+            {
+                // Connecting
+                GUILayout.Label($"Connecting to {manager.networkAddress}..");
+                if (GUILayout.Button("Cancel Connection Attempt"))
+                {
+                    manager.StopClient();
+                }
+            }
+        }
+
         void StartButtons()
         {
             if (!NetworkClient.active)
@@ -74,15 +117,15 @@ namespace Mirror
                 GUILayout.EndHorizontal();
 
                 // Server Only
-                if (Application.platform == RuntimePlatform.WebGLPlayer)
-                {
-                    // cant be a server in webgl build
-                    GUILayout.Box("(  WebGL cannot be server  )");
-                }
-                else
-                {
-                    if (GUILayout.Button("Server Only")) manager.StartServer();
-                }
+                /*                if (Application.platform == RuntimePlatform.WebGLPlayer)
+                                {
+                                    // cant be a server in webgl build
+                                    GUILayout.Box("(  WebGL cannot be server  )");
+                                }
+                                else
+                                {
+                                    if (GUILayout.Button("Server Only")) manager.StartServer();
+                                }*/
             }
             else
             {
@@ -103,7 +146,7 @@ namespace Mirror
             //   Client: ...
             if (NetworkServer.active && NetworkClient.active)
             {
-                GUILayout.Label($"<b>Host</b>: running via {Transport.activeTransport}");
+                GUILayout.Label(manager.networkAddress);
             }
             // server only
             else if (NetworkServer.active)
@@ -146,3 +189,11 @@ namespace Mirror
         }
     }
 }
+
+
+
+
+
+
+
+

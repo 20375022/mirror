@@ -146,6 +146,7 @@ MonoBehaviour:
   syncInterval: 0.1
   mycam: {fileID: 8939109483910467247}
   cam: {fileID: 8939109483910467241}
+  select: {fileID: 0}
   PlyObj: 1
 --- !u!54 &6618709690125954192
 Rigidbody:
