@@ -20,43 +20,47 @@ namespace Mirror
         public int offsetX;
         public int offsetY;
         public GameObject IPado;
-        public string myAddr;
 
+        public GameObject matching;
+        public GameObject connected;
 
         void Awake()
         {
+            matching.SetActive(true);
+            connected.SetActive(false);
             manager = GetComponent<NetworkManager>();
         }
 
-        void OnGUI()
+        void Update()
         {
-            GUILayout.BeginArea(new Rect(10 + offsetX, 40 + offsetY, 215, 9999));
             if (!NetworkClient.isConnected && !NetworkServer.active)
             {
                 Debug.Log("接続前");
-                StartButtons();
             }
             else
             {
-                StatusLabels();
+                if (NetworkServer.active && NetworkClient.active)
+                {
+                    connected.transform.Find("IP").gameObject.SetActive(true);
+                    connected.transform.Find("StatusMessage").GetComponent<Text>().text = "他のプレイヤーを待っています";
+                }
+                // client only
+                else if (NetworkClient.isConnected)
+                {
+                    connected.transform.Find("StatusMessage").GetComponent<Text>().text = "ホストの開始を待っています";
+                }
             }
 
             // client ready
             if (NetworkClient.isConnected && !NetworkClient.ready)
             {
-                if (GUILayout.Button("Client Ready"))
-                {
-                    NetworkClient.Ready();
-                    if (NetworkClient.localPlayer == null)
-                    {
-                        NetworkClient.AddPlayer();
-                    }
-                }
             }
-
-            StopButtons();
-
-            GUILayout.EndArea();
+            else if (NetworkClient.isConnected)
+            {
+            }
+            else if (!NetworkClient.ready)
+            {
+            }
         }
 
         public void OnClickServer()
@@ -64,15 +68,9 @@ namespace Mirror
             if (!NetworkClient.active)
             {
                 manager.StartHost();
-            }
-            else
-            {
-                // Connecting
-                GUILayout.Label($"Connecting to {manager.networkAddress}..");
-                if (GUILayout.Button("Cancel Connection Attempt"))
-                {
-                    manager.StopClient();
-                }
+                matching.SetActive(false);
+                connected.SetActive(true);
+                connected.transform.Find("StopServer").gameObject.SetActive(true);
             }
         }
 
@@ -80,19 +78,74 @@ namespace Mirror
         {
             if (!NetworkClient.active)
             {
-                manager.StartClient();
                 manager.networkAddress = IPado.transform.Find("Text").gameObject.GetComponent<Text>().text;
-            }
-            else
-            {
-                // Connecting
-                GUILayout.Label($"Connecting to {manager.networkAddress}..");
-                if (GUILayout.Button("Cancel Connection Attempt"))
-                {
-                    manager.StopClient();
-                }
+                Debug.Log(IPado.transform.Find("Text").gameObject.GetComponent<Text>().text);
+                manager.StartClient();
+                matching.SetActive(false);
+                connected.SetActive(true);
+                connected.transform.Find("StopClient").gameObject.SetActive(true);
+                connected.transform.Find("StatusMessage").GetComponent<Text>().text = "接続中...";
             }
         }
+
+        public void OnClickStopServer()
+        {
+            matching.SetActive(true);
+            connected.SetActive(false);
+            connected.transform.Find("StopServer").gameObject.SetActive(false);
+            connected.transform.Find("StopClient").gameObject.SetActive(false);
+            connected.transform.Find("IP").gameObject.SetActive(false);
+            connected.transform.Find("Ready").gameObject.SetActive(false);
+            manager.StopHost();
+        }
+
+        public void OnClickStopClient()
+        {
+            matching.SetActive(true);
+            connected.SetActive(false);
+            connected.transform.Find("StopServer").gameObject.SetActive(false);
+            connected.transform.Find("StopClient").gameObject.SetActive(false);
+            connected.transform.Find("Ready").gameObject.SetActive(false);
+            manager.StopClient();
+        }
+        
+        public void Onclickre()
+        {
+            NetworkClient.Ready();
+        }
+
+
+        /*       void OnGUI()
+               {
+                   GUILayout.BeginArea(new Rect(10 + offsetX, 40 + offsetY, 215, 9999));
+                   if (!NetworkClient.isConnected && !NetworkServer.active)
+                   {
+                       Debug.Log("接続前");
+                       StartButtons();
+                   }
+                   else
+                   {
+                       StatusLabels();
+                   }
+
+                   // client ready
+                   if (NetworkClient.isConnected && !NetworkClient.ready)
+                   {
+                       if (GUILayout.Button("Client Ready"))
+                       {
+                           ClientScene.Ready();
+                           if (NetworkClient.localPlayer == null)
+                           {
+                               NetworkClient.AddPlayer();
+                           }
+                       }
+                   }
+
+                   StopButtons();
+
+                   GUILayout.EndArea();
+               }*/
+
 
         void StartButtons()
         {

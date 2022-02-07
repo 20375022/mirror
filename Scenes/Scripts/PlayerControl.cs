@@ -23,6 +23,11 @@ public class PlayerControl : NetworkBehaviour
         cam.GetComponent<AudioListener>().enabled = true;
     }
 
+    void OnDestroy()
+    {
+        Destroy(cam);
+    }
+
     void Update()
     {
         // キー入力
