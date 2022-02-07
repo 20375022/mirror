@@ -1351,7 +1351,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   target: {fileID: 3190031216494300670}
   targetpos: {x: 0, y: 0, z: 0}
-  Cam_sensi: 100
+  Cam_sensi: 110
   GameUI: {fileID: 5067451607098424965}
   OptionUI: {fileID: 573034939394192436}
 --- !u!1 &2903920527315562358
