@@ -1,10 +1,6 @@
 // vis2k: GUILayout instead of spacey += ...; removed Update hotkeys to avoid
 // confusion if someone accidentally presses one.
-using System;
-using System.Collections.Generic;
-using System.Net.NetworkInformation;
 using UnityEngine;
-using UnityEngine.UI;
 
 namespace Mirror
 {
@@ -19,133 +15,41 @@ namespace Mirror
 
         public int offsetX;
         public int offsetY;
-        public GameObject IPado;
-
-        public GameObject matching;
-        public GameObject connected;
 
         void Awake()
         {
-            matching.SetActive(true);
-            connected.SetActive(false);
             manager = GetComponent<NetworkManager>();
         }
 
-        void Update()
+        void OnGUI()
         {
+            GUILayout.BeginArea(new Rect(10 + offsetX, 40 + offsetY, 215, 9999));
             if (!NetworkClient.isConnected && !NetworkServer.active)
             {
-                Debug.Log("接続前");
+                StartButtons();
             }
             else
             {
-                if (NetworkServer.active && NetworkClient.active)
-                {
-                    connected.transform.Find("IP").gameObject.SetActive(true);
-                    connected.transform.Find("StatusMessage").GetComponent<Text>().text = "他のプレイヤーを待っています";
-                }
-                // client only
-                else if (NetworkClient.isConnected)
-                {
-                    connected.transform.Find("StatusMessage").GetComponent<Text>().text = "ホストの開始を待っています";
-                }
+                StatusLabels();
             }
 
             // client ready
             if (NetworkClient.isConnected && !NetworkClient.ready)
             {
+                if (GUILayout.Button("Client Ready"))
+                {
+                    NetworkClient.Ready();
+                    if (NetworkClient.localPlayer == null)
+                    {
+                        NetworkClient.AddPlayer();
+                    }
+                }
             }
-            else if (NetworkClient.isConnected)
-            {
-            }
-            else if (!NetworkClient.ready)
-            {
-            }
+
+            StopButtons();
+
+            GUILayout.EndArea();
         }
-
-        public void OnClickServer()
-        {
-            if (!NetworkClient.active)
-            {
-                manager.StartHost();
-                matching.SetActive(false);
-                connected.SetActive(true);
-                connected.transform.Find("StopServer").gameObject.SetActive(true);
-            }
-        }
-
-        public void OnClickClient()
-        {
-            if (!NetworkClient.active)
-            {
-                manager.networkAddress = IPado.transform.Find("Text").gameObject.GetComponent<Text>().text;
-                Debug.Log(IPado.transform.Find("Text").gameObject.GetComponent<Text>().text);
-                manager.StartClient();
-                matching.SetActive(false);
-                connected.SetActive(true);
-                connected.transform.Find("StopClient").gameObject.SetActive(true);
-                connected.transform.Find("StatusMessage").GetComponent<Text>().text = "接続中...";
-            }
-        }
-
-        public void OnClickStopServer()
-        {
-            matching.SetActive(true);
-            connected.SetActive(false);
-            connected.transform.Find("StopServer").gameObject.SetActive(false);
-            connected.transform.Find("StopClient").gameObject.SetActive(false);
-            connected.transform.Find("IP").gameObject.SetActive(false);
-            connected.transform.Find("Ready").gameObject.SetActive(false);
-            manager.StopHost();
-        }
-
-        public void OnClickStopClient()
-        {
-            matching.SetActive(true);
-            connected.SetActive(false);
-            connected.transform.Find("StopServer").gameObject.SetActive(false);
-            connected.transform.Find("StopClient").gameObject.SetActive(false);
-            connected.transform.Find("Ready").gameObject.SetActive(false);
-            manager.StopClient();
-        }
-        
-        public void Onclickre()
-        {
-            NetworkClient.Ready();
-        }
-
-
-        /*       void OnGUI()
-               {
-                   GUILayout.BeginArea(new Rect(10 + offsetX, 40 + offsetY, 215, 9999));
-                   if (!NetworkClient.isConnected && !NetworkServer.active)
-                   {
-                       Debug.Log("接続前");
-                       StartButtons();
-                   }
-                   else
-                   {
-                       StatusLabels();
-                   }
-
-                   // client ready
-                   if (NetworkClient.isConnected && !NetworkClient.ready)
-                   {
-                       if (GUILayout.Button("Client Ready"))
-                       {
-                           ClientScene.Ready();
-                           if (NetworkClient.localPlayer == null)
-                           {
-                               NetworkClient.AddPlayer();
-                           }
-                       }
-                   }
-
-                   StopButtons();
-
-                   GUILayout.EndArea();
-               }*/
-
 
         void StartButtons()
         {
@@ -170,15 +74,15 @@ namespace Mirror
                 GUILayout.EndHorizontal();
 
                 // Server Only
-                /*                if (Application.platform == RuntimePlatform.WebGLPlayer)
-                                {
-                                    // cant be a server in webgl build
-                                    GUILayout.Box("(  WebGL cannot be server  )");
-                                }
-                                else
-                                {
-                                    if (GUILayout.Button("Server Only")) manager.StartServer();
-                                }*/
+                if (Application.platform == RuntimePlatform.WebGLPlayer)
+                {
+                    // cant be a server in webgl build
+                    GUILayout.Box("(  WebGL cannot be server  )");
+                }
+                else
+                {
+                    if (GUILayout.Button("Server Only")) manager.StartServer();
+                }
             }
             else
             {
@@ -199,7 +103,7 @@ namespace Mirror
             //   Client: ...
             if (NetworkServer.active && NetworkClient.active)
             {
-                GUILayout.Label(manager.networkAddress);
+                GUILayout.Label($"<b>Host</b>: running via {Transport.activeTransport}");
             }
             // server only
             else if (NetworkServer.active)
@@ -242,11 +146,3 @@ namespace Mirror
         }
     }
 }
-
-
-
-
-
-
-
-
