@@ -307,6 +307,7 @@ MonoBehaviour:
   mycam: {fileID: 656028141562082839}
   cam: {fileID: 656028141562082833}
   Plane: {fileID: 919132149155446097, guid: ea1b1c6cb97201f4b953eabcf2919b3f, type: 3}
+  Player: {fileID: 1555054639584768389}
 --- !u!82 &1542162358162441767
 AudioSource:
   m_ObjectHideFlags: 0
