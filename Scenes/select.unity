@@ -502,9 +502,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   offsetX: 0
   offsetY: 0
-  IPado: {fileID: 535957936}
-  matching: {fileID: 1715059272}
-  connected: {fileID: 1600433614}
 --- !u!114 &499638677
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -558,7 +555,7 @@ MonoBehaviour:
   autoCreatePlayer: 1
   playerSpawnMethod: 0
   spawnPrefabs: []
-  showRoomGUI: 0
+  showRoomGUI: 1
   minPlayers: 1
   roomPlayerPrefab: {fileID: 1324788117597170254, guid: b331f831caf6b2e45a48eb92e2d6492f,
     type: 3}

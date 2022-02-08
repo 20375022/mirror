@@ -18,6 +18,7 @@ public class PlayerControl : NetworkBehaviour
     public int PlyObj;  // 今どのモデルをONにしているか
 
     void Start() {
+        Debug.Log("game start");
         Plane = GameObject.Find("y床");
         this.transform.GetChild(PlyObj).gameObject.SetActive(true);
         cam.GetComponent<AudioListener>().enabled = true;
