@@ -1486,6 +1486,18 @@ BoxCollider:
   serializedVersion: 2
   m_Size: {x: 0.008593475, y: 0.8120624, z: 0.8120625}
   m_Center: {x: 0.0027579733, y: 4.9074872e-18, z: -6.404042e-25}
+--- !u!114 &413339410
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 413339407}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d69754a57dd27f0468e06f91b44ab9f6, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &556419952
 GameObject:
   m_ObjectHideFlags: 0
@@ -1652,6 +1664,21 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: c81d80e9e0c73774cb00d9a4329e698c,
         type: 3}
+      propertyPath: m_LocalScale.x
+      value: 0.5
+      objectReference: {fileID: 0}
+    - target: {fileID: -8679921383154817045, guid: c81d80e9e0c73774cb00d9a4329e698c,
+        type: 3}
+      propertyPath: m_LocalScale.y
+      value: 0.5
+      objectReference: {fileID: 0}
+    - target: {fileID: -8679921383154817045, guid: c81d80e9e0c73774cb00d9a4329e698c,
+        type: 3}
+      propertyPath: m_LocalScale.z
+      value: 0.5
+      objectReference: {fileID: 0}
+    - target: {fileID: -8679921383154817045, guid: c81d80e9e0c73774cb00d9a4329e698c,
+        type: 3}
       propertyPath: m_LocalPosition.x
       value: 0
       objectReference: {fileID: 0}
@@ -1705,6 +1732,11 @@ PrefabInstance:
       propertyPath: m_Name
       value: oksford
       objectReference: {fileID: 0}
+    - target: {fileID: 5435251026557140569, guid: c81d80e9e0c73774cb00d9a4329e698c,
+        type: 3}
+      propertyPath: m_Materials.Array.data[0]
+      value: 
+      objectReference: {fileID: 2100000, guid: 4ebb556d31dd45d45bd797aab9bb441c, type: 2}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: c81d80e9e0c73774cb00d9a4329e698c, type: 3}
 --- !u!1 &727934663
@@ -2903,10 +2935,10 @@ MonoBehaviour:
   autoCreatePlayer: 0
   playerSpawnMethod: 0
   spawnPrefabs:
-  - {fileID: 6733335857364296818, guid: 41addff4bfe49854bb9fef9c33077557, type: 3}
-  - {fileID: 6964952758330297299, guid: 853ee6866bdcf07448f027abaad1e78d, type: 3}
-  power: {fileID: 6733335857364296818, guid: 41addff4bfe49854bb9fef9c33077557, type: 3}
-  speed: {fileID: 6964952758330297299, guid: 853ee6866bdcf07448f027abaad1e78d, type: 3}
+  - {fileID: 3190031216494300670, guid: 628d1575b9b10184db3df690f024b13e, type: 3}
+  - {fileID: 3585785049824449575, guid: 80e3ae82db1c02641baa3fb737b97cb6, type: 3}
+  power: {fileID: 3190031216494300670, guid: 628d1575b9b10184db3df690f024b13e, type: 3}
+  speed: {fileID: 3585785049824449575, guid: 80e3ae82db1c02641baa3fb737b97cb6, type: 3}
   technique: {fileID: 1555054639584768389, guid: 628d1575b9b10184db3df690f024b13e,
     type: 3}
 --- !u!4 &1675975830
