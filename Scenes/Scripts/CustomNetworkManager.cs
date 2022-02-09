@@ -32,7 +32,7 @@ public class CustomNetworkManager : NetworkManager
     }
     void OnCreateCharacter(NetworkConnection conn, CreateMMOCharacterMessage message)
     {
-        //パワータイプキャラクターを生成
+/*        //パワータイプキャラクターを生成
         if (PlayerType.power == message.playerType)
         {
             playerPrefab = power;
@@ -60,7 +60,7 @@ public class CustomNetworkManager : NetworkManager
         // Manager but you can use different prefabs per race for example
         GameObject gameobject = Instantiate(playerPrefab);
         // call this to use this gameobject as the primary controller
-        NetworkServer.AddPlayerForConnection(conn, gameobject);
+        NetworkServer.AddPlayerForConnection(conn, gameobject);*/
     }
     /*
         public override void OnClientConnect(NetworkConnection conn)

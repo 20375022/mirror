@@ -11,12 +11,11 @@ using Mirror;
 
 public class MynetworkManager : NetworkManager
 {
-    //パワーキャラクター
-    public GameObject power;
-    //スピードキャラクター
-    public GameObject speed;
-    //テクニックキャラクター
-    public GameObject technique;
+    //キャラクター
+    public GameObject piesu;        // ピエロと素体
+    public GameObject pierun;       // ピエロとランナー
+    public GameObject killsu;       // ジェーソンと素体
+    public GameObject killrun;      // ジェーソンとランナー
 
     static int gamemode = 0;
 
@@ -43,22 +42,27 @@ public class MynetworkManager : NetworkManager
     void OnCreateCharacter(NetworkConnection conn, CreateMMOCharacterMessage message)
     {
         //パワータイプキャラクターを生成
-        if (PlayerType.power == message.playerType)
+        if (PlayerType.piesu == message.playerType)
         {
-            playerPrefab = power;
-            Debug.Log("power");
+            playerPrefab = piesu;
+            Debug.Log("piesu");
         }
         //スピードタイプキャラクターを生成
-        else if (PlayerType.speed == message.playerType)
+        else if (PlayerType.pierun == message.playerType)
         {
-            playerPrefab = speed;
-            Debug.Log("speed");
+            playerPrefab = pierun;
+            Debug.Log("pierun");
         }
         //テクニックタイプキャラクターを生成
-        else if (PlayerType.tec == message.playerType)
+        else if (PlayerType.killsu == message.playerType)
         {
-            playerPrefab = technique;
-            Debug.Log("technique");
+            playerPrefab = killsu;
+            Debug.Log("killsu");
+        }
+        else if (PlayerType.killrun == message.playerType)
+        {
+            playerPrefab = killrun;
+            Debug.Log("killrun");
         }
         //キャラクタータイプが選択されてない
         else
