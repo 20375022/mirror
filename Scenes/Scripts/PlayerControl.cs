@@ -89,11 +89,11 @@ public class PlayerControl : NetworkBehaviour
             this.GetComponent<AudioSource>().Play();
             if (isServer)
             {
-                RpcPlaySounds();    // クライアントに送信
+                //RpcPlaySounds();    // クライアントに送信
             }
             else if (isClient)
             {
-                CmdPlaySounds();    // サーバーに送信
+                //CmdPlaySounds();    // サーバーに送信
             }
         }
     }
@@ -123,7 +123,7 @@ public class PlayerControl : NetworkBehaviour
                     CmdClientSonar(collision.contacts[0].point, collision.impulse.magnitude);
                 }
             }
-            CmdPlaySounds();
+            //CmdPlaySounds();
         }
     }
 

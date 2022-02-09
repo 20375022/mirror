@@ -1893,8 +1893,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   syncMode: 0
   syncInterval: 0.1
-  mycam: {fileID: 0}
-  cam: {fileID: 0}
+  mycam: {fileID: 2549327471208122642}
+  cam: {fileID: 2549327471208122644}
   Plane: {fileID: 0}
   Player: {fileID: 6964952758330297299}
 --- !u!1 &7173208143191806412
@@ -2595,9 +2595,21 @@ PrefabInstance:
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 10421a2028937474bb0983f41bf3063a, type: 3}
+--- !u!1 &2549327471208122644 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 2808932863242272501, guid: 10421a2028937474bb0983f41bf3063a,
+    type: 3}
+  m_PrefabInstance: {fileID: 403725665368061921}
+  m_PrefabAsset: {fileID: 0}
 --- !u!4 &2549327471208122643 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 2808932863242272498, guid: 10421a2028937474bb0983f41bf3063a,
+    type: 3}
+  m_PrefabInstance: {fileID: 403725665368061921}
+  m_PrefabAsset: {fileID: 0}
+--- !u!20 &2549327471208122642 stripped
+Camera:
+  m_CorrespondingSourceObject: {fileID: 2808932863242272499, guid: 10421a2028937474bb0983f41bf3063a,
     type: 3}
   m_PrefabInstance: {fileID: 403725665368061921}
   m_PrefabAsset: {fileID: 0}
