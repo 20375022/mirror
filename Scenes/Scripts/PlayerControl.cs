@@ -7,22 +7,16 @@ public class PlayerControl : NetworkBehaviour
     public GameObject cam;
     public GameObject Plane;
     public GameObject Player;
-    PlayerControl change;
+    public GameObject attackcol;
     float inputHorizontal;
     float inputVertical;
     Rigidbody rb;
     float moveSpeed = 3f;
     bool trigger = false;
-    bool ZKey = false;
+    bool zkey = false;
 
     void Start() {
         Plane = GameObject.Find("地面");
-        if (isServer){
-            Player.name = "S_Player";
-        }
-        if (isClient){
-            change = GameObject.Find("S_Player").GetComponent<PlayerControl>();
-        }
         cam.GetComponent<AudioListener>().enabled = true;
     }
 
@@ -30,10 +24,10 @@ public class PlayerControl : NetworkBehaviour
     {
         if (Input.GetKey(KeyCode.Z))
         {
-            ZKey = true;
+            zkey = true;
         }
         else {
-            ZKey = false;
+            zkey = false;
         }
 
         inputHorizontal = Input.GetAxisRaw("Horizontal");
@@ -116,14 +110,21 @@ public class PlayerControl : NetworkBehaviour
         if (isLocalPlayer)
         {
             if (isServer) {
-                RqcSonarPlayer(collision.contacts[0].point, collision.impulse.magnitude, ZKey);
+                RqcSonarPlayer(collision.contacts[0].point, collision.impulse.magnitude, zkey);
             }
             else if (isClient){
-                if (ZKey == true){
+                if (zkey == true){
                     CmdClientSonar(collision.contacts[0].point, collision.impulse.magnitude);
                 }
             }
             CmdPlaySounds();
+        }
+    }
+
+    void OnTriggerStay() { 
+        if (isLocalPlayer){
+            if (Input.GetKey(KeyCode.Space)){
+            }
         }
     }
 
@@ -146,16 +147,16 @@ public class PlayerControl : NetworkBehaviour
     }
 
     [Command]
-    void CmdSonarPlayer(Vector4 point, float impulse, bool s_ZKey) {
-        if (s_ZKey == true)
+    void CmdSonarPlayer(Vector4 point, float impulse, bool s_zkey) {
+        if (s_zkey == true)
         {
             Plane.GetComponent<SimpleSonarShader_Object>().StartSonarRing(point, impulse * 10);
         }
     }
     [ClientRpc]
-    void RqcSonarPlayer(Vector4 point, float impulse, bool c_ZKey)
+    void RqcSonarPlayer(Vector4 point, float impulse, bool c_zkey)
     {
-        if (c_ZKey == true)
+        if (c_zkey == true)
         {
             Plane.GetComponent<SimpleSonarShader_Object>().StartSonarRing(point, impulse * 10);
         }
