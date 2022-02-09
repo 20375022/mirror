@@ -3,6 +3,8 @@ using Mirror;
 
 public class PlayerControl : NetworkBehaviour
 {
+    [HideInInspector]
+    public bool Killerflg;
     public Camera mycam;
     public GameObject cam;
     public GameObject Plane;
@@ -17,13 +19,18 @@ public class PlayerControl : NetworkBehaviour
 
     void Start() {
         Plane = GameObject.Find("y床");
-        if (isServer){
-            Player.name = "S_Player";
-        }
-        if (isClient){
-            change = GameObject.Find("S_Player").GetComponent<PlayerControl>();
-        }
         cam.GetComponent<AudioListener>().enabled = true;
+        if (isClient) {
+            Debug.Log("client");
+            Killerflg = false;
+            Debug.Log(Killerflg);
+        }
+        if (isServer)
+        {
+            Debug.Log("server");
+            Killerflg = true;
+            Debug.Log(Killerflg);
+        }
     }
 
     void Update()
@@ -42,7 +49,7 @@ public class PlayerControl : NetworkBehaviour
     // 定期更新時に呼ばれる
     void FixedUpdate()
     {
-         rb = this.transform.GetComponent<Rigidbody>();
+        rb = this.transform.GetComponent<Rigidbody>();
         // カメラの有効化(自分の以外は無効に)
         if (!isLocalPlayer)
         {
@@ -118,13 +125,77 @@ public class PlayerControl : NetworkBehaviour
             if (isServer) {
                 RqcSonarPlayer(collision.contacts[0].point, collision.impulse.magnitude, ZKey);
             }
-            else if (isClient){
-                if (ZKey == true){
+            else if (isClient) {
+                if (ZKey == true) {
                     CmdClientSonar(collision.contacts[0].point, collision.impulse.magnitude);
                 }
             }
+
+            if (Input.GetKey(KeyCode.Space))
+            {
+                Debug.Log(Killerflg);
+                Killerflg = ChangeKiller(Killerflg);
+            }
             //CmdPlaySounds();
         }
+    }
+
+    bool ChangeKiller(bool Killerflg)
+    {
+        if (isServer)
+        {
+            if (Killerflg == true)
+            {
+                Killerflg = false;
+                RpcChangeKiller();
+            }
+            else
+            {
+                Killerflg = true;
+                RpcChangeSurvivor();
+            }
+        }
+        else if (isClient)
+        {
+            if (Killerflg == true)
+            {
+                Killerflg = false;
+                CmdChangeKiller();
+            }
+            else
+            {
+                Killerflg = true;
+                CmdChangeSurvivor();
+            }
+        }
+        return Killerflg;
+    }
+
+    // プレイヤー鬼に交代
+    [Command]
+    void CmdChangeKiller()
+    {
+        RpcChangeKiller();
+    }
+
+    [ClientRpc]
+    void RpcChangeKiller()
+    {
+        Player.transform.GetChild(0).gameObject.SetActive(true);
+        Player.transform.GetChild(1).gameObject.SetActive(false);
+    }
+    // プレイヤー鬼から交代
+    [Command]
+    void CmdChangeSurvivor()
+    {
+        RpcChangeSurvivor();
+    }
+
+    [ClientRpc]
+    void RpcChangeSurvivor()
+    {
+        Player.transform.GetChild(1).gameObject.SetActive(true);
+        Player.transform.GetChild(0).gameObject.SetActive(false);
     }
 
     // プレイヤーの回転
