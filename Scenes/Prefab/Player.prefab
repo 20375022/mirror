@@ -1488,6 +1488,7 @@ GameObject:
   - component: {fileID: 7828180824006039175}
   - component: {fileID: 6745972826214465916}
   - component: {fileID: 4927486964802422508}
+  - component: {fileID: -2486191974409949907}
   - component: {fileID: 5004497045057007434}
   - component: {fileID: 958277965318060209}
   m_Layer: 0
@@ -1614,6 +1615,21 @@ MonoBehaviour:
   cam: {fileID: 2885001023999283478}
   Plane: {fileID: 0}
   Player: {fileID: 3190031216494300670}
+--- !u!114 &-2486191974409949907
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3190031216494300670}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 65e874c7d68d40543b6a937d286d5933, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  syncMode: 0
+  syncInterval: 0.1
+  playerControl: {fileID: 4927486964802422508}
 --- !u!54 &5004497045057007434
 Rigidbody:
   m_ObjectHideFlags: 0

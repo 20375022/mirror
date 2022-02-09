@@ -1555,6 +1555,7 @@ GameObject:
   - component: {fileID: 8153001898184150878}
   - component: {fileID: 4618584867575044261}
   - component: {fileID: 6478414551239302965}
+  - component: {fileID: 7546915548892907793}
   - component: {fileID: 6410182959464248979}
   - component: {fileID: 1209916095241150824}
   m_Layer: 0
@@ -1597,7 +1598,7 @@ MonoBehaviour:
   sceneId: 0
   serverOnly: 0
   visible: 0
-  m_AssetId: 628d1575b9b10184db3df690f024b13e
+  m_AssetId: 80e3ae82db1c02641baa3fb737b97cb6
   hasSpawned: 0
 --- !u!114 &3460040720451760903
 MonoBehaviour:
@@ -1681,6 +1682,21 @@ MonoBehaviour:
   cam: {fileID: 3859468165224335567}
   Plane: {fileID: 0}
   Player: {fileID: 3585785049824449575}
+--- !u!114 &7546915548892907793
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3585785049824449575}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 65e874c7d68d40543b6a937d286d5933, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  syncMode: 0
+  syncInterval: 0.1
+  playerControl: {fileID: 6478414551239302965}
 --- !u!54 &6410182959464248979
 Rigidbody:
   m_ObjectHideFlags: 0
