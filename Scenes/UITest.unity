@@ -4932,18 +4932,17 @@ MonoBehaviour:
   networkAddress: localhost
   maxConnections: 100
   authenticator: {fileID: 0}
-  playerPrefab: {fileID: 3670821959231907255, guid: 483e649904d19ae4fbaf87ccdf440c0e,
+  playerPrefab: {fileID: 1467882385842629630, guid: ac92e11e27dd63847b67dd798f367a4d,
     type: 3}
   autoCreatePlayer: 0
   playerSpawnMethod: 0
   spawnPrefabs:
-  - {fileID: 4554453815941633918, guid: b52b6f652b8aef64aa9000ccdc4d4c79, type: 3}
-  - {fileID: 9114057078446469488, guid: 3949598c767f1134d81f0765d693a338, type: 3}
-  - {fileID: 3575107337787225266, guid: f3c11f6d0502e4141937b4fee4d4cb59, type: 3}
-  piesu: {fileID: 3670821959231907255, guid: 483e649904d19ae4fbaf87ccdf440c0e, type: 3}
-  pierun: {fileID: 4554453815941633918, guid: b52b6f652b8aef64aa9000ccdc4d4c79, type: 3}
-  killsu: {fileID: 9114057078446469488, guid: 3949598c767f1134d81f0765d693a338, type: 3}
-  killrun: {fileID: 3575107337787225266, guid: f3c11f6d0502e4141937b4fee4d4cb59, type: 3}
+  - {fileID: 2589543366283502422, guid: 3949598c767f1134d81f0765d693a338, type: 3}
+  - {fileID: 4139595730699495327, guid: f3c11f6d0502e4141937b4fee4d4cb59, type: 3}
+  piesu: {fileID: 1467882385842629630, guid: ac92e11e27dd63847b67dd798f367a4d, type: 3}
+  pierun: {fileID: 8285871218502293136, guid: b52b6f652b8aef64aa9000ccdc4d4c79, type: 3}
+  killsu: {fileID: 2589543366283502422, guid: 3949598c767f1134d81f0765d693a338, type: 3}
+  killrun: {fileID: 4139595730699495327, guid: f3c11f6d0502e4141937b4fee4d4cb59, type: 3}
 --- !u!4 &1675975830
 Transform:
   m_ObjectHideFlags: 0
