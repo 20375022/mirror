@@ -1805,11 +1805,12 @@ GameObject:
   - component: {fileID: 8326391406824007568}
   - component: {fileID: 9128480417096392535}
   - component: {fileID: 8044892579232836897}
-  - component: {fileID: 4516592528347940307}
+  - component: {fileID: -5243464054561420192}
   - component: {fileID: 6337181871142414883}
   - component: {fileID: 2526448392960856141}
   - component: {fileID: 6134951882017860161}
   - component: {fileID: 5275785381867091142}
+  - component: {fileID: 1689539668278657853}
   m_Layer: 0
   m_Name: killrun
   m_TagString: Untagged
@@ -1850,7 +1851,7 @@ MonoBehaviour:
   sceneId: 0
   serverOnly: 0
   visible: 0
-  m_AssetId: 483e649904d19ae4fbaf87ccdf440c0e
+  m_AssetId: f3c11f6d0502e4141937b4fee4d4cb59
   hasSpawned: 0
 --- !u!114 &9128480417096392535
 MonoBehaviour:
@@ -1897,7 +1898,7 @@ Rigidbody:
   m_Interpolate: 0
   m_Constraints: 112
   m_CollisionDetection: 0
---- !u!136 &4516592528347940307
+--- !u!136 &-5243464054561420192
 CapsuleCollider:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -1907,10 +1908,10 @@ CapsuleCollider:
   m_Material: {fileID: 0}
   m_IsTrigger: 0
   m_Enabled: 1
-  m_Radius: 3.097671
-  m_Height: 22.266863
+  m_Radius: 1.041045
+  m_Height: 8.469795
   m_Direction: 1
-  m_Center: {x: -0.016229153, y: 12.160527, z: -0.47406435}
+  m_Center: {x: -0.001641035, y: 4.216148, z: -0.02960419}
 --- !u!95 &6337181871142414883
 Animator:
   serializedVersion: 3
@@ -1963,7 +1964,6 @@ MonoBehaviour:
   Killerflg: 0
   mycam: {fileID: 2541786781385537217}
   cam: {fileID: 3428821423082287270}
-  Plane: {fileID: 0}
   Player: {fileID: 4139595730699495327}
 --- !u!114 &5275785381867091142
 MonoBehaviour:
@@ -1980,6 +1980,19 @@ MonoBehaviour:
   syncMode: 0
   syncInterval: 0.1
   playerControl: {fileID: 6134951882017860161}
+--- !u!114 &1689539668278657853
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4139595730699495327}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 33588f41d9c4e4448b394de8c00b749f, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  followDestroyObject: {fileID: 3428821423082287270}
 --- !u!1 &4203807949892992384
 GameObject:
   m_ObjectHideFlags: 0

@@ -1,21 +1,22 @@
 ﻿using UnityEngine;
 using Mirror;
+using GrovalConst;
 
 public class PlayerControl : NetworkBehaviour
 {
     [HideInInspector]
-    public bool Killerflg;
-    public Camera mycam;
-    public GameObject cam;
-    public GameObject Plane;
-    public GameObject Player;
-    PlayerControl change;
-    float inputHorizontal;
-    float inputVertical;
-    Rigidbody rb;
-    float moveSpeed = 3f;
-    bool trigger = false;
-    bool ZKey = false;
+    public bool Killerflg;              // 自分が鬼であるかのフラグ
+
+    public Camera mycam;                // カメラコンポーネント
+    public GameObject cam;              // 自分のカメラオブジェクト
+    GameObject Plane;                   // 床オブジェクト
+    public GameObject Player;           // 自分
+    float inputHorizontal;              // 横の入力
+    float inputVertical;                // 縦の入力
+    Rigidbody rb;                       // リジッドボディ
+    float moveSpeed = Const.SPEED_WALK; // 移動の速さ
+    bool trigger = false;               // トリガー
+    bool ZKey = false;                  // Zキー
 
     void Start() {
         Plane = GameObject.Find("y床");
@@ -31,6 +32,7 @@ public class PlayerControl : NetworkBehaviour
             Killerflg = true;
             Debug.Log(Killerflg);
         }
+        ChangeKiller(Killerflg);    // 最初に鬼かどうか判断
     }
 
     void Update()
@@ -63,13 +65,13 @@ public class PlayerControl : NetworkBehaviour
         // ローカルプレイヤーの時
         if (isLocalPlayer)
         {
-            if (Input.GetKey(KeyCode.LeftShift))
+            if (Input.GetKey(KeyCode.LeftShift))    // 走っているか
             {
-                moveSpeed = 5.0f;
+                moveSpeed = Const.SPEED_RUN;
             }
             else
             {
-                moveSpeed = 3.0f;
+                moveSpeed = Const.SPEED_WALK;
             }
 
             // カメラの方向から、X-Z平面の単位ベクトルを取得
@@ -118,7 +120,7 @@ public class PlayerControl : NetworkBehaviour
         this.GetComponent<AudioSource>().Play();
     }
 
-
+    // 当たり判定に当たっているとき
     void OnCollisionStay(Collision collision) {
         if (isLocalPlayer)
         {
@@ -133,25 +135,36 @@ public class PlayerControl : NetworkBehaviour
 
             if (Input.GetKey(KeyCode.Space))
             {
+                if (Killerflg == true)
+                {
+                    Killerflg = false;
+                }
+                else
+                {
+                    Killerflg = true;
+                }
                 Debug.Log(Killerflg);
-                Killerflg = ChangeKiller(Killerflg);
+                ChangeKiller(Killerflg);
             }
             //CmdPlaySounds();
         }
     }
 
-    bool ChangeKiller(bool Killerflg)
+
+
+    // -----------------------------------------------------------------
+    // 鬼を変更する(呼べば勝手に変える)
+    // -----------------------------------------------------------------
+    void ChangeKiller(bool Killerflg)
     {
         if (isServer)
         {
             if (Killerflg == true)
             {
-                Killerflg = false;
                 RpcChangeKiller();
             }
             else
             {
-                Killerflg = true;
                 RpcChangeSurvivor();
             }
         }
@@ -159,19 +172,20 @@ public class PlayerControl : NetworkBehaviour
         {
             if (Killerflg == true)
             {
-                Killerflg = false;
                 CmdChangeKiller();
             }
             else
             {
-                Killerflg = true;
                 CmdChangeSurvivor();
             }
         }
-        return Killerflg;
     }
 
+
+
+    // -----------------------------------------------------------------
     // プレイヤー鬼に交代
+    // -----------------------------------------------------------------
     [Command]
     void CmdChangeKiller()
     {
@@ -181,10 +195,13 @@ public class PlayerControl : NetworkBehaviour
     [ClientRpc]
     void RpcChangeKiller()
     {
-        Player.transform.GetChild(0).gameObject.SetActive(true);
-        Player.transform.GetChild(1).gameObject.SetActive(false);
+        Player.transform.GetChild(1).gameObject.SetActive(false);   // 1が逃げ
+        Player.transform.GetChild(0).gameObject.SetActive(true);    // 0が鬼
     }
+
+    // -----------------------------------------------------------------
     // プレイヤー鬼から交代
+    // -----------------------------------------------------------------
     [Command]
     void CmdChangeSurvivor()
     {
@@ -194,35 +211,38 @@ public class PlayerControl : NetworkBehaviour
     [ClientRpc]
     void RpcChangeSurvivor()
     {
-        Player.transform.GetChild(1).gameObject.SetActive(true);
-        Player.transform.GetChild(0).gameObject.SetActive(false);
+        Player.transform.GetChild(0).gameObject.SetActive(false);   // 0が鬼
+        Player.transform.GetChild(1).gameObject.SetActive(true);    // 1が逃げ
     }
 
+
+    // -----------------------------------------------------------------
     // プレイヤーの回転
+    // -----------------------------------------------------------------
     [Command]
     void CmdRotatePlayer(Quaternion rotate)
     {
         transform.rotation = rotate;
     }
+    // -----------------------------------------------------------------
     // プレイヤーの移動
+    // -----------------------------------------------------------------
     [Command]
     void CmdMovePlayer(Vector3 move)
     {
         GetComponent<Rigidbody>().velocity = move;
     }
 
+
+
+    // -----------------------------------------------------------------
+    // プレイヤーのソナー
+    // -----------------------------------------------------------------
     [Command]
     void CmdClientSonar(Vector4 Point, float impulse) {
         RqcSonarPlayer(Point, impulse, true);
     }
 
-    [Command]
-    void CmdSonarPlayer(Vector4 point, float impulse, bool s_ZKey) {
-        if (s_ZKey == true)
-        {
-            Plane.GetComponent<SimpleSonarShader_Object>().StartSonarRing(point, impulse * 10);
-        }
-    }
     [ClientRpc]
     void RqcSonarPlayer(Vector4 point, float impulse, bool c_ZKey)
     {

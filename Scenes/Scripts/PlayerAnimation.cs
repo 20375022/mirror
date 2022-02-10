@@ -7,18 +7,18 @@ public class PlayerAnimation : NetworkBehaviour
     // Animator コンポーネント
     private Animator animator;
     public PlayerControl playerControl;
-    //int PlyObj;
+    
+    // プレイヤーの状態
+    
 
     // 設定したフラグの名前
+    private const string key_isONI = "isONI";
     private const string key_isWalk = "isWalk";
     private const string key_isRun = "isRun";
 
     // 初期化メソッド
     void Start()
     {
-        //PlyObj = playerControl.PlyObj;
-        // 自分に設定されているAnimatorコンポーネントを取得する
-        //this.animator = this.transform.GetChild(PlyObj).GetComponent<Animator>();
         this.animator = GetComponent<Animator>();
     }
 
@@ -27,6 +27,18 @@ public class PlayerAnimation : NetworkBehaviour
     {
         if (isLocalPlayer)
         {
+            // 鬼であるかずっと確認する
+            if (playerControl.Killerflg == true)
+            {
+                // 逃げアニメーションから鬼アニメーションに遷移する
+                this.animator.SetBool(key_isONI, true);
+            }
+            else
+            {
+                // 鬼アニメーションから逃げアニメーションに遷移する
+                this.animator.SetBool(key_isONI, false);
+            }
+
             // 移動ボタンを押下している
             if ((Input.GetKey(KeyCode.W)) || (Input.GetKey(KeyCode.S)) ||
                 (Input.GetKey(KeyCode.A)) || (Input.GetKey(KeyCode.D)))
