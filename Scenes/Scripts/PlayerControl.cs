@@ -7,27 +7,34 @@ public class PlayerControl : NetworkBehaviour
     public GameObject cam;
     public GameObject Plane;
     public GameObject Player;
-    public GameObject attackcol;
     float inputHorizontal;
     float inputVertical;
     Rigidbody rb;
     float moveSpeed = 3f;
     bool trigger = false;
-    bool zkey = false;
+    bool sonarkey = false;
 
     void Start() {
         Plane = GameObject.Find("地面");
         cam.GetComponent<AudioListener>().enabled = true;
+        if (isLocalPlayer){
+            if (isClient){
+                Player.tag = "Player";
+            }
+            if (isServer){
+                Player.tag = "Killer";
+            }
+        }
     }
 
     void Update()
     {
-        if (Input.GetKey(KeyCode.Z))
+        if (Input.GetKey(KeyCode.Q))
         {
-            zkey = true;
+            sonarkey = true;
         }
         else {
-            zkey = false;
+            sonarkey = false;
         }
 
         inputHorizontal = Input.GetAxisRaw("Horizontal");
@@ -92,6 +99,145 @@ public class PlayerControl : NetworkBehaviour
         }
     }
 
+    void OnCollisionStay(Collision collision) {
+        if (isLocalPlayer)
+        {
+            if (isServer)
+            {
+                RqcSonarPlayer(collision.contacts[0].point, collision.impulse.magnitude, sonarkey);
+            }
+            else if (isClient){
+                if (sonarkey == true){
+                    CmdClientSonar(collision.contacts[0].point, collision.impulse.magnitude);
+                }
+            }
+            CmdPlaySounds();
+        }
+    }
+
+    void OnTriggerStay(Collider other)
+    {
+        if (isLocalPlayer){
+            if (Input.GetKey(KeyCode.Space)){
+                if (other.CompareTag("Player"))
+                {
+                    GameObject receive = GameObject.Find(other.gameObject.name);
+                    int range = Random.Range(0, 8);
+                    int ax, ay, az;
+                    int rx, ry, rz;
+                    int r;
+
+                    ax = 0;
+                    ay = 0;
+                    az = 0;
+                    rx = 0;
+                    ry = 0;
+                    rz = 0;
+
+                    Debug.Log("当たった");
+                    switch (range){
+                        case 0 :
+                            ax = -90;
+                            az = -90;
+                            ay = 1;
+                            break;
+                        case 1:
+                            ax = -90;
+                            az = 0;
+                            ay = 1;
+                            break;
+                        case 2:
+                            ax = 0;
+                            az = -90;
+                            ay = 1;
+                            break;
+                        case 3:
+                            ax = -90;
+                            az = 90;
+                            ay = 1;
+                            break;
+                        case 4:
+                            ax = 90;
+                            az = -90;
+                            ay = 3;
+                            break;
+                        case 5:
+                            ax = 0;
+                            az = 90;
+                            ay = 1;
+                            break;
+                        case 6:
+                            ax = 90;
+                            az = 0;
+                            ay = 3;
+                            break;
+                        case 7:
+                            ax = 90;
+                            az = 90;
+                            ay = 6;
+                            break;
+                    }
+
+                    Debug.Log("x_z" + ax + az);
+
+                    Vector3 AttackPlace = new Vector3(ax, ay, az);
+
+                    r = range;
+                    while (r == range) {
+                        r = Random.Range(0, 8);
+                    }
+
+                    switch (r)
+                    {
+                        case 0:
+                            rx = -90;
+                            rz = -90;
+                            ry = 1;
+                            break;
+                        case 1:
+                            rx = -90;
+                            rz = 0;
+                            ry = 1;
+                            break;
+                        case 2:
+                            rx = 0;
+                            rz = -90;
+                            ry = 1;
+                            break;
+                        case 3:
+                            rx = -90;
+                            rz = 90;
+                            ry = 1;
+                            break;
+                        case 4:
+                            rx = 90;
+                            rz = -90;
+                            ry = 3;
+                            break;
+                        case 5:
+                            rx = 0;
+                            rz = 90;
+                            ry = 1;
+                            break;
+                        case 6:
+                            rx = 90;
+                            rz = 0;
+                            ry = 3;
+                            break;
+                        case 7:
+                            rx = 90;
+                            rz = 90;
+                            ry = 6;
+                            break;
+                    }
+                    Vector3 ReceivePlace = new Vector3(rx, ry, rz);
+
+                    this.transform.position = AttackPlace;
+                    receive.transform.position = ReceivePlace;
+                }
+            }
+        }
+    }
 
     [Command]
     void CmdPlaySounds()
@@ -103,29 +249,6 @@ public class PlayerControl : NetworkBehaviour
     void RpcPlaySounds()
     {
         this.GetComponent<AudioSource>().Play();
-    }
-
-
-    void OnCollisionStay(Collision collision) {
-        if (isLocalPlayer)
-        {
-            if (isServer) {
-                RqcSonarPlayer(collision.contacts[0].point, collision.impulse.magnitude, zkey);
-            }
-            else if (isClient){
-                if (zkey == true){
-                    CmdClientSonar(collision.contacts[0].point, collision.impulse.magnitude);
-                }
-            }
-            CmdPlaySounds();
-        }
-    }
-
-    void OnTriggerStay() { 
-        if (isLocalPlayer){
-            if (Input.GetKey(KeyCode.Space)){
-            }
-        }
     }
 
     // プレイヤーの回転
@@ -147,16 +270,16 @@ public class PlayerControl : NetworkBehaviour
     }
 
     [Command]
-    void CmdSonarPlayer(Vector4 point, float impulse, bool s_zkey) {
-        if (s_zkey == true)
+    void CmdSonarPlayer(Vector4 point, float impulse, bool s_sonarkey) {
+        if (s_sonarkey == true)
         {
             Plane.GetComponent<SimpleSonarShader_Object>().StartSonarRing(point, impulse * 10);
         }
     }
     [ClientRpc]
-    void RqcSonarPlayer(Vector4 point, float impulse, bool c_zkey)
+    void RqcSonarPlayer(Vector4 point, float impulse, bool c_sonarkey)
     {
-        if (c_zkey == true)
+        if (c_sonarkey == true)
         {
             Plane.GetComponent<SimpleSonarShader_Object>().StartSonarRing(point, impulse * 10);
         }
