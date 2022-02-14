@@ -6,10 +6,11 @@ using Mirror;
 
 public class TimerController : NetworkBehaviour
 {
-    public Text timerText;
     public float totalTime;
+    public int tim;
     [SyncVar]
-    int seconds;
+    public int seconds;
+
     // Use this for initialization
     void Start()
     {
@@ -17,29 +18,23 @@ public class TimerController : NetworkBehaviour
     // Update is called once per frame
     void Update()
     {
-        int tim;
 
-        tim = TimeInc();
-        tim = TimeSync();
-        timerText.text = tim.ToString();
+        TimeInc();
+        TimeSync();
     }
 
     [ServerCallback]
-    int TimeInc()
+    void TimeInc()
     {
-        totalTime -= Time.deltaTime;
+        totalTime += Time.deltaTime;
         seconds = (int)totalTime;
-
-        return seconds;
+        tim = seconds;
     }
 
     [ClientCallback]
-    int TimeSync()
+    void TimeSync()
     {
-        int tim;
-
         tim = GetComponent<TimerController>().seconds;
-        return tim;
     }
 
 }
