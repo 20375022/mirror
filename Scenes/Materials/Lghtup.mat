@@ -7,9 +7,9 @@ Material:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_Name: Brackcurtain
-  m_Shader: {fileID: 4800000, guid: 8f7522229a4b07747880aaa7045e5ab6, type: 3}
-  m_ShaderKeywords: ETC1_EXTERNAL_ALPHA
+  m_Name: Lghtup
+  m_Shader: {fileID: 4800000, guid: abf920ee427ab794f93a52dea431c777, type: 3}
+  m_ShaderKeywords: 
   m_LightmapFlags: 4
   m_EnableInstancingVariants: 0
   m_DoubleSidedGI: 0
