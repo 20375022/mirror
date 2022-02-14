@@ -4,10 +4,6 @@ using System.Collections.Generic;
 using UnityEngine;
 using Mirror;
 
-/*public struct CreateMMOCharacterMessage : NetworkMessage
-{
-    public PlayerType playerType;
-}*/
 
 public class MynetworkManager : NetworkManager
 {

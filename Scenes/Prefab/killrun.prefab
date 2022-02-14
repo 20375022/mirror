@@ -1410,7 +1410,7 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 1325956975362182559}
+      - m_Target: {fileID: 6134951882017860161}
         m_MethodName: OnClickReady
         m_Mode: 1
         m_Arguments:
@@ -2252,6 +2252,9 @@ MonoBehaviour:
   syncMode: 0
   syncInterval: 0.1
   Killerflg: 0
+  UI_Lobby: {fileID: 4963527094146634494}
+  UI_Game: {fileID: 3670506121370885126}
+  UI_Option: {fileID: 8195727319487441984}
   mycam: {fileID: 2541786781385537217}
   cam: {fileID: 3428821423082287270}
   Player: {fileID: 4139595730699495327}

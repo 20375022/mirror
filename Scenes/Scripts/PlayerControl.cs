@@ -4,8 +4,23 @@ using GrovalConst;
 
 public class PlayerControl : NetworkBehaviour
 {
+
+    enum GameMode
+    {
+        LOBBY = 0,
+        GAME,
+        RESULT
+    }
+
     [HideInInspector]
     public bool Killerflg;              // 自分が鬼であるかのフラグ
+
+    GameObject SystemObj;               // ゲームシステム
+    bool isReady;                       // lobbyで準備完了フラグ
+
+    public GameObject UI_Lobby;         // UI
+    public GameObject UI_Game;          // UI
+    public GameObject UI_Option;        // UI
 
     public Camera mycam;                // カメラコンポーネント
     public GameObject cam;              // 自分のカメラオブジェクト
@@ -19,6 +34,8 @@ public class PlayerControl : NetworkBehaviour
     bool ZKey = false;                  // Zキー
 
     void Start() {
+        isReady = false;
+        SystemObj = GameObject.FindGameObjectWithTag("System");
         Plane = GameObject.Find("y床");
         cam.GetComponent<AudioListener>().enabled = true;
         if (isClient) {
@@ -47,7 +64,29 @@ public class PlayerControl : NetworkBehaviour
 
         inputHorizontal = Input.GetAxisRaw("Horizontal");
         inputVertical = Input.GetAxisRaw("Vertical");
+
+        switch (SystemObj.GetComponent<GameSystemManage>().gameMode)
+        {
+            case (int)GameMode.LOBBY:
+
+                Debug.Log("PLY Gamemode = Lobby");
+                UI_Lobby.SetActive(true);
+                UI_Game.SetActive(false);
+                UI_Option.SetActive(false);
+                break;
+
+            case (int)GameMode.GAME:
+                Debug.Log("PLY Gamemode = Game");
+                UI_Lobby.SetActive(false);
+                break;
+
+            case (int)GameMode.RESULT:
+                Debug.Log("PLY Gamemode = Result");
+                break;
+        }
+
     }
+
     // 定期更新時に呼ばれる
     void FixedUpdate()
     {
@@ -252,4 +291,53 @@ public class PlayerControl : NetworkBehaviour
             Plane.GetComponent<SimpleSonarShader_Object>().StartSonarRing(point, impulse * 10);
         }
     }
+
+
+
+    // -----------------------------------------------------------------
+    // プレイヤーの準備完了
+    // -----------------------------------------------------------------
+    public void OnClickReady()
+    {
+        if (isReady == false)
+        {
+            isReady = true;
+            if (isClient)
+            {
+                CmdIncSync();
+            }
+        }
+        else
+        {
+            isReady = false;
+            if (isClient)
+            {
+                CmdDecreSync();
+            }
+        }
+    }
+
+    [ClientRpc]
+    public void RpcReadyInc()
+    {
+        SystemObj.GetComponent<GameSystemManage>().readyPlayer++;
+    }
+
+    [Command]
+    public void CmdIncSync()
+    {
+        RpcReadyInc();
+    }
+    [ClientRpc]
+    public void RpcReadyDecre()
+    {
+        SystemObj.GetComponent<GameSystemManage>().readyPlayer--;
+    }
+
+    [Command]
+    public void CmdDecreSync()
+    {
+        RpcReadyDecre();
+    }
+
 }

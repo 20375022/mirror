@@ -5,7 +5,7 @@ using Mirror;
 
 public class GameSystemManage : NetworkBehaviour
 {
-    public enum GameMode
+    enum GameMode
     {
         LOBBY = 0,
         GAME,
@@ -34,6 +34,10 @@ public class GameSystemManage : NetworkBehaviour
             case (int)GameMode.LOBBY:
 
                 Debug.Log("Gamemode = Lobby");
+                if (readyPlayer == 2)
+                {
+                    gameMode = (int)GameMode.GAME;
+                }
                 break;
 
             case (int)GameMode.GAME:
@@ -44,19 +48,6 @@ public class GameSystemManage : NetworkBehaviour
                 Debug.Log("Gamemode = Result");
                 break;
         }
-    }
-
-
-    [ServerCallback]
-    void ReadyInc()
-    {
-        readyPlayer++;
-    }
-
-    [ClientCallback]
-    public void ReadySync()
-    {
-        ReadyInc();
     }
 
 }
