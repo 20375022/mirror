@@ -105,13 +105,14 @@ public class PlayerControl : NetworkBehaviour
             if (isServer)
             {
                 RqcSonarPlayer(collision.contacts[0].point, collision.impulse.magnitude, sonarkey);
+                RpcPlaySounds();
             }
             else if (isClient){
                 if (sonarkey == true){
                     CmdClientSonar(collision.contacts[0].point, collision.impulse.magnitude);
                 }
+                CmdPlaySounds();
             }
-            CmdPlaySounds();
         }
     }
 
@@ -242,7 +243,7 @@ public class PlayerControl : NetworkBehaviour
     [Command]
     void CmdPlaySounds()
     {
-        this.GetComponent<AudioSource>().Play();
+        RpcPlaySounds();
     }
 
     [ClientRpc]
