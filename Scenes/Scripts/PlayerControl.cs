@@ -135,7 +135,7 @@ public class PlayerControl : NetworkBehaviour
 
             if (Input.GetKey(KeyCode.Space))
             {
-                if (Killerflg == true)
+/*                if (Killerflg == true)
                 {
                     Killerflg = false;
                 }
@@ -145,6 +145,7 @@ public class PlayerControl : NetworkBehaviour
                 }
                 Debug.Log(Killerflg);
                 ChangeKiller(Killerflg);
+*/
             }
             //CmdPlaySounds();
         }

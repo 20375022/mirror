@@ -15,6 +15,8 @@ public class PlayerAnimation : NetworkBehaviour
     private const string key_isONI = "isONI";
     private const string key_isWalk = "isWalk";
     private const string key_isRun = "isRun";
+    private const string key_isNorikoe = "isNorikoe";
+    bool norikoe;
 
     // 初期化メソッド
     void Start()
@@ -27,6 +29,8 @@ public class PlayerAnimation : NetworkBehaviour
     {
         if (isLocalPlayer)
         {
+            norikoe = animator.GetBool("isNorikoe");
+
             // 鬼であるかずっと確認する
             if (playerControl.Killerflg == true)
             {
@@ -63,6 +67,21 @@ public class PlayerAnimation : NetworkBehaviour
                 // WalkからWaitに遷移する
                 this.animator.SetBool(key_isWalk, false);
                 this.animator.SetBool(key_isRun, false);
+            }
+
+            // スペースで乗り越え
+            if (norikoe == false)
+            {
+                if (Input.GetKey(KeyCode.Space))
+                {
+                    this.animator.SetBool(key_isNorikoe, true);
+                }
+                if (this.animator.GetCurrentAnimatorStateInfo(0).normalizedTime > 1)
+                    Debug.Log("乗り越え終了");
+            }
+            else 
+            {
+                this.animator.SetBool(key_isNorikoe, false);
             }
 
         }
