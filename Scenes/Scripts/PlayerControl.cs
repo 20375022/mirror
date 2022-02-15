@@ -1,18 +1,25 @@
 ﻿using UnityEngine;
 using Mirror;
+using System.Collections;
+using System.Collections.Generic;
 
+[RequireComponent(typeof(AudioSource))]
 public class PlayerControl : NetworkBehaviour
 {
+    [SerializeField] AudioClip[] clips;
+    [SerializeField] bool randomizePitch = true;
+    [SerializeField] float pitchRange = 0.1f;
     public Camera mycam;
     public GameObject cam;
     public GameObject Plane;
     public GameObject Player;
+    public AudioSource source;
     float inputHorizontal;
     float inputVertical;
     Rigidbody rb;
     float moveSpeed = 3f;
     bool trigger = false;
-    bool sonarkey = false;
+
 
     void Start() {
         Plane = GameObject.Find("地面");
@@ -29,14 +36,6 @@ public class PlayerControl : NetworkBehaviour
 
     void Update()
     {
-        if (Input.GetKey(KeyCode.Q))
-        {
-            sonarkey = true;
-        }
-        else {
-            sonarkey = false;
-        }
-
         inputHorizontal = Input.GetAxisRaw("Horizontal");
         inputVertical = Input.GetAxisRaw("Vertical");
     }
@@ -83,34 +82,21 @@ public class PlayerControl : NetworkBehaviour
         }
     }
 
-    void OnCollisionEnter()
+    void OnCollisionEnter(Collision collision)
     {
         if (isLocalPlayer)
         {
-            this.GetComponent<AudioSource>().Play();
-            if (isServer)
-            {
-                RpcPlaySounds();    // クライアントに送信
-            }
-            else if (isClient)
-            {
-                CmdPlaySounds();    // サーバーに送信
-            }
+            CmdSonarPlayer(collision.contacts[0].point, collision.impulse.magnitude);
+            CmdPlaySounds();
         }
     }
 
     void OnCollisionStay(Collision collision) {
         if (isLocalPlayer)
         {
-            if (isServer)
+            if (Input.GetKey(KeyCode.Q))
             {
-                RqcSonarPlayer(collision.contacts[0].point, collision.impulse.magnitude, sonarkey);
-                RpcPlaySounds();
-            }
-            else if (isClient){
-                if (sonarkey == true){
-                    CmdClientSonar(collision.contacts[0].point, collision.impulse.magnitude);
-                }
+                CmdSonarPlayer(collision.contacts[0].point, collision.impulse.magnitude);
                 CmdPlaySounds();
             }
         }
@@ -249,7 +235,8 @@ public class PlayerControl : NetworkBehaviour
     [ClientRpc]
     void RpcPlaySounds()
     {
-        this.GetComponent<AudioSource>().Play();
+//        source.Play();
+        source.PlayOneShot(clips[0]);
     }
 
     // プレイヤーの回転
@@ -266,23 +253,12 @@ public class PlayerControl : NetworkBehaviour
     }
 
     [Command]
-    void CmdClientSonar(Vector4 Point, float impulse) {
-        RqcSonarPlayer(Point, impulse, true);
-    }
-
-    [Command]
-    void CmdSonarPlayer(Vector4 point, float impulse, bool s_sonarkey) {
-        if (s_sonarkey == true)
-        {
-            Plane.GetComponent<SimpleSonarShader_Object>().StartSonarRing(point, impulse * 10);
-        }
+    void CmdSonarPlayer(Vector4 point, float impulse) {
+        RpcSonarPlayer(point, impulse);
     }
     [ClientRpc]
-    void RqcSonarPlayer(Vector4 point, float impulse, bool c_sonarkey)
+    void RpcSonarPlayer(Vector4 point, float impulse)
     {
-        if (c_sonarkey == true)
-        {
-            Plane.GetComponent<SimpleSonarShader_Object>().StartSonarRing(point, impulse * 10);
-        }
+        Plane.GetComponent<SimpleSonarShader_Object>().StartSonarRing(point, impulse * 10);
     }
 }

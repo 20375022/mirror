@@ -282,11 +282,15 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   syncMode: 0
   syncInterval: 0.1
+  clips:
+  - {fileID: 8300000, guid: c5916fe8f1f740446a8212eb7751232f, type: 3}
+  randomizePitch: 1
+  pitchRange: 0.1
   mycam: {fileID: 656028141562082839}
   cam: {fileID: 656028141562082833}
   Plane: {fileID: 919132149155446097, guid: ea1b1c6cb97201f4b953eabcf2919b3f, type: 3}
   Player: {fileID: 1555054639584768389}
-  attackcol: {fileID: 8851946765237081211}
+  source: {fileID: 1542162358162441767}
 --- !u!82 &1542162358162441767
 AudioSource:
   m_ObjectHideFlags: 0
