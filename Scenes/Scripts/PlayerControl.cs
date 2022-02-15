@@ -4,14 +4,6 @@ using GrovalConst;
 
 public class PlayerControl : NetworkBehaviour
 {
-
-    enum GameMode
-    {
-        LOBBY = 0,
-        GAME,
-        RESULT
-    }
-
     [HideInInspector]
     public bool Killerflg;              // 自分が鬼であるかのフラグ
 
@@ -78,6 +70,7 @@ public class PlayerControl : NetworkBehaviour
             case (int)GameMode.GAME:
                 Debug.Log("PLY Gamemode = Game");
                 UI_Lobby.SetActive(false);
+                UI_Game.SetActive(true);
                 break;
 
             case (int)GameMode.RESULT:

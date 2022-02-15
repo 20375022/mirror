@@ -2,16 +2,10 @@
 using System.Collections.Generic;
 using UnityEngine;
 using Mirror;
+using GrovalConst;
 
 public class GameSystemManage : NetworkBehaviour
 {
-    enum GameMode
-    {
-        LOBBY = 0,
-        GAME,
-        RESULT
-    }
-
     public int gameMode;
     [SyncVar]
     public int countPlayer;

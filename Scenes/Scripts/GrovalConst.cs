@@ -14,4 +14,12 @@ namespace GrovalConst
         public const float SPEED_RUN    = 8f;   // 走る速さ
     }
 
+    public enum GameMode
+    {
+        LOBBY = 0,
+        GAME,
+        RESULT
+    }
+
+
 }
