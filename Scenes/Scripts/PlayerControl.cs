@@ -1,7 +1,10 @@
 ﻿using UnityEngine;
 using Mirror;
 using GrovalConst;
+using System.Collections;
+using System.Collections.Generic;
 
+[RequireComponent(typeof(AudioSource))]
 public class PlayerControl : NetworkBehaviour
 {
     [HideInInspector]
@@ -14,6 +17,9 @@ public class PlayerControl : NetworkBehaviour
     public GameObject UI_Game;          // UI
     public GameObject UI_Option;        // UI
 
+    [SerializeField] AudioClip[] clips;
+    [SerializeField] bool randomizePitch = true;
+    [SerializeField] float pitchRange = 0.1f;
     public Camera mycam;                // カメラコンポーネント
     public GameObject cam;              // 自分のカメラオブジェクト
     GameObject Plane;                   // 床オブジェクト
@@ -23,7 +29,7 @@ public class PlayerControl : NetworkBehaviour
     Rigidbody rb;                       // リジッドボディ
     float moveSpeed = Const.SPEED_WALK; // 移動の速さ
     bool trigger = false;               // トリガー
-    bool ZKey = false;                  // Zキー
+    public AudioSource source;
 
     void Start() {
         isReady = false;
@@ -46,34 +52,30 @@ public class PlayerControl : NetworkBehaviour
 
     void Update()
     {
-        if (Input.GetKey(KeyCode.Z))
-        {
-            ZKey = true;
-        }
-        else {
-            ZKey = false;
-        }
-
         inputHorizontal = Input.GetAxisRaw("Horizontal");
         inputVertical = Input.GetAxisRaw("Vertical");
 
         switch (SystemObj.GetComponent<GameSystemManage>().gameMode)
         {
-            case (int)GameMode.LOBBY:
+            case GameMode.LOBBY:
 
                 Debug.Log("PLY Gamemode = Lobby");
                 UI_Lobby.SetActive(true);
-                UI_Game.SetActive(false);
+                UI_Game.SetActive(true);
                 UI_Option.SetActive(false);
                 break;
 
-            case (int)GameMode.GAME:
+            case GameMode.GAME:
                 Debug.Log("PLY Gamemode = Game");
                 UI_Lobby.SetActive(false);
                 UI_Game.SetActive(true);
+                if (Input.GetKey(KeyCode.Escape))
+                {
+                    UI_Option.SetActive(true);
+                }
                 break;
 
-            case (int)GameMode.RESULT:
+            case GameMode.RESULT:
                 Debug.Log("PLY Gamemode = Result");
                 break;
         }
@@ -123,51 +125,30 @@ public class PlayerControl : NetworkBehaviour
         }
     }
 
-    void OnCollisionEnter()
+    void OnCollisionEnter(Collision collision)
     {
         if (isLocalPlayer)
         {
-            this.GetComponent<AudioSource>().Play();
-            if (isServer)
-            {
-                //RpcPlaySounds();    // クライアントに送信
-            }
-            else if (isClient)
-            {
-                //CmdPlaySounds();    // サーバーに送信
-            }
+            CmdSonarPlayer(collision.contacts[0].point, collision.impulse.magnitude);
+            CmdPlaySounds();    // サーバーに送信
         }
     }
 
-
-    [Command]
-    void CmdPlaySounds()
-    {
-        this.GetComponent<AudioSource>().Play();
-    }
-
-    [ClientRpc]
-    void RpcPlaySounds()
-    {
-        this.GetComponent<AudioSource>().Play();
-    }
 
     // 当たり判定に当たっているとき
     void OnCollisionStay(Collision collision) {
         if (isLocalPlayer)
         {
-            if (isServer) {
-                RqcSonarPlayer(collision.contacts[0].point, collision.impulse.magnitude, ZKey);
-            }
-            else if (isClient) {
-                if (ZKey == true) {
-                    CmdClientSonar(collision.contacts[0].point, collision.impulse.magnitude);
-                }
+
+            if (Input.GetKey(KeyCode.Q))
+            {
+                CmdSonarPlayer(collision.contacts[0].point, collision.impulse.magnitude);
+                CmdPlaySounds();
             }
 
             if (Input.GetKey(KeyCode.Space))
             {
-/*                if (Killerflg == true)
+                if (Killerflg == true)
                 {
                     Killerflg = false;
                 }
@@ -177,12 +158,146 @@ public class PlayerControl : NetworkBehaviour
                 }
                 Debug.Log(Killerflg);
                 ChangeKiller(Killerflg);
-*/
+
             }
             //CmdPlaySounds();
         }
     }
 
+
+    void OnTriggerStay(Collider other)
+    {
+        if (isLocalPlayer)
+        {
+            if (Input.GetKey(KeyCode.F))
+            {
+                if (other.CompareTag("Player"))
+                {
+                    if (Killerflg == true)
+                    {
+                        GameObject receive = other.gameObject;
+                        int range = Random.Range(0, 8);
+                        int ax, ay, az;
+                        int rx, ry, rz;
+                        int r;
+                        ax = 0;
+                        ay = 0;
+                        az = 0;
+                        rx = 0;
+                        ry = 0;
+                        rz = 0;
+                        Debug.Log("当たった");
+                        switch (range)
+                        {
+                            case 0:
+                                ax = -90;
+                                az = -90;
+                                ay = 1;
+                                break;
+                            case 1:
+                                ax = -90;
+                                az = 0;
+                                ay = 1;
+                                break;
+                            case 2:
+                                ax = 0;
+                                az = -90;
+                                ay = 1;
+                                break;
+                            case 3:
+                                ax = -90;
+                                az = 90;
+                                ay = 1;
+                                break;
+                            case 4:
+                                ax = 90;
+                                az = -90;
+                                ay = 3;
+                                break;
+                            case 5:
+                                ax = 0;
+                                az = 90;
+                                ay = 1;
+                                break;
+                            case 6:
+                                ax = 90;
+                                az = 0;
+                                ay = 3;
+                                break;
+                            case 7:
+                                ax = 90;
+                                az = 90;
+                                ay = 6;
+                                break;
+                        }
+                        Vector3 AttackPlace = new Vector3(ax, ay, az);
+                        r = range;
+                        while (r == range)
+                        {
+                            r = Random.Range(0, 8);
+                        }
+                        switch (r)
+                        {
+                            case 0:
+                                rx = -90;
+                                rz = -90;
+                                ry = 1;
+                                break;
+                            case 1:
+                                rx = -90;
+                                rz = 0;
+                                ry = 1;
+                                break;
+                            case 2:
+                                rx = 0;
+                                rz = -90;
+                                ry = 1;
+                                break;
+                            case 3:
+                                rx = -90;
+                                rz = 90;
+                                ry = 1;
+                                break;
+                            case 4:
+                                rx = 90;
+                                rz = -90;
+                                ry = 3;
+                                break;
+                            case 5:
+                                rx = 0;
+                                rz = 90;
+                                ry = 1;
+                                break;
+                            case 6:
+                                rx = 90;
+                                rz = 0;
+                                ry = 3;
+                                break;
+                            case 7:
+                                rx = 90;
+                                rz = 90;
+                                ry = 6;
+                                break;
+                        }
+                        Vector3 ReceivePlace = new Vector3(rx, ry, rz);
+                        this.transform.position = AttackPlace;
+                        receive.transform.position = ReceivePlace;
+                        //receive.transform.position = new Vector3(90, 0, -80);
+                        Debug.Log("逃げ飛ばす");
+                    }
+                }
+            }
+        }
+    }
+
+
+    // -----------------------------------------------------------------
+    // オプション画面を消す
+    // -----------------------------------------------------------------
+    public void OnclickOptionClose()
+    {
+        UI_Option.SetActive(false);
+    }
 
 
     // -----------------------------------------------------------------
@@ -190,27 +305,13 @@ public class PlayerControl : NetworkBehaviour
     // -----------------------------------------------------------------
     void ChangeKiller(bool Killerflg)
     {
-        if (isServer)
+        if (Killerflg == true)
         {
-            if (Killerflg == true)
-            {
-                RpcChangeKiller();
-            }
-            else
-            {
-                RpcChangeSurvivor();
-            }
+            CmdChangeKiller();
         }
-        else if (isClient)
+        else
         {
-            if (Killerflg == true)
-            {
-                CmdChangeKiller();
-            }
-            else
-            {
-                CmdChangeSurvivor();
-            }
+            CmdChangeSurvivor();
         }
     }
 
@@ -269,20 +370,33 @@ public class PlayerControl : NetworkBehaviour
 
 
     // -----------------------------------------------------------------
-    // プレイヤーのソナー
+    // プレイヤーの音
     // -----------------------------------------------------------------
     [Command]
-    void CmdClientSonar(Vector4 Point, float impulse) {
-        RqcSonarPlayer(Point, impulse, true);
+    void CmdPlaySounds()
+    {
+        RpcPlaySounds();
     }
 
     [ClientRpc]
-    void RqcSonarPlayer(Vector4 point, float impulse, bool c_ZKey)
+    void RpcPlaySounds()
     {
-        if (c_ZKey == true)
-        {
-            Plane.GetComponent<SimpleSonarShader_Object>().StartSonarRing(point, impulse * 10);
-        }
+        source.PlayOneShot(clips[0]);
+    }
+
+
+    // -----------------------------------------------------------------
+    // プレイヤーのソナー
+    // -----------------------------------------------------------------
+    [Command]
+    void CmdSonarPlayer(Vector4 Point, float impulse) {
+        RpcSonarPlayer(Point, impulse);
+    }
+
+    [ClientRpc]
+    void RpcSonarPlayer(Vector4 point, float impulse)
+    {
+        Plane.GetComponent<SimpleSonarShader_Object>().StartSonarRing(point, impulse * 10);
     }
 
 
@@ -321,6 +435,7 @@ public class PlayerControl : NetworkBehaviour
     {
         RpcReadyInc();
     }
+
     [ClientRpc]
     public void RpcReadyDecre()
     {

@@ -3364,6 +3364,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   syncMode: 0
   syncInterval: 0.1
+  tManeger: {fileID: 1100440168}
+  MainCameraDel: {fileID: 8283366747047736419}
   gameMode: 0
   countPlayer: 0
   readyPlayer: 0

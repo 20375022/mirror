@@ -3,36 +3,32 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 using Mirror;
+using GrovalConst;
 
 public class TimerController : NetworkBehaviour
 {
+    [HideInInspector]
     public float totalTime;
+    [HideInInspector]
     public int tim;
     [SyncVar]
     public int seconds;
 
-    // Use this for initialization
-    void Start()
-    {
-    }
-    // Update is called once per frame
-    void Update()
-    {
 
-        TimeInc();
-        TimeSync();
-    }
 
+    /// <summary>
+    /// ゲーム中
+    /// </summary>
     [ServerCallback]
-    void TimeInc()
+    public void TimeInc()
     {
-        totalTime += Time.deltaTime;
+        totalTime -= Time.deltaTime;
         seconds = (int)totalTime;
         tim = seconds;
     }
 
     [ClientCallback]
-    void TimeSync()
+    public void TimeSync()
     {
         tim = GetComponent<TimerController>().seconds;
     }

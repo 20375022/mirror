@@ -18,7 +18,7 @@ public class GameTimer : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        Time = timer.gameObject.GetComponent<TimerController>().seconds;
+        Time = timer.gameObject.GetComponent<TimerController>().tim;
         this.GetComponent<Text>().text = Time.ToString();
     }
 }

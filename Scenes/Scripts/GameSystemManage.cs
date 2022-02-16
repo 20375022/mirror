@@ -6,7 +6,10 @@ using GrovalConst;
 
 public class GameSystemManage : NetworkBehaviour
 {
-    public int gameMode;
+    public TimerController tManeger;
+    public GameObject MainCameraDel;
+    [SyncVar]
+    public GameMode gameMode;
     [SyncVar]
     public int countPlayer;
     [SyncVar]
@@ -15,30 +18,50 @@ public class GameSystemManage : NetworkBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        gameMode = (int)GameMode.LOBBY;
+        gameMode = GameMode.LOBBY;
         readyPlayer = 0;
         countPlayer = 4;
+        tManeger.totalTime = Const.START_TIME;
+        MainCameraDel.gameObject.SetActive(false);  // 接続した瞬間にカメラをメインカメラをオフにする
     }
 
     // Update is called once per frame
     void Update()
     {
+        GameSystems();
+        tManeger.TimeSync();
+    }
+
+    [ServerCallback]
+    void GameSystems()
+    {
         switch (gameMode)
         {
-            case (int)GameMode.LOBBY:
+            case GameMode.LOBBY:
 
                 Debug.Log("Gamemode = Lobby");
                 if (readyPlayer == 2)
                 {
-                    gameMode = (int)GameMode.GAME;
+                    tManeger.TimeInc();
+                    tManeger.TimeSync();
+                    if (tManeger.tim <= 0)
+                    {
+                        tManeger.totalTime = Const.GAME_TIME;
+                        gameMode = GameMode.GAME;
+                    }
                 }
                 break;
 
-            case (int)GameMode.GAME:
+            case GameMode.GAME:
                 Debug.Log("Gamemode = Game");
+                tManeger.TimeInc();
+                if (tManeger.tim <= 0)
+                {
+                    gameMode = GameMode.RESULT;
+                }
                 break;
 
-            case (int)GameMode.RESULT:
+            case GameMode.RESULT:
                 Debug.Log("Gamemode = Result");
                 break;
         }
