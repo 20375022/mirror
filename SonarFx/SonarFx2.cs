@@ -27,7 +27,6 @@ public class SonarFx2 : MonoBehaviour
 {
     private GameObject Player;
 
-    private int cnt = 0;
     // Sonar mode (directional or spherical)
     public enum SonarMode { Directional, Spherical }
     [SerializeField] SonarMode _mode = SonarMode.Directional;

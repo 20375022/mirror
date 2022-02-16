@@ -40,7 +40,7 @@ public class GameSystemManage : NetworkBehaviour
             case GameMode.LOBBY:
 
                 Debug.Log("Gamemode = Lobby");
-                if (readyPlayer == 2)
+                if (readyPlayer == Const.MAX_PLAYER)
                 {
                     tManeger.TimeInc();
                     tManeger.TimeSync();

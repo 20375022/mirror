@@ -14,8 +14,6 @@ namespace Mirror
     {
         NetworkManager manager;
 
-        public int offsetX;
-        public int offsetY;
         public GameObject ServerBtn;    //ServerButton
         public GameObject ClientBtn;    //ClientButton
         public GameObject Inputfield;   //Inputfield
@@ -50,6 +48,7 @@ namespace Mirror
             }
             if (connectedF == client)
             {
+                Debug.Log("クライアント開始");
                 StartMyClient();
             }
         }
@@ -74,7 +73,6 @@ namespace Mirror
         {
             if (CharactorManager.playerType != PlayerType.none)
             {
-//                FadeManager.Instance.LoadScene("UITest", 1.0f);
                 manager.StartHost();
                 connectedF = end;
             }
@@ -85,17 +83,15 @@ namespace Mirror
         {
             if (CharactorManager.playerType != PlayerType.none)
             {
-//                FadeManager.Instance.LoadScene("UITest", 1.0f);
                 manager.StartClient();
+                Debug.Log(manager.networkAddress);
                 connectedF = end;
             }
         }
 
         void StartAll()
         {
-            //            manager.networkAddress = GUILayout.TextField(manager.networkAddress);
             manager.networkAddress = Enteradress.GetComponent<Text>().text;
-            Debug.Log(manager.networkAddress);
             ClientBtn.SetActive(false);
             ServerBtn.SetActive(false);
             Inputfield.SetActive(false);

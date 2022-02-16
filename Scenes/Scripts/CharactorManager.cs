@@ -70,10 +70,6 @@ public class CharactorManager : NetworkBehaviour
             selectPanel.SetActive(true);
             networkPanel.SetActive(false);
         }
-        else
-        {
-            DisabledBtn();
-        }
     }
 
     //ボタンを無効化
@@ -82,7 +78,7 @@ public class CharactorManager : NetworkBehaviour
         selectPanel.SetActive(false);
         Destroy(SelectKillerModel);
         Destroy(SelectSurvivorModel);
-        Cmdplytypechg(playerType);
+        plytypechg(playerType);
     }
 
     //Killerのモデル選択(左ボタン)
@@ -149,7 +145,7 @@ public class CharactorManager : NetworkBehaviour
 
 
 
-    //テクニカルタイプ選択
+    //キャラ選択
     public void SelectedModel()
     {
         Debug.Log("Selected");
@@ -200,8 +196,8 @@ public class CharactorManager : NetworkBehaviour
         }
     }
 
-    [Command]
-    void Cmdplytypechg(PlayerType pt)
+ 
+    void plytypechg(PlayerType pt)
     {
         Debug.Log("yobareta");
         playerType = pt;
