@@ -6,7 +6,7 @@ using UnityEngine.UI;
 public class GameTimer : MonoBehaviour
 {
     GameObject timer;
-    public int Time;
+    int Time;
 
 
     // Start is called before the first frame update

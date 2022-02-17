@@ -6,23 +6,30 @@ using Mirror;
 
 public enum PlayerType
 {
-    piesu = 0,
-    pierun,
-    killsu,
+    killgaki = 0,
     killrun,
+    killOL,
+    piegaki,
+    pierun,
+    pieOL,
+    pastgaki,
+    pastrun,
+    pastOL,
     none
 }
 
 public enum KillerType
 {
     killer = 0,
-    piero
+    piero,
+    past
 }
 
 public enum SurvivorType
 {
-    runner = 0,
-    sutai
+    gaki = 0,
+    runner,
+    OL
 }
 
 
@@ -46,7 +53,7 @@ public class CharactorManager : NetworkBehaviour
         selectPanel.SetActive(false);
         playerType = PlayerType.none;
         killerType = (int)KillerType.killer;
-        survivorType = (int)SurvivorType.runner;
+        survivorType = (int)SurvivorType.gaki;
         SelectKillerModel.transform.GetChild(killerType).gameObject.SetActive(true);
         SelectSurvivorModel.transform.GetChild(survivorType).gameObject.SetActive(true);
     }
@@ -86,7 +93,7 @@ public class CharactorManager : NetworkBehaviour
     {
         Debug.Log("キラー +");
         SelectKillerModel.transform.GetChild(killerType).gameObject.SetActive(false);
-        if (killerType == (int)KillerType.piero)
+        if (killerType == (int)KillerType.past)
         {
             killerType = (int)KillerType.killer;
         }
@@ -103,7 +110,7 @@ public class CharactorManager : NetworkBehaviour
         SelectKillerModel.transform.GetChild(killerType).gameObject.SetActive(false);
         if (killerType == (int)KillerType.killer)
         {
-            killerType = (int)KillerType.piero;
+            killerType = (int)KillerType.past;
         }
         else
         {
@@ -117,9 +124,9 @@ public class CharactorManager : NetworkBehaviour
     {
         Debug.Log("サバイバー +");
         SelectSurvivorModel.transform.GetChild(survivorType).gameObject.SetActive(false);
-        if (survivorType == (int)SurvivorType.sutai)
+        if (survivorType == (int)SurvivorType.OL)
         {
-            survivorType = (int)SurvivorType.runner;
+            survivorType = (int)SurvivorType.gaki;
         }
         else
         {
@@ -132,9 +139,9 @@ public class CharactorManager : NetworkBehaviour
     {
         Debug.Log("サバイバー -");
         SelectSurvivorModel.transform.GetChild(survivorType).gameObject.SetActive(false);
-        if (survivorType == (int)SurvivorType.runner)
+        if (survivorType == (int)SurvivorType.gaki)
         {
-            survivorType = (int)SurvivorType.sutai;
+            survivorType = (int)SurvivorType.OL;
         }
         else
         {
@@ -154,45 +161,71 @@ public class CharactorManager : NetworkBehaviour
             case (int)KillerType.killer:
                 switch (survivorType)
                 {
-                    case(int)SurvivorType.runner:
+                    case(int)SurvivorType.gaki:
+                        Debug.Log("killgaki");
+                        playerType = PlayerType.killgaki;
+                        DisabledBtn();
+                        break;
+
+                    case (int)SurvivorType.runner:
                         Debug.Log("killrun");
                         playerType = PlayerType.killrun;
                         DisabledBtn();
                         break;
 
-                    case (int)SurvivorType.sutai:
-                        Debug.Log("killsu");
-                        playerType = PlayerType.killsu;
+                    case (int)SurvivorType.OL:
+                        Debug.Log("killOL");
+                        playerType = PlayerType.killOL;
                         DisabledBtn();
                         break;
-
-//                    case (int)SurvivorType:
-//                        break;
                 }
                 break;
 
             case (int)KillerType.piero:
                 switch (survivorType)
                 {
-                    case(int)SurvivorType.runner:
+                    case(int)SurvivorType.gaki:
+                        Debug.Log("piegaki");
+                        playerType = PlayerType.piegaki;
+                        DisabledBtn();
+                        break;
+
+                    case (int)SurvivorType.runner:
                         Debug.Log("pierun");
                         playerType = PlayerType.pierun;
                         DisabledBtn();
                         break;
 
-                    case (int)SurvivorType.sutai:
-                        Debug.Log("piesu");
-                        playerType = PlayerType.piesu;
+                    case (int)SurvivorType.OL:
+                        Debug.Log("pieOL");
+                        playerType = PlayerType.pieOL;
                         DisabledBtn();
                         break;
-
-//                    case (int)SurvivorType:
-//                        break;
                 }
                 break;
 
-//            case (int)KillerType:
-//                break;
+            case (int)KillerType.past:
+                switch (survivorType)
+                {
+                    case (int)SurvivorType.gaki:
+                        Debug.Log("pastgaki");
+                        playerType = PlayerType.pastgaki;
+                        DisabledBtn();
+                        break;
+
+                    case (int)SurvivorType.runner:
+                        Debug.Log("pastrun");
+                        playerType = PlayerType.pastrun;
+                        DisabledBtn();
+                        break;
+
+                    case (int)SurvivorType.OL:
+                        Debug.Log("pastOL");
+                        playerType = PlayerType.pastOL;
+                        DisabledBtn();
+                        break;
+                }
+                break;
         }
     }
 

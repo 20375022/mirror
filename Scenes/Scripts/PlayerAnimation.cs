@@ -17,6 +17,8 @@ public class PlayerAnimation : NetworkBehaviour
     private const string key_isWalk = "isWalk";
     private const string key_isRun = "isRun";
     private const string key_isNorikoe = "isNorikoe";
+    private const string key_isFall = "isFall";   
+    private const string key_isLanding = "isLanding";   
     bool norikoe;
 
     // 初期化メソッド
@@ -54,9 +56,32 @@ public class PlayerAnimation : NetworkBehaviour
                     this.animator.SetBool(key_isRun, true);
                     break;
 
-                case PlayerMode.WAIT:
+                case PlayerMode.WAIT:       // 立ちに移行する
                     this.animator.SetBool(key_isWalk, false);
                     this.animator.SetBool(key_isRun, false);
+                    this.animator.SetBool(key_isLanding, false);
+                    break;
+
+                case PlayerMode.FALL:       // 落下に移行する
+                    this.animator.SetBool(key_isFall, true);
+                    this.animator.SetBool(key_isWalk, false);
+                    this.animator.SetBool(key_isRun, false);
+                    break;
+
+                case PlayerMode.LANDING:       // 着地に移行する
+                    this.animator.SetBool(key_isLanding, true);
+                    this.animator.SetBool(key_isFall, false);
+                    this.animator.SetBool(key_isWalk, false);
+                    this.animator.SetBool(key_isRun, false);
+                    if (this.animator.GetCurrentAnimatorStateInfo(0).normalizedTime <= 1)
+                    {
+                        Debug.Log("着地再生中");
+                    }
+                    else
+                    {
+                        Debug.Log("着地再生終了");
+                        playerControl.plyMode = PlayerMode.WAIT;
+                    }
                     break;
             }
         }

@@ -3,17 +3,25 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using Mirror;
+using UnityEngine.SceneManagement;
 
 
 public class MynetworkManager : NetworkManager
 {
     //キャラクター
-    public GameObject piesu;        // ピエロと素体
-    public GameObject pierun;       // ピエロとランナー
-    public GameObject killsu;       // ジェーソンと素体
-    public GameObject killrun;      // ジェーソンとランナー
+    public GameObject killgaki;         // ジェーソンとガキ
+    public GameObject killrun;          // ジェーソンとランナー
+    public GameObject killOL;           // ジェーソンとOL
+    public GameObject piegaki;          // ピエロとガキ
+    public GameObject pierun;           // ピエロとランナー
+    public GameObject pieOL;            // ピエロとOL
+    public GameObject pastgaki;         // ペストとガキ
+    public GameObject pastrun;          // ペストとランナー
+    public GameObject pastOL;           // ペストとOL
 
-    static int gamemode = 0;
+    public GameObject Spawner;          // 最初のスポーン位置
+    public GameObject place;            // リスポーン地点
+    public int CreateSpawn;
 
     //====================
     // ホスト・クライアント・サーバーの開始・停止
@@ -47,6 +55,7 @@ public class MynetworkManager : NetworkManager
     public override void OnStopClient()
     {
         base.OnStopClient();
+        SceneManager.LoadScene("title");
         print("OnStopClient");
     }
     // サーバーの停止時に呼ばれる
@@ -138,28 +147,50 @@ public class MynetworkManager : NetworkManager
 
     void OnCreateCharacter(NetworkConnection conn, CreateMMOCharacterMessage message)
     {
-        //パワータイプキャラクターを生成
-        if (PlayerType.piesu == message.playerType)
+        if (PlayerType.piegaki == message.playerType)
         {
-            playerPrefab = piesu;
-            Debug.Log("piesu");
+            playerPrefab = piegaki;
+            Debug.Log("piegaki");
         }
-        //スピードタイプキャラクターを生成
         else if (PlayerType.pierun == message.playerType)
         {
             playerPrefab = pierun;
             Debug.Log("pierun");
         }
-        //テクニックタイプキャラクターを生成
-        else if (PlayerType.killsu == message.playerType)
+        else if (PlayerType.pieOL == message.playerType)
         {
-            playerPrefab = killsu;
+            playerPrefab = pieOL;
+            Debug.Log("pierun");
+        }
+        else if (PlayerType.killgaki == message.playerType)
+        {
+            playerPrefab = killgaki;
             Debug.Log("killsu");
         }
         else if (PlayerType.killrun == message.playerType)
         {
             playerPrefab = killrun;
             Debug.Log("killrun");
+        }
+        else if (PlayerType.killOL == message.playerType)
+        {
+            playerPrefab = killOL;
+            Debug.Log("killsu");
+        }
+        else if (PlayerType.pastgaki == message.playerType)
+        {
+            playerPrefab = pastgaki;
+            Debug.Log("killsu");
+        }
+        else if (PlayerType.pastrun == message.playerType)
+        {
+            playerPrefab = pastrun;
+            Debug.Log("killrun");
+        }
+        else if (PlayerType.pastOL == message.playerType)
+        {
+            playerPrefab = pastOL;
+            Debug.Log("killsu");
         }
         //キャラクタータイプが選択されてない
         else
@@ -170,25 +201,40 @@ public class MynetworkManager : NetworkManager
 
         // playerPrefab is the one assigned in the inspector in Network
         // Manager but you can use different prefabs per race for example
-        GameObject gameobject = Instantiate(playerPrefab);
+        Transform startPos = GetNetStartPosition();        // スタートポジションがアタッチされたオブジェクトの座標を探す
+        GameObject gameobject= startPos != null             // オブジェクトがあればその位置にInstantiateする
+            ? Instantiate(playerPrefab, startPos.position, startPos.rotation)
+            : Instantiate(playerPrefab);
+        Destroy(Spawner.transform.GetChild(CreateSpawn).gameObject);
+        //GameObject gameobject = Instantiate(playerPrefab);
+        //GameObject gameobject = Instantiate(playerPrefab, place.transform.GetChild(CreateSpawn).gameObject.transform.position, Quaternion.identity);
+        //CreateSpawn++;
 
         // call this to use this gameobject as the primary controller
+        gameobject.name = $"{gameobject.name} [connId={conn.connectionId}]";
         NetworkServer.AddPlayerForConnection(conn, gameobject);
-        gamemode = NetworkServer.connections.Count;
     }
 
-    public void OvO()
+    /// <summary>Get the next NetworkStartPosition based on the selected PlayerSpawnMethod.</summary>
+    public Transform GetNetStartPosition()
     {
-        //接続人数が二人だった場合
-        if (gamemode == 2)
+        // first remove any dead transforms
+        startPositions.RemoveAll(t => t == null);
+
+        if (startPositions.Count == 0)
+            return null;
+
+        if (playerSpawnMethod == PlayerSpawnMethod.Random)
         {
-            ServerChangeScene("OvO");
+            CreateSpawn = UnityEngine.Random.Range(0, startPositions.Count);
+            return startPositions[CreateSpawn];
         }
-    }
-
-    public static int GetPlayernum() 
-    {
-       return gamemode;
+        else
+        {
+            Transform startPosition = startPositions[startPositionIndex];
+            startPositionIndex = (startPositionIndex + 1) % startPositions.Count;
+            return startPosition;
+        }
     }
 
 }

@@ -11,6 +11,8 @@ public class PlayerControl : NetworkBehaviour
     public bool Killerflg;              // 自分が鬼であるかのフラグ
     [HideInInspector]
     public PlayerMode plyMode;          // プレイヤーのモード
+    [HideInInspector]
+    public bool WLResult;               // 勝ったか負けたか
 
     GameObject SystemObj;               // ゲームシステム
     bool isReady;                       // lobbyで準備完了フラグ
@@ -22,7 +24,6 @@ public class PlayerControl : NetworkBehaviour
     [SerializeField] AudioClip[] clips;
     [SerializeField] bool randomizePitch = true;
     [SerializeField] float pitchRange = 0.1f;
-    public Camera mycam;                // カメラコンポーネント
     public GameObject cam;              // 自分のカメラオブジェクト
     GameObject Plane;                   // 床オブジェクト
     public GameObject Player;           // 自分
@@ -38,6 +39,7 @@ public class PlayerControl : NetworkBehaviour
 
     void Start() {
         PlyRB = GetComponent<Rigidbody>();
+        rb = this.transform.GetComponent<Rigidbody>();  // 自分のリジッドボディ
         SystemObj = GameObject.FindGameObjectWithTag("System");
         Plane = GameObject.Find("y床");
         cam.GetComponent<AudioListener>().enabled = true;
@@ -67,9 +69,12 @@ public class PlayerControl : NetworkBehaviour
             switch (SystemObj.GetComponent<GameSystemManage>().gameMode)
             {
                 case GameMode.LOBBY:
-
                     Debug.Log("PLY Gamemode = Lobby");
                     UI_Lobby.SetActive(true);
+                    if( isServer)
+                    {
+                        UI_Lobby.transform.GetChild(0).gameObject.SetActive(true);
+                    }
                     UI_Game.SetActive(true);
                     UI_Option.SetActive(false);
                     break;
@@ -85,12 +90,13 @@ public class PlayerControl : NetworkBehaviour
                     break;
 
                 case GameMode.RESULT:
+                    Debug.Log(WLResult);
                     Debug.Log("PLY Gamemode = Result");
                     break;
             }
             ChangeKiller();        // 常に鬼かどうかを共有
         }
-        Debug.Log(plyMode);
+        Debug.Log(plyMode);         // 常にプレイヤーのモードを見る
     }
 
     // 定期更新時に呼ばれる
@@ -101,30 +107,45 @@ public class PlayerControl : NetworkBehaviour
         {
             rb = this.transform.GetComponent<Rigidbody>();  // 自分のリジッドボディを毎回取り直す
 
-            if ((Input.GetKey(KeyCode.W)) || (Input.GetKey(KeyCode.S)) ||
-                (Input.GetKey(KeyCode.A)) || (Input.GetKey(KeyCode.D)))
+            // プレイヤーのモードで動作を管理
+            switch (plyMode)
             {
-                plyMode = PlayerMode.WALK;
-                inputHorizontal = Input.GetAxisRaw("Horizontal");
-                inputVertical = Input.GetAxisRaw("Vertical");
-                PlayerMovement();
-            }
-            else
-            {
-                plyMode = PlayerMode.WAIT;
-                inputHorizontal = 0;
-                inputVertical = 0;
-                CmdNotMovePlayer();
-            }
+                case PlayerMode.WAIT:   // 立ちモード
+                case PlayerMode.WALK:   // 歩きモード
+                case PlayerMode.RUN:    // 走りモード
+                    if ((Input.GetKey(KeyCode.W)) || (Input.GetKey(KeyCode.S)) ||
+                        (Input.GetKey(KeyCode.A)) || (Input.GetKey(KeyCode.D)))
+                    {
+                        plyMode = PlayerMode.WALK;
+                        inputHorizontal = Input.GetAxisRaw("Horizontal");
+                        inputVertical = Input.GetAxisRaw("Vertical");
+                        if (Input.GetKey(KeyCode.LeftShift))    // 走りキーを押しているか
+                        {
+                            plyMode = PlayerMode.RUN;
+                        }
+                        PlayerMovement();
+                    }
+                    else
+                    {
+                        plyMode = PlayerMode.WAIT;
+                        inputHorizontal = 0;
+                        inputVertical = 0;
+                        CmdNotMovePlayer();
+                    }
+                    break;
 
-            if (Input.GetKey(KeyCode.LeftShift))    // 走りキーを押しているか
-            {
-                if (plyMode == PlayerMode.WALK)     // 歩いてる時だけ走れる
-                {
-                    plyMode = PlayerMode.RUN;
-                }
-            }
+                case PlayerMode.ATK:    // 攻撃モード
+                    CmdNotMovePlayer();
+                    break;
 
+                case PlayerMode.FALL:   // 落ちるモード
+                    CmdNotMovePlayer();
+                    break;
+
+                case PlayerMode.LANDING:// 着地モード
+                    CmdNotMovePlayer();
+                    break;
+            }
 
         }
     }
@@ -156,11 +177,32 @@ public class PlayerControl : NetworkBehaviour
         }
     }
 
+    // -------------------------------------------------------------------------------------------- //
+    //                                                                                              //
+    //                                  当たり判定関連                                              //
+    //                                                                                              //
+    // -------------------------------------------------------------------------------------------- //
+    public void SurvivorCollisionHit()
+    {
+        Debug.Log("プレイヤー集合中");
+        if (SystemObj.GetComponent<GameSystemManage>().Escape == false)
+        {
+            CmdEscapeSurvivor();
+        }
+    }
 
-    void OnTriggerStay(Collider other)
+    [Command]
+    void CmdEscapeSurvivor()
+    {
+        SystemObj.GetComponent<GameSystemManage>().time = 10f;
+        SystemObj.GetComponent<GameSystemManage>().Escape = true;
+    }
+
+    public void MainCollisionHit(Collider other)
     {
         if (isLocalPlayer)
         {
+            Debug.Log("プレイヤーヒット");
             if (SystemObj.GetComponent<GameSystemManage>().gameMode == GameMode.GAME)
             {
                 if (Input.GetKey(KeyCode.F))
@@ -169,6 +211,19 @@ public class PlayerControl : NetworkBehaviour
                 }
             }
         }
+    }
+
+    public void StandCollisionHit()     // 足元の当たり判定が当たったとき(着地)
+    {
+        if (plyMode == PlayerMode.FALL)
+        {
+            plyMode = PlayerMode.LANDING;
+        }
+    }
+
+    public void StandCollisionExit()    // 足元の当たり判定が離れた時(落下)
+    {
+        plyMode = PlayerMode.FALL;
     }
 
 
@@ -211,6 +266,7 @@ public class PlayerControl : NetworkBehaviour
     {
         Player.transform.GetChild(1).gameObject.SetActive(false);   // 1が逃げ
         Player.transform.GetChild(0).gameObject.SetActive(true);    // 0が鬼
+        Player.tag = "Killer";
     }
 
     // -----------------------------------------------------------------
@@ -227,6 +283,7 @@ public class PlayerControl : NetworkBehaviour
     {
         Player.transform.GetChild(0).gameObject.SetActive(false);   // 0が鬼
         Player.transform.GetChild(1).gameObject.SetActive(true);    // 1が逃げ
+        Player.tag = "Player";
     }
 
 
@@ -282,8 +339,8 @@ public class PlayerControl : NetworkBehaviour
     [Command]
     void CmdNotMovePlayer()
     {
-        PlyRB.velocity = Vector3.zero;
-        PlyRB.angularVelocity = Vector3.zero;
+        PlyRB.velocity = new Vector3(0.0f, rb.velocity.y, 0.0f);
+        PlyRB.angularVelocity = new Vector3(0.0f, rb.velocity.y, 0.0f);
     }
 
     // -----------------------------------------------------------------
@@ -323,84 +380,81 @@ public class PlayerControl : NetworkBehaviour
     // -----------------------------------------------------------------
     void KillerAttack(Collider other)
     {
-        if (other.CompareTag("Player"))
+        if (Killerflg == true)
         {
-            if (Killerflg == true)
+            GameObject receive = other.gameObject;
+            int range = Random.Range(0, 8);
+            Vector3 AttackPlace = new Vector3(0, 0, 0);
+            Vector3 ReceivePlace = new Vector3(0, 0, 0);
+            int r;
+            Debug.Log("当たった");
+            switch (range)
             {
-                GameObject receive = other.gameObject;
-                int range = Random.Range(0, 8);
-                Vector3 AttackPlace = new Vector3(0, 0, 0);
-                Vector3 ReceivePlace = new Vector3(0, 0, 0);
-                int r;
-                Debug.Log("当たった");
-                switch (range)
-                {
-                    case 0:
-                        AttackPlace = new Vector3(0, 5, -60);
-                        break;
-                    case 1:
-                        AttackPlace = new Vector3(25, 5, -25);
-                        break;
-                    case 2:
-                        AttackPlace = new Vector3(20, 5, 15);
-                        break;
-                    case 3:
-                        AttackPlace = new Vector3(-40, 5, 40);
-                        break;
-                    case 4:
-                        AttackPlace = new Vector3(-40, 5, -20);
-                        break;
-                    case 5:
-                        AttackPlace = new Vector3(30, 25, -5);
-                        break;
-                    case 6:
-                        AttackPlace = new Vector3(-35, 25, 35);
-                        break;
-                    case 7:
-                        AttackPlace = new Vector3(10, 25, -20);
-                        break;
-                }
-                r = range;
-                while (true)
-                {
-                    r = Random.Range(0, 8);
-                    if (r != range && r != pastr)
-                    {
-                        break;
-                    }
-                }
-                pastr = r;
-                switch (r)
-                {
-                    case 0:
-                        ReceivePlace = new Vector3(0, 5, -60);
-                        break;
-                    case 1:
-                        ReceivePlace = new Vector3(25, 5, -25);
-                        break;
-                    case 2:
-                        ReceivePlace = new Vector3(20, 5, 15);
-                        break;
-                    case 3:
-                        ReceivePlace = new Vector3(-40, 5, 40);
-                        break;
-                    case 4:
-                        ReceivePlace = new Vector3(-40, 5, -20);
-                        break;
-                    case 5:
-                        ReceivePlace = new Vector3(30, 25, -5);
-                        break;
-                    case 6:
-                        ReceivePlace = new Vector3(-35, 25, 35);
-                        break;
-                    case 7:
-                        ReceivePlace = new Vector3(10, 25, -20);
-                        break;
-                }
-                CmdAttackPlayer(Player, receive, AttackPlace, ReceivePlace);
-                Killerflg = false;
-                Debug.Log("逃げ飛ばす");
+                case 0:
+                    AttackPlace = new Vector3(0, 5, -60);
+                    break;
+                case 1:
+                    AttackPlace = new Vector3(25, 5, -25);
+                    break;
+                case 2:
+                    AttackPlace = new Vector3(20, 5, 15);
+                    break;
+                case 3:
+                    AttackPlace = new Vector3(-40, 5, 40);
+                    break;
+                case 4:
+                    AttackPlace = new Vector3(-40, 5, -20);
+                    break;
+                case 5:
+                    AttackPlace = new Vector3(30, 25, -5);
+                    break;
+                case 6:
+                    AttackPlace = new Vector3(-35, 25, 35);
+                    break;
+                case 7:
+                    AttackPlace = new Vector3(10, 25, -20);
+                    break;
             }
+            r = range;
+            while (true)
+            {
+                r = Random.Range(0, 8);
+                if (r != range && r != pastr)
+                {
+                    break;
+                }
+            }
+            pastr = r;
+            switch (r)
+            {
+                case 0:
+                    ReceivePlace = new Vector3(0, 5, -60);
+                    break;
+                case 1:
+                    ReceivePlace = new Vector3(25, 5, -25);
+                    break;
+                case 2:
+                    ReceivePlace = new Vector3(20, 5, 15);
+                    break;
+                case 3:
+                    ReceivePlace = new Vector3(-40, 5, 40);
+                    break;
+                case 4:
+                    ReceivePlace = new Vector3(-40, 5, -20);
+                    break;
+                case 5:
+                    ReceivePlace = new Vector3(30, 25, -5);
+                    break;
+                case 6:
+                    ReceivePlace = new Vector3(-35, 25, 35);
+                    break;
+                case 7:
+                    ReceivePlace = new Vector3(10, 25, -20);
+                    break;
+            }
+            CmdAttackPlayer(Player, receive, AttackPlace, ReceivePlace);
+            Killerflg = false;
+            Debug.Log("逃げ飛ばす");
         }
     }
 
@@ -465,4 +519,12 @@ public class PlayerControl : NetworkBehaviour
         RpcReadyDecre();
     }
 
+ 
+
+
 }
+
+
+
+
+

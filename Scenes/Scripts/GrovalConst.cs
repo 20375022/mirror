@@ -10,13 +10,13 @@ namespace GrovalConst
     /// </summary>
     public static class Const
     {
-        public const int    MAX_PLAYER  = 2;    // ゲームの人数 
+        public const int    MAX_PLAYER  = 4;    // ゲームの人数 
 
-        public const float  SPEED_WALK  = 5f;   // 歩く速さ
-        public const float  SPEED_RUN   = 8f;   // 走る速さ
+        public const float  SPEED_WALK  = 10f;   // 歩く速さ
+        public const float  SPEED_RUN   = 20f;   // 走る速さ
 
         public const float  START_TIME  = 4f;   // ロビーからゲームスタート 
-        public const float  GAME_TIME   = 41f;  // ゲームの時間(タイマーの性質上 + 1秒 で始める)
+        public const float  GAME_TIME   = 111f;  // ゲームの時間(タイマーの性質上 + 1秒 で始める)
     }
 
     // ゲームのモード

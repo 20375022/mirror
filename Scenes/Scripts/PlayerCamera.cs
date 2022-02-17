@@ -14,6 +14,7 @@ public class PlayerCamera : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
+        this.transform.position = new Vector3(0f, 10.58f, -9.22f);
         this.transform.parent = null;
     }
 
@@ -38,4 +39,5 @@ public class PlayerCamera : MonoBehaviour
             }
         }
     }
+
 }
