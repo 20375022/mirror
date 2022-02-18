@@ -26,6 +26,8 @@ public class SimpleSonarShader_Object : MonoBehaviour
     // These are kept in the same order as the positionsQueue.
     private static Queue<float> intensityQueue = new Queue<float>(QueueSize);
 
+    private static Queue<Color> colorQueue = new Queue<Color>(QueueSize);
+
     // Make sure only 1 object initializes the queues.
     private static bool NeedToInitQueues = true;
 
@@ -46,6 +48,7 @@ public class SimpleSonarShader_Object : MonoBehaviour
             {
                 positionsQueue.Enqueue(GarbagePosition);
                 intensityQueue.Enqueue(-5000f);
+                colorQueue.Enqueue(new Color(1.0f, 1.0f, 1.0f, 1.0f));
             }
         }
 
@@ -56,7 +59,7 @@ public class SimpleSonarShader_Object : MonoBehaviour
     /// <summary>
     /// Starts a sonar ring from this position with the given intensity.
     /// </summary>
-    public void StartSonarRing(Vector4 position, float intensity)
+    public void StartSonarRing(Vector4 position, float intensity, Color color)
     {
         // Put values into the queue
         position.w = Time.timeSinceLevelLoad;
@@ -65,6 +68,9 @@ public class SimpleSonarShader_Object : MonoBehaviour
 
         intensityQueue.Dequeue();
         intensityQueue.Enqueue(intensity);
+
+        colorQueue.Dequeue();
+        colorQueue.Enqueue(color);
 
         RingDelegate();
     }
@@ -79,13 +85,23 @@ public class SimpleSonarShader_Object : MonoBehaviour
         {
             r.material.SetVectorArray("_hitPts", positionsQueue.ToArray());
             r.material.SetFloatArray("_Intensity", intensityQueue.ToArray());
+            r.material.SetColorArray("_RingColor", colorQueue.ToArray());
         }
     }
 
-    void OnCollisionEnter(Collision collision) {
+    public void SonarColor(float red, float gle, float blu)
+    {
+        // Send updated queues to the shaders
+        foreach (Renderer r in ObjectRenderers)
+        {
+//            r.material.SetColor("_RingColor", new Color(red, gle, blu, 1.0f));
+        }
+    }
+
+/*    void OnCollisionEnter(Collision collision) {
         // Start sonar ring from the contact point
         StartSonarRing(collision.contacts[0].point, collision.impulse.magnitude / 2);    // <-リングの大きさ(初期値は / 10)
-    }
+    }*/
 
 /*    void OnCollisionStay(Collision collision)
     {

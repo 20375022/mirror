@@ -7,7 +7,6 @@ Shader "MadeByProfessorOakie/SimpleSonarShader" {
 		_MainTex("Albedo (RGB)", 2D) = "white" {}
 		_Glossiness("Smoothness", Range(0,1)) = 0.5
 		_Metallic("Metallic", Range(0,1)) = 0.0
-		_RingColor("Ring Color", Color) = (1,1,1,1)
 		_RingColorIntensity("Ring Color Intensity", float) = 2
 		_RingSpeed("Ring Speed", float) = 1
 		_RingWidth("Ring Width", float) = 0.1
@@ -44,7 +43,7 @@ Shader "MadeByProfessorOakie/SimpleSonarShader" {
 	half _Glossiness;
 	half _Metallic;
 	fixed4 _Color;
-	fixed4 _RingColor;
+	fixed4 _RingColor[20];
 	fixed4 _EmissionLM;
 	half _RingColorIntensity;
 	half _RingSpeed;
@@ -53,14 +52,14 @@ Shader "MadeByProfessorOakie/SimpleSonarShader" {
 
 
 	void surf(Input IN, inout SurfaceOutputStandard o) {
+		// Check every point in the array
+		// The goal is to set RGB to highest possible values based on current sonar rings
 		fixed4 c = tex2D(_MainTex, IN.uv_MainTex) * _Color;
 		o.Albedo = c.rgb;
 
-		half DiffFromRingCol = abs(o.Albedo.r - _RingColor.r) + abs(o.Albedo.b - _RingColor.b) + abs(o.Albedo.g - _RingColor.g);
-
-		// Check every point in the array
-		// The goal is to set RGB to highest possible values based on current sonar rings
 		for (int i = 0; i < 20; i++) {
+
+			half DiffFromRingCol = abs(o.Albedo.r - _RingColor[i].r) + abs(o.Albedo.b - _RingColor[i].b) + abs(o.Albedo.g - _RingColor[i].g);
 
 			half d = distance(_hitPts[i], IN.worldPos);
 			half intensity = _Intensity[i] * _RingIntensityScale;
@@ -72,15 +71,16 @@ Shader "MadeByProfessorOakie/SimpleSonarShader" {
 				// Calculate predicted RGB values sampling the texture radially
 				float angle = acos(dot(normalize(IN.worldPos - _hitPts[i]), float3(1,0,0)));
 				val *= tex2D(_RingTex, half2(1 - posInRing, angle));
-				half3 tmp = _RingColor * val + c * (1 - val);
+				half3 tmp = _RingColor[i] * val + c * (1 - val);
 
 				// Determine if predicted values will be closer to the Ring color
-				half tempDiffFromRingCol = abs(tmp.r - _RingColor.r) + abs(tmp.b - _RingColor.b) + abs(tmp.g - _RingColor.g);
+				half tempDiffFromRingCol = abs(tmp.r - _RingColor[i].r) + abs(tmp.b - _RingColor[i].b) + abs(tmp.g - _RingColor[i].g);
 				if (tempDiffFromRingCol < DiffFromRingCol)
 				{
 					// Update values using our predicted ones.
 					
 					DiffFromRingCol = tempDiffFromRingCol;
+					
 					o.Albedo.r = tmp.r;
 					o.Albedo.g = tmp.g;
 					o.Albedo.b = tmp.b;

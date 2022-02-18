@@ -9,11 +9,16 @@ public class PlayerControl : NetworkBehaviour
     [SerializeField] AudioClip[] clips;
     [SerializeField] bool randomizePitch = true;
     [SerializeField] float pitchRange = 0.1f;
+    public Material[] matsonar;
     public Camera mycam;
     public GameObject cam;
     public GameObject Plane;
     public GameObject Player;
     public AudioSource source;
+    public Collider killattack;
+    public Collider stungun;
+    private int pastr = 0;
+    private bool iskiller;
     float inputHorizontal;
     float inputVertical;
     Rigidbody rb;
@@ -26,10 +31,16 @@ public class PlayerControl : NetworkBehaviour
         cam.GetComponent<AudioListener>().enabled = true;
         if (isLocalPlayer){
             if (isClient){
-                Player.tag = "Player";
+                CmdKillerOrSurvivor(this, false);
+//                iskiller = false;
+//                CmdKillerOrSurvivor("Player") ;
+//                killattack.enabled = false;
             }
             if (isServer){
-                Player.tag = "Killer";
+                CmdKillerOrSurvivor(this, true);
+//                iskiller = true;
+//                CmdKillerOrSurvivor("Killer");
+//                stungun.enabled = false;
             }
         }
     }
@@ -82,161 +93,180 @@ public class PlayerControl : NetworkBehaviour
         }
     }
 
+    /*+++++++++++++++++++++++++++++++++++++++++++++
+     |      接地(瞬間)
+     +++++++++++++++++++++++++++++++++++++++++++++*/
     void OnCollisionEnter(Collision collision)
     {
         if (isLocalPlayer)
         {
-            CmdSonarPlayer(collision.contacts[0].point, collision.impulse.magnitude);
-            CmdPlaySounds();
+            Debug.Log("座標" + collision.contacts[0].point);
+//            CmdSonarPlayerR(collision.contacts[0].point, collision.impulse.magnitude);
+            CmdPlaySounds(Player);
         }
     }
 
-    void OnCollisionStay(Collision collision) {
+    /*+++++++++++++++++++++++++++++++++++++++++++++
+     |      接地(継続)
+     +++++++++++++++++++++++++++++++++++++++++++++*/
+    void OnCollisionStay(Collision collision)
+    {
         if (isLocalPlayer)
         {
-            if (Input.GetKey(KeyCode.Q))
+            if (Input.GetKey(KeyCode.Q) || Input.GetKey(KeyCode.E))
             {
-                CmdSonarPlayer(collision.contacts[0].point, collision.impulse.magnitude);
-                CmdPlaySounds();
+                if (trigger == false)
+                {
+                    trigger = true;
+/*                    for (int i = 0; i < matsonar.GetLength(0); i++)
+                    {
+                        matsonar[i].SetColor("_RingColor", new Color(1.0f, 0.0f, 0.0f, 1.0f));
+                    }*/
+                    if (Input.GetKey(KeyCode.Q))
+                    {
+//                        Plane.GetComponent<SimpleSonarShader_Object>().SonarColor(1.0f, 0.0f, 0.0f);
+                        CmdSonarPlayerR(collision.contacts[0].point, collision.impulse.magnitude);
+                    }
+                    else {
+//                        Plane.GetComponent<SimpleSonarShader_Object>().SonarColor(0.0f, 0.0f, 1.0f);
+                        CmdSonarPlayerB(collision.contacts[0].point, collision.impulse.magnitude);
+                    }
+//                    CmdSonarPlayerR(collision.contacts[0].point, collision.impulse.magnitude, new Color(1.0f, 0.0f, 0.0f));
+                    CmdPlaySounds(Player);
+                }
             }
+            else {
+                trigger = false;
+            }
+/*                if (Input.GetKey(KeyCode.E))
+            {
+                for (int i = 0; i < matsonar.GetLength(0); i++)
+                {
+                    matsonar[i].SetColor("_RingColor", new Color(0.0f, 0.0f, 1.0f, 1.0f));
+                }
+                CmdSonarPlayerB(collision.contacts[0].point, collision.impulse.magnitude);
+                CmdPlaySounds(Player);
+            }*/
         }
     }
 
+    /*+++++++++++++++++++++++++++++++++++++++++++++
+     |      当たり判定(継続)
+     +++++++++++++++++++++++++++++++++++++++++++++*/
     void OnTriggerStay(Collider other)
     {
         if (isLocalPlayer){
             if (Input.GetKey(KeyCode.Space)){
                 if (other.CompareTag("Player"))
                 {
-                    GameObject receive = GameObject.Find(other.gameObject.name);
+                    GameObject receive = other.gameObject;
                     int range = Random.Range(0, 8);
-                    int ax, ay, az;
-                    int rx, ry, rz;
+                    Vector3 AttackPlace = new Vector3(0, 0, 0);
+                    Vector3 ReceivePlace = new Vector3(0, 0, 0);
                     int r;
-
-                    ax = 0;
-                    ay = 0;
-                    az = 0;
-                    rx = 0;
-                    ry = 0;
-                    rz = 0;
 
                     Debug.Log("当たった");
                     switch (range){
                         case 0 :
-                            ax = -90;
-                            az = -90;
-                            ay = 1;
+                            AttackPlace = new Vector3(-90, 1, -90);
                             break;
                         case 1:
-                            ax = -90;
-                            az = 0;
-                            ay = 1;
+                            AttackPlace = new Vector3(-90, 1, 0);
                             break;
                         case 2:
-                            ax = 0;
-                            az = -90;
-                            ay = 1;
+                            AttackPlace = new Vector3(0, 1, -90);
                             break;
                         case 3:
-                            ax = -90;
-                            az = 90;
-                            ay = 1;
+                            AttackPlace = new Vector3(-90, 1, 90);
                             break;
                         case 4:
-                            ax = 90;
-                            az = -90;
-                            ay = 3;
+                            AttackPlace = new Vector3(90, 3, -90);
                             break;
                         case 5:
-                            ax = 0;
-                            az = 90;
-                            ay = 1;
+                            AttackPlace = new Vector3(0, 1, 90);
                             break;
                         case 6:
-                            ax = 90;
-                            az = 0;
-                            ay = 3;
+                            AttackPlace = new Vector3(90, 3, 0);
                             break;
                         case 7:
-                            ax = 90;
-                            az = 90;
-                            ay = 6;
+                            AttackPlace = new Vector3(90, 6, 90);
                             break;
                     }
 
-                    Debug.Log("x_z" + ax + az);
-
-                    Vector3 AttackPlace = new Vector3(ax, ay, az);
-
                     r = range;
-                    while (r == range) {
+                    while (true) {
                         r = Random.Range(0, 8);
+                        if (r != range && r != pastr){
+                            break ;
+                        }
                     }
+                    pastr = r;
 
                     switch (r)
                     {
                         case 0:
-                            rx = -90;
-                            rz = -90;
-                            ry = 1;
+                            ReceivePlace = new Vector3(-90, 1, -90);
                             break;
                         case 1:
-                            rx = -90;
-                            rz = 0;
-                            ry = 1;
+                            ReceivePlace = new Vector3(-90, 1, 0);
                             break;
                         case 2:
-                            rx = 0;
-                            rz = -90;
-                            ry = 1;
+                            ReceivePlace = new Vector3(0, 1, -90);
                             break;
                         case 3:
-                            rx = -90;
-                            rz = 90;
-                            ry = 1;
+                            ReceivePlace = new Vector3(-90, 1, 90);
                             break;
                         case 4:
-                            rx = 90;
-                            rz = -90;
-                            ry = 3;
+                            ReceivePlace = new Vector3(90, 3, -90);
                             break;
                         case 5:
-                            rx = 0;
-                            rz = 90;
-                            ry = 1;
+                            ReceivePlace = new Vector3(0, 1, 90);
                             break;
                         case 6:
-                            rx = 90;
-                            rz = 0;
-                            ry = 3;
+                            ReceivePlace = new Vector3(90, 3, 0);
                             break;
                         case 7:
-                            rx = 90;
-                            rz = 90;
-                            ry = 6;
+                            ReceivePlace = new Vector3(90, 6, 90);
                             break;
                     }
-                    Vector3 ReceivePlace = new Vector3(rx, ry, rz);
+                    Debug.Log("x_z" + ReceivePlace.x + " - " + ReceivePlace.z);
 
-                    this.transform.position = AttackPlace;
-                    receive.transform.position = ReceivePlace;
+                    CmdResetPlayer(Player, receive, AttackPlace, ReceivePlace);
                 }
             }
         }
     }
 
+    /*+++++++++++++++++++++++++++++++++++++++++++++
+     |      鬼逃げ分岐
+     +++++++++++++++++++++++++++++++++++++++++++++*/
     [Command]
-    void CmdPlaySounds()
-    {
-        RpcPlaySounds();
+    void CmdKillerOrSurvivor(PlayerControl pc, bool kos) {
+        RpcKillerOrSurvivor(pc, kos) ;
     }
 
     [ClientRpc]
-    void RpcPlaySounds()
+    void RpcKillerOrSurvivor(PlayerControl pc, bool kos)
+    {
+        pc.iskiller = kos;
+        Debug.Log("分岐時点" + pc.iskiller);
+    }
+
+
+    /*+++++++++++++++++++++++++++++++++++++++++++++
+     |      音発生
+     +++++++++++++++++++++++++++++++++++++++++++++*/
+    [Command]
+    void CmdPlaySounds(GameObject main)
+    {
+        RpcPlaySounds(main);
+    }
+
+    [ClientRpc]
+    void RpcPlaySounds(GameObject main)
     {
 //        source.Play();
-        source.PlayOneShot(clips[0]);
+        main.GetComponent<AudioSource>().PlayOneShot(clips[0]);
     }
 
     // プレイヤーの回転
@@ -252,13 +282,42 @@ public class PlayerControl : NetworkBehaviour
         GetComponent<Rigidbody>().velocity = move;
     }
 
+    /*+++++++++++++++++++++++++++++++++++++++++++++
+     |      攻撃後の座標変更
+     +++++++++++++++++++++++++++++++++++++++++++++*/
     [Command]
-    void CmdSonarPlayer(Vector4 point, float impulse) {
-        RpcSonarPlayer(point, impulse);
+    void CmdResetPlayer(GameObject main, GameObject opponent, Vector3 attacker, Vector3 receiver)
+    {
+        main.transform.position = attacker;
+        opponent.transform.position = receiver;
+    }
+
+
+    /*+++++++++++++++++++++++++++++++++++++++++++++
+     |      プレイヤーソナー
+     +++++++++++++++++++++++++++++++++++++++++++++*/
+    // 赤 ---------------------------
+    [Command]
+    void CmdSonarPlayerR(Vector4 point, float impulse)
+    {
+        RpcSonarPlayerR(point, impulse);
     }
     [ClientRpc]
-    void RpcSonarPlayer(Vector4 point, float impulse)
+    void RpcSonarPlayerR(Vector4 point, float impulse)
     {
-        Plane.GetComponent<SimpleSonarShader_Object>().StartSonarRing(point, impulse * 10);
+        Debug.Log("赤");
+        Plane.GetComponent<SimpleSonarShader_Object>().StartSonarRing(point, impulse * 10, new Color(1.0f, 0.0f, 0.0f, 1.0f));
+    }
+    // 青 ---------------------------
+    [Command]
+    void CmdSonarPlayerB(Vector4 point, float impulse)
+    {
+        RpcSonarPlayerB(point, impulse);
+    }
+    [ClientRpc]
+    void RpcSonarPlayerB(Vector4 point, float impulse)
+    {
+        Debug.Log("青");
+        Plane.GetComponent<SimpleSonarShader_Object>().StartSonarRing(point, impulse * 10, new Color(0.0f, 0.0f, 1.0f, 1.0f));
     }
 }

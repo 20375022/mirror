@@ -143,6 +143,7 @@ Transform:
   - {fileID: 656028141562082838}
   - {fileID: 2016263454158115469}
   - {fileID: 7478937848130079041}
+  - {fileID: 4967441547500571601}
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -286,11 +287,23 @@ MonoBehaviour:
   - {fileID: 8300000, guid: c5916fe8f1f740446a8212eb7751232f, type: 3}
   randomizePitch: 1
   pitchRange: 0.1
+  matsonar:
+  - {fileID: 2100000, guid: 806e686420fe1334095de0a5459d93e3, type: 2}
+  - {fileID: 2100000, guid: 096d1a4f32278ef429e31881e72a9153, type: 2}
+  - {fileID: 2100000, guid: 8319071e22888a6448d2c20373ec0a28, type: 2}
+  - {fileID: 2100000, guid: 8319071e22888a6448d2c20373ec0a28, type: 2}
+  stageparts:
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
   mycam: {fileID: 656028141562082839}
   cam: {fileID: 656028141562082833}
   Plane: {fileID: 919132149155446097, guid: ea1b1c6cb97201f4b953eabcf2919b3f, type: 3}
   Player: {fileID: 1555054639584768389}
   source: {fileID: 1542162358162441767}
+  killattack: {fileID: 6158200610614308468}
+  stungun: {fileID: 3870759052054861545}
 --- !u!82 &1542162358162441767
 AudioSource:
   m_ObjectHideFlags: 0
@@ -387,6 +400,50 @@ AudioSource:
     m_PreInfinity: 2
     m_PostInfinity: 2
     m_RotationOrder: 4
+--- !u!1 &4663092321789756594
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 4967441547500571601}
+  - component: {fileID: 3870759052054861545}
+  m_Layer: 0
+  m_Name: StangunRange
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 0
+--- !u!4 &4967441547500571601
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4663092321789756594}
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: -0.012650967, y: 0, z: 1.09}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 457295366531875569}
+  m_RootOrder: 3
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!65 &3870759052054861545
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4663092321789756594}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 1
+  m_Enabled: 1
+  serializedVersion: 2
+  m_Size: {x: 1, y: 1, z: 15.508438}
+  m_Center: {x: 0, y: 0, z: 7.254219}
 --- !u!1 &8851946765237081211
 GameObject:
   m_ObjectHideFlags: 0
