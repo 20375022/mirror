@@ -35,6 +35,9 @@ public class PlayerControl : NetworkBehaviour
     bool trigger = false;               // トリガー
     public AudioSource source;
     int pastr;
+    public Vector3 sonarPos;            // 
+    float span = 2f;             // 
+    private float currentTime = 0f;     // 
 
 
     void Start() {
@@ -43,6 +46,7 @@ public class PlayerControl : NetworkBehaviour
         SystemObj = GameObject.FindGameObjectWithTag("System");
         Plane = GameObject.Find("y床");
         cam.GetComponent<AudioListener>().enabled = true;
+        WLResult = true;
 
         isReady = false;            // 準備未完了にする
         if (isClient) {             // サーバーを鬼にしてはじめる
@@ -86,6 +90,19 @@ public class PlayerControl : NetworkBehaviour
                     if (Input.GetKey(KeyCode.Escape))
                     {
                         UI_Option.SetActive(true);
+                    }
+
+                    if (Killerflg == false)
+                    {
+                        if (SystemObj.GetComponent<GameSystemManage>().Escape == true)
+                        {
+                            currentTime += Time.deltaTime;
+                            if (currentTime > span)
+                            {
+                                CmdSonarPlayerB(sonarPos, 10);
+                                currentTime = 0f;
+                            }
+                        }
                     }
                     break;
 
@@ -154,8 +171,8 @@ public class PlayerControl : NetworkBehaviour
     {
         if (isLocalPlayer)
         {
-            CmdSonarPlayer(collision.contacts[0].point, collision.impulse.magnitude);
-            CmdPlaySounds();    // サーバーに送信
+            CmdSonarPlayerR(collision.contacts[0].point, collision.impulse.magnitude);
+            CmdPlaySounds(Player);    // サーバーに送信
         }
     }
 
@@ -164,16 +181,29 @@ public class PlayerControl : NetworkBehaviour
     void OnCollisionStay(Collision collision) {
         if (isLocalPlayer)
         {
+            sonarPos = collision.contacts[0].point;
 
-            if (Input.GetKey(KeyCode.Q))
+            if (Input.GetKey(KeyCode.Q) || Input.GetKey(KeyCode.E))
             {
-                CmdSonarPlayer(collision.contacts[0].point, collision.impulse.magnitude);
-                CmdPlaySounds();
+                if (trigger == false)
+                {
+                    trigger = true;
+                    if (Input.GetKey(KeyCode.Q))
+                    {
+                        CmdSonarPlayerR(sonarPos, 1.0f);
+                    }
+                    else
+                    {
+                        CmdSonarPlayerB(sonarPos, 1.0f);
+                    }
+                    CmdPlaySounds(Player);
+                }
             }
-
-            if (Input.GetKey(KeyCode.Space))
+            else
             {
+                trigger = false;
             }
+            CmdPlaySounds(Player);
         }
     }
 
@@ -184,18 +214,39 @@ public class PlayerControl : NetworkBehaviour
     // -------------------------------------------------------------------------------------------- //
     public void SurvivorCollisionHit()
     {
-        Debug.Log("プレイヤー集合中");
-        if (SystemObj.GetComponent<GameSystemManage>().Escape == false)
+        if (isLocalPlayer)
         {
-            CmdEscapeSurvivor();
+            Debug.Log("プレイヤー集合中");
+            if (SystemObj.GetComponent<GameSystemManage>().Escape == false)
+            {
+                CmdEscapeSurvivor();
+            }
         }
     }
+
 
     [Command]
     void CmdEscapeSurvivor()
     {
-        SystemObj.GetComponent<GameSystemManage>().time = 10f;
+        SystemObj.GetComponent<GameSystemManage>().escapeTime = 11;
         SystemObj.GetComponent<GameSystemManage>().Escape = true;
+    }
+    public void SurvivorCollisionNotHit()
+    {
+        if (isLocalPlayer)
+        {
+            Debug.Log("プレイヤー集合していない");
+            if (SystemObj.GetComponent<GameSystemManage>().Escape == true)
+            {
+                CmdNotEscapeSurvivor();
+            }
+        }
+    }
+    [Command]
+    void CmdNotEscapeSurvivor()
+    {
+        Debug.Log("escapeをfalseに");
+        SystemObj.GetComponent<GameSystemManage>().Escape = false;
     }
 
     public void MainCollisionHit(Collider other)
@@ -347,32 +398,43 @@ public class PlayerControl : NetworkBehaviour
     // プレイヤーの音
     // -----------------------------------------------------------------
     [Command]
-    void CmdPlaySounds()
+    void CmdPlaySounds(GameObject main)
     {
-        RpcPlaySounds();
+        RpcPlaySounds(main);
     }
-
     [ClientRpc]
-    void RpcPlaySounds()
+    void RpcPlaySounds(GameObject main)
     {
-        source.PlayOneShot(clips[0]);
+        main.GetComponent<AudioSource>().PlayOneShot(clips[0]);
     }
-
 
     // -----------------------------------------------------------------
     // プレイヤーのソナー
     // -----------------------------------------------------------------
+    // 赤 ---------------------------
     [Command]
-    void CmdSonarPlayer(Vector4 Point, float impulse) {
-        RpcSonarPlayer(Point, impulse);
-    }
-
-    [ClientRpc]
-    void RpcSonarPlayer(Vector4 point, float impulse)
+    void CmdSonarPlayerR(Vector4 point, float impulse)
     {
-        Plane.GetComponent<SimpleSonarShader_Object>().StartSonarRing(point, impulse * 10);
+        RpcSonarPlayerR(point, impulse);
     }
-
+    [ClientRpc]
+    void RpcSonarPlayerR(Vector4 point, float impulse)
+    {
+        Debug.Log("赤");
+        Plane.GetComponent<SimpleSonarShader_Object>().StartSonarRing(point, impulse * 10, new Color(1.0f, 0.0f, 0.0f, 1.0f));
+    }
+    // 青 ---------------------------
+    [Command]
+    void CmdSonarPlayerB(Vector4 point, float impulse)
+    {
+        RpcSonarPlayerB(point, impulse);
+    }
+    [ClientRpc]
+    void RpcSonarPlayerB(Vector4 point, float impulse)
+    {
+        Debug.Log("青");
+        Plane.GetComponent<SimpleSonarShader_Object>().StartSonarRing(point, impulse * 10, new Color(0.0f, 0.0f, 1.0f, 1.0f));
+    }
 
 
     // -----------------------------------------------------------------

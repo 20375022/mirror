@@ -14,6 +14,13 @@ public class TimerController : NetworkBehaviour
     [SyncVar]
     public int seconds;
 
+    [HideInInspector]
+    public float estotalTime;
+    [HideInInspector]
+    public int estim;
+    [SyncVar]
+    public int esseconds;
+
 
 
     /// <summary>
@@ -31,6 +38,21 @@ public class TimerController : NetworkBehaviour
     public void TimeSync()
     {
         tim = GetComponent<TimerController>().seconds;
+    }
+
+
+    [ServerCallback]
+    public void esTimeInc()
+    {
+        estotalTime -= Time.deltaTime;
+        esseconds = (int)estotalTime;
+        estim = esseconds;
+    }
+
+    [ClientCallback]
+    public void esTimeSync()
+    {
+        estim = GetComponent<TimerController>().esseconds;
     }
 
 }

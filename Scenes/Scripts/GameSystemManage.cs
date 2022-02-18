@@ -9,8 +9,6 @@ public class GameSystemManage : NetworkBehaviour
     public TimerController tManeger;
     public GameObject MainCameraDel;
     public GameObject spawnPlace;
-    [HideInInspector]
-    public float time;
     [SyncVar]
     public bool Escape;
     [SyncVar]
@@ -32,6 +30,7 @@ public class GameSystemManage : NetworkBehaviour
         countPlayer = Const.MAX_PLAYER;
         SyncSpawn = 0;
         tManeger.totalTime = Const.START_TIME;
+        tManeger.estotalTime = 10;
         Escape = false;
         escapeTime = 100;
         MainCameraDel.gameObject.SetActive(false);  // 接続した瞬間にカメラをメインカメラをオフにする
@@ -42,6 +41,7 @@ public class GameSystemManage : NetworkBehaviour
     {
         GameSystems();      // サーバーのゲームシステム
         tManeger.TimeSync();
+        tManeger.esTimeSync();
     }
 
 
@@ -74,18 +74,18 @@ public class GameSystemManage : NetworkBehaviour
                 break;
 
             case GameMode.GAME:
-                Debug.Log("Gamemode = Game");
                 tManeger.TimeInc();
 
-                if ( Escape == true )
+                if (Escape == true)
                 {
-                    time -= Time.deltaTime;
-                    escapeTime = (int)time;
-                    if (escapeTime <= 0)
+                    tManeger.esTimeInc();
+                    GameObject plyPos = GameObject.FindWithTag("Player");
+                    if (tManeger.estim <= 0)
                     {
                         GameObject[] ply = GameObject.FindGameObjectsWithTag("Player");
                         foreach (GameObject obj in ply)
                         {
+                            Debug.Log("プレイヤー側の勝利");
                             obj.gameObject.GetComponent<PlayerControl>().WLResult = true;
                         }
                         GameObject kill = GameObject.FindWithTag("Killer");
@@ -94,6 +94,7 @@ public class GameSystemManage : NetworkBehaviour
                         gameMode = GameMode.RESULT;
                     }
                 }
+
 
                 if (tManeger.tim <= 0)      // タイムアップ時の処理
                 {

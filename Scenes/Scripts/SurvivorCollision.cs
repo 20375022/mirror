@@ -16,7 +16,8 @@ public class SurvivorCollision : MonoBehaviour
         if (PLYCON.Killerflg == true)
         {
             bCol.enabled = false;
-        }else
+        }
+        else
         {
             bCol.enabled = true;
         }
@@ -29,23 +30,29 @@ public class SurvivorCollision : MonoBehaviour
             // TODO:2つ以上同時に衝突していた場合の処理
             PLYCON.SurvivorCollisionHit();
         }
-
         // 毎回衝突したオブジェクトリストをクリアする
         m_hitObjects.Clear();
     }
 
-/*    void OnTriggerStay(Collider i_other)
-    {
-        // 衝突しているオブジェクトをリストに登録する
-        m_hitObjects.Add(i_other.gameObject);
-    }
-    */
+    /*    void OnTriggerStay(Collider i_other)
+        {
+            // 衝突しているオブジェクトをリストに登録する
+            m_hitObjects.Add(i_other.gameObject);
+        }
+        */
     private void OnTriggerStay(Collider other)
     {
         if (other.gameObject.tag == "Player")
         {
             Debug.Log("プレイヤー発見");
             m_hitObjects.Add(other.gameObject);
+        }
+    }
+    private void OnTriggerExit(Collider other)
+    {
+        if (other.gameObject.tag == "Player")
+        {
+            PLYCON.SurvivorCollisionNotHit();
         }
     }
 }
