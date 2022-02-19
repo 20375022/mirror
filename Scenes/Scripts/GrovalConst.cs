@@ -16,7 +16,7 @@ namespace GrovalConst
         public const float  SPEED_RUN   = 8f;   // 走る速さ
 
         public const float  START_TIME  = 4f;   // ロビーからゲームスタート 
-        public const float  GAME_TIME   = 26f; // ゲームの時間(タイマーの性質上 + 1秒 で始める) 180
+        public const float  GAME_TIME   = 6f; // ゲームの時間(タイマーの性質上 + 1秒 で始める) 180
         public const float  ESCAPE_TIME = 11f;  // 集合してから勝つまで
     }
 

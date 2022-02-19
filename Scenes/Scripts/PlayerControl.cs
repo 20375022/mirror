@@ -77,11 +77,11 @@ public class PlayerControl : NetworkBehaviour
 
         isReady = false;            // 準備未完了にする
         if (isClient) {             // サーバーを鬼にしてはじめる
-            Killerflg = false;
+            Killerflg = true;
         }
         if (isServer)
         {
-            Killerflg = true;
+            Killerflg = false;
         }
 
         plyMode = PlayerMode.WAIT;  // 立ちモードにする(スタンダード)

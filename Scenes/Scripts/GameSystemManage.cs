@@ -111,16 +111,16 @@ public class GameSystemManage : NetworkBehaviour
                 {
                     tManeger.esTimeInc();
                     GameObject plyPos = GameObject.FindWithTag("Player");
-                    if (tManeger.estim <= 0)
+                    if (tManeger.estim <= 0)    // エスケープ成功
                     {
                         GameObject[] ply = GameObject.FindGameObjectsWithTag("Player");
                         foreach (GameObject obj in ply)
                         {
                             Debug.Log("プレイヤー側の勝利");
-                            obj.gameObject.GetComponent<PlayerControl>().WLResult = true;
+                            RpcWin(obj);
                         }
                         GameObject kill = GameObject.FindWithTag("Killer");
-                        kill.gameObject.GetComponent<PlayerControl>().WLResult = false;
+                        RpcLose(kill);
 
                         gameMode = GameMode.RESULT;
                     }
@@ -131,10 +131,10 @@ public class GameSystemManage : NetworkBehaviour
                     GameObject[] ply = GameObject.FindGameObjectsWithTag("Player");
                     foreach (GameObject obj in ply)
                     {
-                        obj.gameObject.GetComponent<PlayerControl>().WLResult = false;
+                        RpcLose(obj);
                     }
                     GameObject kill = GameObject.FindWithTag("Killer");
-                    kill.gameObject.GetComponent<PlayerControl>().WLResult = true;
+                    RpcWin(kill);
 
                     gameMode = GameMode.RESULT;
                 }
@@ -161,5 +161,26 @@ public class GameSystemManage : NetworkBehaviour
         Obj.transform.position = spawnPlace.transform.GetChild(SyncSpawn).gameObject.transform.position;
         SyncSpawn++;
     }
+
+    // -----------------------------------------------------------------
+    // 勝ち
+    // -----------------------------------------------------------------
+    [ClientRpc]
+    void RpcWin(GameObject Obj)
+    {
+        Obj.gameObject.GetComponent<PlayerControl>().WLResult = true;
+    }
+
+    // -----------------------------------------------------------------
+    // 負け
+    // -----------------------------------------------------------------
+    [ClientRpc]
+    void RpcLose(GameObject Obj)
+    {
+        Obj.gameObject.GetComponent<PlayerControl>().WLResult = false;
+    }
+
+
+
 
 }
