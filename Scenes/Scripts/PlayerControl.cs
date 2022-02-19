@@ -37,6 +37,7 @@ public class PlayerControl : NetworkBehaviour
     bool trigger = false;               // トリガー
     public bool ATKflg;                 // アタックフラグ
     public bool Landflg;                // 着地フラグ
+    public bool Stunflg;                // スタンフラグ
     public AudioSource source;
     int pastr;
     public Vector3 sonarPos;            // 
@@ -48,8 +49,17 @@ public class PlayerControl : NetworkBehaviour
     private float LandcoolTime = 0f;    // 
     float SonarSpan = 0.8f;             // 走ってる
     private float SonarcoolTime = 0f;   // 走ってる
-    float SoundSpan = 0.4f;             // サウンド
-    private float SoundCoolTime = 0f;   // サウンド
+    float SoundSpan = 0.4f;             // 走ってる
+    private float SoundcoolTime = 0f;   // 走ってる
+    float StunSpan = 4f;                // スタン
+    private float StunCoolTime = 0f;    // スタン
+    bool OkATK;                         //
+    float OkAtkSpan = 10f;              // 攻撃のクールタイム
+    private float OkAtkCoolTime = 0f;   // 攻撃
+    float SonarActSpan = 7f;            // 走ってる
+    private float SonarActcoolTime = 0f;// 走ってる
+    bool SonarAct;                      //
+
 
 
     void Start() {
@@ -59,16 +69,19 @@ public class PlayerControl : NetworkBehaviour
         SystemTime = GameObject.FindGameObjectWithTag("Timer");
         Plane = GameObject.Find("y床");
         cam.GetComponent<AudioListener>().enabled = true;
-        WLResult = true;
+        WLResult = false;
         ATKflg = false;
+        Stunflg = false;
+        OkATK = true;               // 攻撃可能
+        SonarAct = true;
 
         isReady = false;            // 準備未完了にする
         if (isClient) {             // サーバーを鬼にしてはじめる
-            Killerflg = true;
+            Killerflg = false;
         }
         if (isServer)
         {
-            Killerflg = false;
+            Killerflg = true;
         }
 
         plyMode = PlayerMode.WAIT;  // 立ちモードにする(スタンダード)
@@ -128,6 +141,17 @@ public class PlayerControl : NetworkBehaviour
                     UI_Game.SetActive(false);
                     UI_Option.SetActive(false);
                     UI_Result.SetActive(true);
+                    if( Killerflg == true)
+                    {
+                        UI_Result.transform.GetChild(3).gameObject.SetActive(true);
+                        UI_Result.transform.GetChild(4).gameObject.SetActive(false);
+                    }
+                    else
+                    {
+                        UI_Result.transform.GetChild(3).gameObject.SetActive(false);
+                        UI_Result.transform.GetChild(4).gameObject.SetActive(true);
+                    }
+
                     if (WLResult == true)   // 勝った方
                     {
                         UI_Result.transform.GetChild(0).gameObject.SetActive(true);
@@ -141,11 +165,11 @@ public class PlayerControl : NetworkBehaviour
 
                     if (isServer)
                     {
-                        UI_Result.transform.GetChild(2).gameObject.SetActive(true);
+                        UI_Result.transform.GetChild(2).gameObject.SetActive(true);     // ロビーに戻るボタン
                     }
                     else
                     {
-                        UI_Result.transform.GetChild(2).gameObject.SetActive(false);
+                        UI_Result.transform.GetChild(2).gameObject.SetActive(false);    // ロビーに戻るボタン
                     }
                     Debug.Log(WLResult);
                     Debug.Log("PLY Gamemode = Result");
@@ -196,22 +220,49 @@ public class PlayerControl : NetworkBehaviour
 
                     if (SystemObj.GetComponent<GameSystemManage>().gameMode == GameMode.GAME)
                     {
-                        if (Input.GetKey(KeyCode.F))
+                        if (Killerflg == true)
                         {
-                            if (ATKflg == false)
+                            if (Input.GetKey(KeyCode.F))
                             {
-                                ATKflg = true;
-                                plyMode = PlayerMode.ATK;
+                                if (ATKflg == false)
+                                {
+                                    ATKflg = true;
+                                    plyMode = PlayerMode.ATK;
+                                }
+                            }
+                        }
+                        else             // サバイバーの攻撃
+                        {
+                            if (OkATK == true)
+                            {
+                                if (Input.GetKey(KeyCode.F))
+                                {
+                                    if (ATKflg == false)
+                                    {
+                                        ATKflg = true;
+                                        OkATK = false;
+                                        plyMode = PlayerMode.ATK;
+                                    }
+                                }
+                            }
+                            else        // 攻撃クールダウン
+                            {
+                                OkAtkCoolTime += Time.deltaTime;
+                                if (OkAtkCoolTime > OkAtkSpan)
+                                {
+                                    OkATK = true;
+                                    OkAtkCoolTime = 0f;
+                                }
                             }
                         }
 
                         if (plyMode == PlayerMode.RUN)
                         {
-                            SoundCoolTime += (Time.deltaTime - 0.1f);
-                            if (SoundCoolTime > SoundSpan)
+                            SoundcoolTime += Time.deltaTime;
+                            if (SoundcoolTime > SoundSpan)
                             {
                                 CmdPlaySounds(Player);  // 足音
-                                SoundCoolTime = 0f;
+                                SoundcoolTime = 0f;
                             }
 
                             SonarcoolTime += Time.deltaTime;
@@ -223,11 +274,36 @@ public class PlayerControl : NetworkBehaviour
                                 }
                                 else
                                 {
-                                    CmdSonarPlayerO(sonarPos, 1.0f);
+                                    CmdSonarPlayerB(sonarPos, 1.0f);
                                 }
-                                CmdPlaySounds(Player);  // 足音
                                 SonarcoolTime = 0f;
                             }
+                        }
+                    }
+
+                    if (SonarAct == true)
+                    {
+                        if (Input.GetKey(KeyCode.Q))
+                        {
+                            if (Killerflg == true)
+                            {
+                                CmdSonarPlayerR(sonarPos, 1.0f);
+                                SonarAct = false;
+                            }
+                            else
+                            {
+                                CmdSonarPlayerB(sonarPos, 1.0f);
+                                SonarAct = false;
+                            }
+                        }
+                    }
+                    else
+                    {
+                        SonarActcoolTime += Time.deltaTime;
+                        if (SonarActcoolTime > SonarActSpan)
+                        {
+                            SonarAct = true;
+                            SonarActcoolTime = 0f;
                         }
                     }
                     break;
@@ -258,6 +334,17 @@ public class PlayerControl : NetworkBehaviour
                     Debug.Log(Landflg);
                     CmdNotMovePlayer();
                     break;
+
+                case PlayerMode.STUN:
+                    StunCoolTime += Time.deltaTime;
+                    if (StunCoolTime > StunSpan)
+                    {
+                        Stunflg = false;
+                        plyMode = PlayerMode.WAIT;
+                        StunCoolTime = 0f;
+                    }
+                    Debug.Log(Landflg);
+                    break;
             }
         }
     }
@@ -278,27 +365,6 @@ public class PlayerControl : NetworkBehaviour
         if (isLocalPlayer)
         {
             sonarPos = collision.contacts[0].point;
-
-            if (Input.GetKey(KeyCode.Q) || Input.GetKey(KeyCode.E))
-            {
-                if (trigger == false)
-                {
-                    trigger = true;
-                    if (Input.GetKey(KeyCode.Q))
-                    {
-                        CmdSonarPlayerR(sonarPos, 1.0f);
-                    }
-                    else
-                    {
-                        CmdSonarPlayerB(sonarPos, 1.0f);
-                    }
-                    CmdPlaySounds(Player);
-                }
-            }
-            else
-            {
-                trigger = false;
-            }
         }
     }
 
@@ -355,6 +421,21 @@ public class PlayerControl : NetworkBehaviour
                 {
                     Debug.Log("プレイヤーヒット");
                     KillerAttack(other);
+                }
+            }
+        }
+    }
+
+    public void GunCollisionHit(Collider other)        // 逃げの銃のアクション
+    {
+        if (isLocalPlayer)
+        {
+            if (SystemObj.GetComponent<GameSystemManage>().gameMode == GameMode.GAME)
+            {
+                if (Input.GetKey(KeyCode.F))
+                {
+                    Debug.Log("キラーヒット");
+                    GunAttack(other);
                 }
             }
         }
@@ -535,7 +616,7 @@ public class PlayerControl : NetworkBehaviour
     void RpcSonarPlayerR(Vector4 point, float impulse)
     {
         Debug.Log("赤");
-        Plane.GetComponent<SimpleSonarShader_Object>().StartSonarRing(point, impulse * 10, new Color(1.0f, 0.0f, 0.0f, 1.0f));
+        Plane.GetComponent<SimpleSonarShader_Object>().StartSonarRing(point, impulse * 3, new Color(1.0f, 0.0f, 0.0f, 1.0f));
     }
     // 青 ---------------------------
     [Command]
@@ -547,7 +628,7 @@ public class PlayerControl : NetworkBehaviour
     void RpcSonarPlayerB(Vector4 point, float impulse)
     {
         Debug.Log("青");
-        Plane.GetComponent<SimpleSonarShader_Object>().StartSonarRing(point, impulse * 10, new Color(0.0f, 0.0f, 1.0f, 1.0f));
+        Plane.GetComponent<SimpleSonarShader_Object>().StartSonarRing(point, impulse * 3, new Color(0.0f, 0.0f, 1.0f, 1.0f));
     }
     // オレンジ ---------------------------
     [Command]
@@ -559,10 +640,37 @@ public class PlayerControl : NetworkBehaviour
     void RpcSonarPlayerO(Vector4 point, float impulse)
     {
         Debug.Log("オレンジ");
-        Plane.GetComponent<SimpleSonarShader_Object>().StartSonarRing(point, impulse * 10, new Color(1.0f, 0.2f, 0.2f, 1.0f));
+        Plane.GetComponent<SimpleSonarShader_Object>().StartSonarRing(point, impulse * 3, new Color(1.0f, 0.5f, 0.0f, 1.0f));
     }
 
 
+
+    // -----------------------------------------------------------------
+    // 逃げの攻撃
+    // -----------------------------------------------------------------
+    void GunAttack(Collider other)
+    {
+        GameObject KillerObj = other.gameObject;
+        if ( (Killerflg == false) && (KillerObj.gameObject.GetComponent<PlayerControl>().Stunflg == false) )
+        {
+            Debug.Log("キラーをスタンにするCMD");
+            CmdAttackGun(KillerObj);
+        }
+    }
+
+    [Command]
+    void CmdAttackGun(GameObject KillerObj)
+    {
+        RpcAttackGun(KillerObj);
+    }
+
+    [ClientRpc]
+    void RpcAttackGun(GameObject KillerObj)
+    {
+        Debug.Log("キラーをスタンにするCMD");
+        KillerObj.gameObject.GetComponent<PlayerControl>().Stunflg = true;
+        KillerObj.gameObject.GetComponent<PlayerControl>().plyMode = PlayerMode.STUN;
+    }
 
     // -----------------------------------------------------------------
     // キラーの攻撃

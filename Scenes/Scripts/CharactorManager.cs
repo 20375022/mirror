@@ -43,7 +43,9 @@ public class CharactorManager : NetworkBehaviour
     int killerType;
     int survivorType;
     public GameObject SelectKillerModel;
+    public GameObject SelectKillerCamera;
     public GameObject SelectSurvivorModel;
+    public GameObject SelectSurvivorCamera;
     public GameObject Enteradress;
 
     // Start is called before the first frame update
@@ -83,8 +85,12 @@ public class CharactorManager : NetworkBehaviour
     void DisabledBtn() 
     {
         selectPanel.SetActive(false);
-        Destroy(SelectKillerModel);
-        Destroy(SelectSurvivorModel);
+        SelectKillerModel.SetActive(false);
+        SelectSurvivorModel.SetActive(false);
+        SelectKillerCamera.SetActive(false);
+        SelectSurvivorCamera.SetActive(false);
+        //Destroy(SelectKillerModel);
+        //Destroy(SelectSurvivorModel);
         plytypechg(playerType);
     }
 

@@ -9,6 +9,10 @@ public class GameSystemManage : NetworkBehaviour
     public TimerController tManeger;
     public GameObject MainCameraDel;
     public GameObject spawnPlace;
+    public GameObject SelectKillerModel;
+    public GameObject SelectKillerCamera;
+    public GameObject SelectSurvivorModel;
+    public GameObject SelectSurvivorCamera;
     [SyncVar]
     public bool Startflg;
     [SyncVar]
@@ -41,7 +45,22 @@ public class GameSystemManage : NetworkBehaviour
         GameSystems();      // サーバーのゲームシステム
         tManeger.TimeSync();
         tManeger.esTimeSync();
+        if (gameMode == GameMode.RESULT)
+        {
+            SelectKillerModel.SetActive(true);
+            SelectSurvivorModel.SetActive(true);
+            SelectKillerCamera.SetActive(true);
+            SelectSurvivorCamera.SetActive(true);
+        }
+        else
+        {
+            SelectKillerModel.SetActive(false);
+            SelectSurvivorModel.SetActive(false);
+            SelectKillerCamera.SetActive(false);
+            SelectSurvivorCamera.SetActive(false);
+        }
     }
+
 
 
     [ServerCallback]

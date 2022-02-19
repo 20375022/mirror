@@ -20,13 +20,12 @@ public class PlayerAnimation : NetworkBehaviour
     private const string key_isFall = "isFall";   
     private const string key_isLanding = "isLanding";   
     private const string key_isAttack = "isAttack";   
-    bool land;
+    private const string key_isStun = "isStun";   
 
     // 初期化メソッド
     void Start()
     {
         this.animator = GetComponent<Animator>();
-        land = false;
     }
 
     // 1フレームに1回コールされる
@@ -55,6 +54,7 @@ public class PlayerAnimation : NetworkBehaviour
                     this.animator.SetBool(key_isFall, false);
                     this.animator.SetBool(key_isWalk, false);
                     this.animator.SetBool(key_isRun, false);
+                    this.animator.SetBool(key_isStun, false);
                     break;
 
                 case PlayerMode.WALK:           // 歩きに移行する
@@ -72,7 +72,7 @@ public class PlayerAnimation : NetworkBehaviour
                     this.animator.SetBool(key_isRun, false);
                     break;
 
-                case PlayerMode.ATK:         // 攻撃に移行する
+                case PlayerMode.ATK:            // 攻撃に移行する
                     this.animator.SetBool(key_isAttack, true);
                     this.animator.SetBool(key_isLanding, false);
                     this.animator.SetBool(key_isFall, false);
@@ -89,6 +89,16 @@ public class PlayerAnimation : NetworkBehaviour
                         this.animator.SetBool(key_isRun, false);
                     }
                     break;
+
+                case PlayerMode.STUN:           // スタンに移行する
+                    this.animator.SetBool(key_isStun, true);
+                    this.animator.SetBool(key_isAttack, false);
+                    this.animator.SetBool(key_isLanding, false);
+                    this.animator.SetBool(key_isFall, false);
+                    this.animator.SetBool(key_isWalk, false);
+                    this.animator.SetBool(key_isRun, false);
+                    break;
+
             }
         }
     }

@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class MainCollision : MonoBehaviour
+public class GunCollision : MonoBehaviour
 {
     public PlayerControl PLYCON;
 
@@ -11,19 +11,19 @@ public class MainCollision : MonoBehaviour
     {
         if (PLYCON.Killerflg == true)
         {
-            this.gameObject.GetComponent<BoxCollider>().enabled = true;
+            this.gameObject.GetComponent<BoxCollider>().enabled = false;
         }
         else
         {
-            this.gameObject.GetComponent<BoxCollider>().enabled = false;
+            this.gameObject.GetComponent<BoxCollider>().enabled = true;
         }
     }
-
+    
     private void OnTriggerStay(Collider other)
     {
-        if (other.gameObject.tag == "Player")
+        if (other.gameObject.tag == "Killer")
         {
-            PLYCON.MainCollisionHit(other);
+            PLYCON.GunCollisionHit(other);
         }
     }
 }
