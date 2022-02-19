@@ -6,7 +6,15 @@ public class StandCollision : MonoBehaviour
 {
     public PlayerControl PLYCON;
 
-    private void OnTriggerEnter(Collider other)
+    private void OnTriggerExit(Collider other)
+    {
+        if (other.gameObject.tag == "yuka")
+        {
+            PLYCON.StandCollisionExit();
+        }
+    }
+
+    private void OnTriggerStay(Collider other)
     {
         if (other.gameObject.tag == "yuka")
         {
@@ -14,12 +22,5 @@ public class StandCollision : MonoBehaviour
         }
     }
 
-        private void OnTriggerExit(Collider other)
-    {
-        if (other.gameObject.tag == "yuka")
-        {
-            PLYCON.StandCollisionExit();
-        }
-    }
 
 }

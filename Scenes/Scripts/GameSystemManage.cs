@@ -10,9 +10,9 @@ public class GameSystemManage : NetworkBehaviour
     public GameObject MainCameraDel;
     public GameObject spawnPlace;
     [SyncVar]
-    public bool Escape;
+    public bool Startflg;
     [SyncVar]
-    public int escapeTime;
+    public bool Escape;
     [SyncVar]
     public int SyncSpawn;
     [SyncVar]
@@ -28,11 +28,10 @@ public class GameSystemManage : NetworkBehaviour
         gameMode = GameMode.LOBBY;
         readyPlayer = 0;
         countPlayer = Const.MAX_PLAYER;
+        Startflg = false;
         SyncSpawn = 0;
-        tManeger.totalTime = Const.START_TIME;
-        tManeger.estotalTime = 10;
+        tManeger.estotalTime = 11;
         Escape = false;
-        escapeTime = 100;
         MainCameraDel.gameObject.SetActive(false);  // 接続した瞬間にカメラをメインカメラをオフにする
     }
 
@@ -56,25 +55,38 @@ public class GameSystemManage : NetworkBehaviour
                 Debug.Log(SyncSpawn);
                 if (readyPlayer == Const.MAX_PLAYER)
                 {
-                    tManeger.TimeInc();
-                    tManeger.TimeSync();
-                    if (tManeger.tim <= 0)
+                    if (Startflg == false)
                     {
-                        tManeger.totalTime = Const.GAME_TIME;
-                        gameMode = GameMode.GAME;
-                        GameObject[] ply = GameObject.FindGameObjectsWithTag("Player");
-                        foreach (GameObject obj in ply)
-                        {
-                            SpawnPlayer(obj);
-                        }
-                        GameObject kill = GameObject.FindWithTag("Killer");
-                        SpawnPlayer(kill);
+                        Startflg = true;
+                        tManeger.totalTime = Const.START_TIME;
                     }
+                    else
+                    {
+                        tManeger.TimeInc();
+                        tManeger.TimeSync();
+                        if (tManeger.tim <= 0)
+                        {
+                            tManeger.totalTime = Const.GAME_TIME;
+                            gameMode = GameMode.GAME;
+                            readyPlayer = 0;
+                            GameObject[] ply = GameObject.FindGameObjectsWithTag("Player");
+                            foreach (GameObject obj in ply)
+                            {
+                                SpawnPlayer(obj);
+                            }
+                            GameObject kill = GameObject.FindWithTag("Killer");
+                            SpawnPlayer(kill);
+                        }
+                    }
+                }
+                else
+                {
+                    Startflg = false;
                 }
                 break;
 
             case GameMode.GAME:
-                tManeger.TimeInc();
+                tManeger.TimeInc();     // ゲーム中制限時間
 
                 if (Escape == true)
                 {
@@ -94,7 +106,6 @@ public class GameSystemManage : NetworkBehaviour
                         gameMode = GameMode.RESULT;
                     }
                 }
-
 
                 if (tManeger.tim <= 0)      // タイムアップ時の処理
                 {

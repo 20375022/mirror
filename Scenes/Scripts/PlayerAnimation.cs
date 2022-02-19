@@ -19,12 +19,14 @@ public class PlayerAnimation : NetworkBehaviour
     private const string key_isNorikoe = "isNorikoe";
     private const string key_isFall = "isFall";   
     private const string key_isLanding = "isLanding";   
-    bool norikoe;
+    private const string key_isAttack = "isAttack";   
+    bool land;
 
     // 初期化メソッド
     void Start()
     {
         this.animator = GetComponent<Animator>();
+        land = false;
     }
 
     // 1フレームに1回コールされる
@@ -47,40 +49,44 @@ public class PlayerAnimation : NetworkBehaviour
             // plyModeでモード毎にアニメーション移行
             switch (playerControl.plyMode)
             {
-                case PlayerMode.WALK:       // 歩きに移行する
+                case PlayerMode.WAIT:           // 立ちに移行する
+                    this.animator.SetBool(key_isAttack, false);
+                    this.animator.SetBool(key_isLanding, false);
+                    this.animator.SetBool(key_isFall, false);
+                    this.animator.SetBool(key_isWalk, false);
+                    this.animator.SetBool(key_isRun, false);
+                    break;
+
+                case PlayerMode.WALK:           // 歩きに移行する
                     this.animator.SetBool(key_isRun, false);
                     this.animator.SetBool(key_isWalk, true);
                     break;
 
-                case PlayerMode.RUN:        // 走りに移行する
+                case PlayerMode.RUN:            // 走りに移行する
                     this.animator.SetBool(key_isRun, true);
                     break;
 
-                case PlayerMode.WAIT:       // 立ちに移行する
-                    this.animator.SetBool(key_isWalk, false);
-                    this.animator.SetBool(key_isRun, false);
-                    this.animator.SetBool(key_isLanding, false);
-                    break;
-
-                case PlayerMode.FALL:       // 落下に移行する
+                case PlayerMode.FALL:           // 落下に移行する
                     this.animator.SetBool(key_isFall, true);
                     this.animator.SetBool(key_isWalk, false);
                     this.animator.SetBool(key_isRun, false);
                     break;
 
-                case PlayerMode.LANDING:       // 着地に移行する
-                    this.animator.SetBool(key_isLanding, true);
+                case PlayerMode.ATK:         // 攻撃に移行する
+                    this.animator.SetBool(key_isAttack, true);
+                    this.animator.SetBool(key_isLanding, false);
                     this.animator.SetBool(key_isFall, false);
                     this.animator.SetBool(key_isWalk, false);
                     this.animator.SetBool(key_isRun, false);
-                    if (this.animator.GetCurrentAnimatorStateInfo(0).normalizedTime <= 1)
+                    break;
+
+                case PlayerMode.LANDING:        // 着地に移行する
+                    if (playerControl.Landflg == true)
                     {
-                        Debug.Log("着地再生中");
-                    }
-                    else
-                    {
-                        Debug.Log("着地再生終了");
-                        playerControl.plyMode = PlayerMode.WAIT;
+                        this.animator.SetBool(key_isLanding, true);
+                        this.animator.SetBool(key_isFall, false);
+                        this.animator.SetBool(key_isWalk, false);
+                        this.animator.SetBool(key_isRun, false);
                     }
                     break;
             }
